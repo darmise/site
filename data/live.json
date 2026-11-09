@@ -1,0 +1,13 @@
+{
+  "active": false,
+  "matchId": null,
+  "competition": "Serie D Calcio a 5",
+  "home": "",
+  "away": "",
+  "homeScore": 0,
+  "awayScore": 0,
+  "status": "pre",
+  "minute": 0,
+  "streamUrl": "",
+  "events": []
+}

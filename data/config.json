@@ -1,0 +1,33 @@
+{
+  "teamName": "Football Tricarico",
+  "shortName": "FTR",
+  "tagline": "Il blog dei tifosi: pagelle, dirette e tutto sulla rosa",
+  "accent": "#d7263d",
+  "season": "2026/27",
+  "accent2": "#1d4ed8",
+  "mascot": "Ringhio",
+  "about": "Siamo un gruppo di tifosi del Football Tricarico che segue la squadra in casa e in trasferta. Questo blog nasce dalla passione per i nostri colori, il rosso e il blu: un punto di ritrovo per chi vive la squadra partita dopo partita.",
+  "goal": "Raccontare la stagione con passione e spirito critico, e far sentire ogni tifoso parte del gruppo. Qui trovi:",
+  "goalPoints": [
+    {
+      "ico": "📝",
+      "t": "Pagelle",
+      "d": "I voti della redazione, partita per partita."
+    },
+    {
+      "ico": "🔴",
+      "t": "Diretta",
+      "d": "Risultato e cronaca mentre si gioca."
+    },
+    {
+      "ico": "👥",
+      "t": "Rosa",
+      "d": "La squadra aggiornata, tra disponibili e indisponibili."
+    },
+    {
+      "ico": "🏆",
+      "t": "Community",
+      "d": "Pronostici e voti: i tifosi dicono la loro."
+    }
+  ]
+}
