@@ -47,7 +47,14 @@
     S.matches = mergePagelle(matches, extra);
     S.live = live;
   }
-  const timeLabel = m => (m.timeKnown === false ? 'orario da definire' : 'ore ' + fmtTime(m.date));
+  const PLACEHOLDER = 'assets/team-placeholder.svg';
+  const logo = src => `<img class="tlogo" src="${esc(src || PLACEHOLDER)}" alt="" width="64" height="64">`;
+  // se un logo non si carica, mostra lo scudo neutro
+  document.addEventListener('error', e => {
+    const i = e.target;
+    if (i && i.tagName === 'IMG' && i.classList.contains('tlogo') && !i.dataset.fb) { i.dataset.fb = '1'; i.src = PLACEHOLDER; }
+  }, true);
+  const timeLabel = m =>(m.timeKnown === false ? 'orario da definire' : 'ore ' + fmtTime(m.date));
 
   /* ---------- layout comune ---------- */
   function renderChrome() {
@@ -86,9 +93,9 @@
       el.innerHTML = `
         <div class="eyebrow"><span class="live-pill">● LIVE</span> ${esc(lv.competition)}</div>
         <div class="scoreboard">
-          <div class="t">${esc(lv.home)}</div>
+          <div class="t">${logo(lv.homeLogo)}<span>${esc(lv.home)}</span></div>
           <div class="s">${esc(lv.homeScore)} – ${esc(lv.awayScore)}</div>
-          <div class="t">${esc(lv.away)}</div>
+          <div class="t away"><span>${esc(lv.away)}</span>${logo(lv.awayLogo)}</div>
         </div>
         <div class="meta">${st}${min}</div>
         <a class="btn" href="live.html">Segui la diretta</a>`;
@@ -102,9 +109,9 @@
     el.innerHTML = `
       <div class="eyebrow">Ultimo risultato · ${esc(last.competition)}${last.round ? ' · ' + last.round + 'ª giornata' : ''} · ${fmtDate(last.date)}</div>
       <div class="scoreboard">
-        <div class="t">${esc(last.home)}</div>
+        <div class="t">${logo(last.homeLogo)}<span>${esc(last.home)}</span></div>
         <div class="s">${esc(last.homeScore)} – ${esc(last.awayScore)}</div>
-        <div class="t">${esc(last.away)}</div>
+        <div class="t away"><span>${esc(last.away)}</span>${logo(last.awayLogo)}</div>
       </div>
       ${last.title ? `<p>${esc(last.title)}</p>` : ''}
       <a class="btn" href="pagelle.html">Leggi le pagelle</a>
@@ -119,7 +126,7 @@
     el.innerHTML = `
       <div>
         <div class="muted">${esc(m.competition)} · ${where}</div>
-        <div class="vs">${esc(m.home)} vs ${esc(m.away)}</div>
+        <div class="vs">${logo(m.homeLogo)}<span>${esc(m.home)}</span><i>vs</i><span>${esc(m.away)}</span>${logo(m.awayLogo)}</div>
         <div class="muted">${m.round ? m.round + 'ª giornata · ' : ''}${fmtDate(m.date)} · ${timeLabel(m)}</div>
       </div>
       <div class="countdown" id="cd"></div>`;
