@@ -10,24 +10,14 @@
   "goal": "Raccontare la stagione con passione e spirito critico, e far sentire ogni tifoso parte del gruppo. Qui trovi:",
   "goalPoints": [
     {
-      "ico": "📝",
-      "t": "Pagelle",
-      "d": "I voti della redazione, partita per partita."
-    },
-    {
-      "ico": "🔴",
-      "t": "Diretta",
-      "d": "Risultato e cronaca mentre si gioca."
-    },
-    {
       "ico": "👥",
       "t": "Rosa",
       "d": "La squadra aggiornata, tra disponibili e indisponibili."
     },
     {
-      "ico": "🏆",
-      "t": "Community",
-      "d": "Pronostici e voti: i tifosi dicono la loro."
+      "ico": "📝",
+      "t": "Pagelle",
+      "d": "I voti della redazione, partita per partita."
     }
   ],
   "totalRounds": 22,

@@ -5,10 +5,9 @@
   const NAV = [
     ['index.html', 'Home', 'home'],
     ['rosa.html', 'Rosa', 'rosa'],
-    ['pagelle.html', 'Pagelle', 'pagelle'],
-    ['community.html', 'Community', 'community'],
-    ['live.html', 'Live', 'live']
+    ['pagelle.html', 'Pagelle', 'pagelle']
   ];
+  //['community.html', 'Community', 'community'], ['live.html', 'Live', 'live']
   const page = document.body.dataset.page;
 
   const getJSON = async url => {
