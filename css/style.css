@@ -157,3 +157,19 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
 .next-card .countdown{margin-top:0}
 .goal-list .ico{flex:0 0 34px}
 .goal-list li>span:last-child{flex:1;min-width:0}
+
+/* Logo squadre */
+.tlogo{display:block;object-fit:contain;flex:0 0 auto}
+.scoreboard .t{display:flex;align-items:center;gap:14px}
+.scoreboard .t:last-child{justify-content:flex-end;text-align:right}
+.scoreboard .tlogo{width:clamp(44px,7vw,72px);height:clamp(44px,7vw,72px);filter:drop-shadow(0 2px 4px #0006)}
+.vs{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.vs i{font-style:normal;color:var(--accent)}
+.next .vs .tlogo{width:40px;height:40px}
+@media (max-width:560px){
+  .scoreboard .t{flex-direction:column;text-align:center;gap:6px}
+  .scoreboard .t:last-child{align-items:center;text-align:center}
+  .scoreboard .t.away .tlogo{order:-1}
+}
+.vs .tm{display:inline-flex;align-items:center;gap:10px}
+.vs{gap:8px 14px}

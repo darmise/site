@@ -8,23 +8,30 @@ I risultati vengono letti da Tuttocampo (girone Serie D Calcio a 5 Potenza) da u
 GitHub Actions e riscrive `data/matches.json` e `data/live.json`. **Non modificare a mano questi due file**:
 vengono sovrascritti.
 
-- `scripts/update_matches.py` – legge le giornate con un browser automatico (le pagine di Tuttocampo
-  caricano i risultati con JavaScript) e salva solo le partite della squadra indicata in `data/config.json` → `teamName`.
-- `.github/workflows/update-data.yml` – lo lancia ogni 10 minuti, ma lo script si ferma subito se non c'è una
-  partita tra 30 minuti prima e 4 ore dopo l'orario d'inizio. Una volta al giorno rilegge tutte le giornate.
-- Stati: `scheduled` (da giocare), `live` (in corso), `played` (terminata), `postponed` (rinviata).
+Come funziona `scripts/update_matches.py`:
+- un contatore va da 1 a 22 (`totalRounds` in `data/config.json`) e apre `.../Giornata<n>` con un browser
+  automatico, perché le tabelle di Tuttocampo si caricano con JavaScript;
+- per ogni giornata cerca la partita della squadra indicata in `config.json` → `teamName` e salva giornata,
+  data/ora, squadre, risultato (se già giocata), stato e **indirizzi dei logo** (non scarica nulla);
+- sul sito la "Prossima gara" è la prima giornata ancora da giocare, l'ultimo risultato è l'ultima giocata;
+- stati: `scheduled` (da giocare), `live` (in corso), `played` (terminata), `postponed` (rinviata);
+- se una giornata non si riesce a leggere, quella già salvata resta com'era e la pagina viene salvata in
+  `debug/` (su GitHub la trovi come "debug-pagine" in fondo alla pagina dell'esecuzione).
+
+`.github/workflows/update-data.yml` lo lancia ogni 10 minuti, ma si ferma subito se non c'è una partita tra
+30 minuti prima e 4 ore dopo l'orario d'inizio. Una volta al giorno aggiorna comunque.
 
 ### Attivazione (una volta sola)
 1. Carica **tutto** il contenuto della cartella in un repository GitHub, compresa la cartella nascosta `.github`.
 2. *Settings → Pages*: sorgente "Deploy from a branch", branch `main`, cartella `/ (root)`.
 3. *Settings → Actions → General → Workflow permissions*: scegli **Read and write permissions**.
-4. Tab *Actions* → "Aggiorna risultati" → *Run workflow*: il primo avvio legge tutte le 22 giornate.
+4. Tab *Actions* → "Aggiorna risultati" → *Run workflow*: legge tutte le 22 giornate (circa 1-2 minuti).
 
 ### Prove in locale
 ```
 pip install -r scripts/requirements.txt && playwright install chromium
 python scripts/update_matches.py --from-file tests/giornata1.html --round 1   # prova sul file salvato
-python scripts/update_matches.py --should-run                                  # true/false
+python scripts/update_matches.py --rounds 1-3                                  # legge solo alcune giornate
 python -m http.server                                                          # poi apri http://localhost:8000
 ```
 

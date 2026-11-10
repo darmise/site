@@ -2,9 +2,9 @@ name: Aggiorna risultati
 
 on:
   schedule:
-    - cron: '*/10 10-23 * * *'   # ogni 10 minuti, ma lo script si ferma subito se non c'è una partita vicina
-    - cron: '30 4 * * *'         # una volta al giorno rilegge tutte le giornate (date e orari cambiano)
-  workflow_dispatch:             # avvio manuale dal tab Actions: fa sempre il giro completo
+    - cron: '*/10 10-23 * * *'   # ogni 10 minuti, ma si ferma subito se non c'è una partita vicina
+    - cron: '30 4 * * *'         # una volta al giorno: aggiorna comunque (date e orari possono cambiare)
+  workflow_dispatch:             # avvio manuale dal tab Actions: aggiorna sempre
 
 permissions:
   contents: write
@@ -16,7 +16,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
@@ -30,11 +30,9 @@ jobs:
         id: decide
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ "${{ github.event.schedule }}" = "30 4 * * *" ]; then
-            echo "run=true"  >> "$GITHUB_OUTPUT"
-            echo "full=--full" >> "$GITHUB_OUTPUT"
+            echo "run=true" >> "$GITHUB_OUTPUT"
           else
             echo "run=$(python scripts/update_matches.py --should-run)" >> "$GITHUB_OUTPUT"
-            echo "full=" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Installa dipendenze
@@ -43,9 +41,9 @@ jobs:
           pip install -r scripts/requirements.txt
           playwright install --with-deps chromium
 
-      - name: Leggi i risultati
+      - name: Leggi i risultati (giornate 1-22)
         if: steps.decide.outputs.run == 'true'
-        run: python scripts/update_matches.py ${{ steps.decide.outputs.full }}
+        run: python scripts/update_matches.py
 
       - name: Salva le modifiche
         if: steps.decide.outputs.run == 'true'
@@ -60,3 +58,12 @@ jobs:
             git pull --rebase
             git push
           fi
+
+      - name: Pagine di debug (solo se qualcosa non è stato letto)
+        if: always() && steps.decide.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-pagine
+          path: debug/
+          if-no-files-found: ignore
+          retention-days: 3

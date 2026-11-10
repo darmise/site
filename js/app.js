@@ -34,9 +34,10 @@
   };
   const playerName = id => (S.players.find(p => p.id === id) || {}).name || 'Giocatore';
   const playerRole = id => (S.players.find(p => p.id === id) || {}).role || '';
-  const byDate = (a, b) => (a.date || '').localeCompare(b.date || '');
-  const played = () => S.matches.filter(m => m.status === 'played').sort((a, b) => byDate(b, a));
-  const upcoming = () => S.matches.filter(m => m.status === 'scheduled').sort(byDate);
+  // L'ordine è quello delle giornate (1, 2, 3...): la prossima partita è la prima giornata ancora da giocare.
+  const byRound = (a, b) => (a.round || 0) - (b.round || 0);
+  const played = () => S.matches.filter(m => m.status === 'played').sort((a, b) => byRound(b, a));
+  const upcoming = () => S.matches.filter(m => m.status === 'scheduled').sort(byRound);
   // I dati delle partite arrivano da Tuttocampo (data/matches.json, aggiornato in automatico);
   // pagelle e articoli scritti a mano stanno in data/pagelle.json, agganciati all'id della partita.
   const mergePagelle = (matches, extra) => matches.map(m => Object.assign({ pagelle: [], title: '', report: '' }, m, (extra || {})[m.id] || {}));
@@ -126,7 +127,11 @@
     el.innerHTML = `
       <div>
         <div class="muted">${esc(m.competition)} · ${where}</div>
-        <div class="vs">${logo(m.homeLogo)}<span>${esc(m.home)}</span><i>vs</i><span>${esc(m.away)}</span>${logo(m.awayLogo)}</div>
+        <div class="vs">
+          <span class="tm">${logo(m.homeLogo)}<span>${esc(m.home)}</span></span>
+          <i>vs</i>
+          <span class="tm"><span>${esc(m.away)}</span>${logo(m.awayLogo)}</span>
+        </div>
         <div class="muted">${m.round ? m.round + 'ª giornata · ' : ''}${fmtDate(m.date)} · ${timeLabel(m)}</div>
       </div>
       <div class="countdown" id="cd"></div>`;

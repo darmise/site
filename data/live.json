@@ -4,6 +4,8 @@
   "competition": "Serie D Calcio a 5",
   "home": "",
   "away": "",
+  "homeLogo": "",
+  "awayLogo": "",
   "homeScore": 0,
   "awayScore": 0,
   "status": "pre",
