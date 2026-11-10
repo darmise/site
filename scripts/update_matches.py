@@ -21,6 +21,7 @@ Uso:
   python scripts/update_matches.py                         # requests, tutte le 22 giornate
   python scripts/update_matches.py --rounds 1-3            # solo alcune giornate (prove)
   python scripts/update_matches.py --mode browser          # con Chromium (come la versione precedente)
+  python scripts/update_matches.py --mode browser --headless --smart   # senza finestra, solo giornata attuale + successiva
   python scripts/update_matches.py --should-run            # stampa true/false (solo libreria standard)
   python scripts/update_matches.py --from-file tests/giornata1.html --round 1   # prova offline
 """
@@ -398,12 +399,27 @@ def parse_range(text, total):
     return list(range(int(a), int(b or a) + 1))
 
 
+def smart_rounds(old, total):
+    """Solo le giornate che servono alla home: quella del contatore (prima non ancora giocata) e la successiva."""
+    pending = [m["round"] for m in old if m.get("status") in ("live", "scheduled", "postponed")]
+    played = [m["round"] for m in old if m.get("status") == "played"]
+    counter = min(pending) if pending else (max(played) + 1 if played else 1)
+    return [n for n in (counter, counter + 1) if 1 <= n <= total]
+
+
 def main():
+    for stream in (sys.stdout, sys.stderr):      # console di Windows: niente errori con accenti e simboli
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     ap = argparse.ArgumentParser()
     ap.add_argument("--should-run", action="store_true")
     ap.add_argument("--mode", choices=["requests", "browser"], default="requests")
     ap.add_argument("--headless", action="store_true", help="solo con --mode browser (predefinito: finestra visibile)")
     ap.add_argument("--rounds", help="es. 1-22 oppure 3")
+    ap.add_argument("--smart", action="store_true",
+                    help="legge solo la giornata del contatore e la successiva (poche richieste)")
     ap.add_argument("--from-file")
     ap.add_argument("--round", type=int, default=1)
     ap.add_argument("--base-url", default=BASE_URL)
@@ -422,7 +438,8 @@ def main():
         html = Path(args.from_file).read_text(encoding="utf-8")
         results, failed = {args.round: parse_round(html, args.round, team)}, []
     else:
-        rounds = parse_range(args.rounds, total)
+        rounds = smart_rounds(old, total) if args.smart and not args.rounds else parse_range(args.rounds, total)
+        print(f"Giornate da leggere: {', '.join(map(str, rounds))}")
         try:
             if args.mode == "browser":
                 results, failed = read_rounds_browser(rounds, args.base_url, team, args.headless)

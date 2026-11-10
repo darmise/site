@@ -1,0 +1,42 @@
+name: Prova browser su GitHub (senza il mio computer)
+
+# Parte solo a mano. Serve a capire se Tuttocampo si apre con Chromium sui server di GitHub (ubuntu-latest).
+# NON salva nulla nel repository: legge la giornata 1 e mostra il risultato nel log.
+# Se risponde 403, questo metodo non è utilizzabile su GitHub e si resta sul runner self-hosted.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prova:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONUTF8: '1'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Installa dipendenze e Chromium
+        run: |
+          python -m pip install -r scripts/requirements.txt
+          python -m pip install "playwright>=1.45"
+          python -m playwright install --with-deps chromium
+
+      - name: Leggi la giornata 1 con il browser (nessun salvataggio nel repository)
+        run: python scripts/update_matches.py --mode browser --headless --rounds 1
+
+      - name: Pagine di debug (se qualcosa non è stato letto)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-pagine-browser-github
+          path: debug/
+          if-no-files-found: ignore
+          retention-days: 3
