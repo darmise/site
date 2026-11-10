@@ -29,14 +29,14 @@ jobs:
           cache-dependency-path: scripts/requirements.txt
 
       - name: Installa dipendenze
-        shell: pwsh
+        shell: powershell
         run: |
           python -m pip install -r scripts/requirements.txt
           python -m playwright install chromium
 
       - name: Serve aggiornare?
         id: decide
-        shell: pwsh
+        shell: powershell
         run: |
           $eventName = "${{ github.event_name }}"
           $schedule = "${{ github.event.schedule }}"
@@ -56,13 +56,13 @@ jobs:
 
       - name: Leggi i risultati (giornate 1-22)
         if: steps.decide.outputs.run == 'true'
-        shell: pwsh
+        shell: powershell
         run: |
           python scripts/update_matches.py
 
       - name: Salva le modifiche
         if: steps.decide.outputs.run == 'true'
-        shell: pwsh
+        shell: powershell
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
