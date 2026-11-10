@@ -4,10 +4,10 @@
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const NAV = [
     ['index.html', 'Home', 'home'],
-    ['live.html', 'Live', 'live'],
-    ['pagelle.html', 'Pagelle', 'pagelle'],
     ['rosa.html', 'Rosa', 'rosa'],
-    ['community.html', 'Community', 'community']
+    ['pagelle.html', 'Pagelle', 'pagelle'],
+    ['community.html', 'Community', 'community'],
+    ['live.html', 'Live', 'live']
   ];
   const page = document.body.dataset.page;
 
@@ -69,7 +69,7 @@
     }).join('');
     $('#site-header').innerHTML = `
       <div class="wrap">
-        <a class="brand" href="index.html"><img class="logo" src="assets/logo.svg" alt="" width="38" height="44"><b>${esc(S.config.teamName)}</b></a>
+        <a class="brand" href="index.html"><img class="logo" src="assets/logo.jpg" alt="" width="38" height="44"><b>${esc(S.config.teamName)}</b></a>
         <button class="burger" aria-label="Apri il menu" aria-expanded="false">☰</button>
         <nav class="nav" id="nav">${links}</nav>
       </div>`;
