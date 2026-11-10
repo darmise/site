@@ -274,7 +274,7 @@ def read_rounds(rounds, base_url, team):
 
     with sync_playwright() as p:
 
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=False)
 
         # Configurazione sessione Chromium
         ctx = browser.new_context(
