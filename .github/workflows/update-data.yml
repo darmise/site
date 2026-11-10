@@ -1,10 +1,11 @@
+
 name: Aggiorna risultati
 
 on:
   schedule:
-    - cron: '*/10 10-23 * * *'   # ogni 10 minuti, ma si ferma subito se non c'è una partita vicina
-    - cron: '30 4 * * *'         # una volta al giorno: aggiorna comunque (date e orari possono cambiare)
-  workflow_dispatch:             # avvio manuale dal tab Actions: aggiorna sempre
+    - cron: '*/10 10-23 * * *'
+    - cron: '30 4 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -15,8 +16,9 @@ concurrency:
 
 jobs:
   update:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, windows, x64]
     timeout-minutes: 20
+
     steps:
       - uses: actions/checkout@v4
 
@@ -26,38 +28,60 @@ jobs:
           cache: pip
           cache-dependency-path: scripts/requirements.txt
 
+      - name: Installa dipendenze
+        shell: pwsh
+        run: |
+          python -m pip install -r scripts/requirements.txt
+          python -m playwright install chromium
+
       - name: Serve aggiornare?
         id: decide
+        shell: pwsh
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ "${{ github.event.schedule }}" = "30 4 * * *" ]; then
-            echo "run=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "run=$(python scripts/update_matches.py --should-run)" >> "$GITHUB_OUTPUT"
-          fi
+          $eventName = "${{ github.event_name }}"
+          $schedule = "${{ github.event.schedule }}"
 
-      - name: Installa dipendenze
-        if: steps.decide.outputs.run == 'true'
-        run: |
-          pip install -r scripts/requirements.txt
-          playwright install --with-deps chromium
+          if ($eventName -eq "workflow_dispatch" -or $schedule -eq "30 4 * * *") {
+            "run=true" >> $env:GITHUB_OUTPUT
+          }
+          else {
+            $shouldRun = python scripts/update_matches.py --should-run
+
+            if ($LASTEXITCODE -ne 0) {
+              exit $LASTEXITCODE
+            }
+
+            "run=$($shouldRun.Trim())" >> $env:GITHUB_OUTPUT
+          }
 
       - name: Leggi i risultati (giornate 1-22)
         if: steps.decide.outputs.run == 'true'
-        run: python scripts/update_matches.py
+        shell: pwsh
+        run: |
+          python scripts/update_matches.py
 
       - name: Salva le modifiche
         if: steps.decide.outputs.run == 'true'
+        shell: pwsh
         run: |
-          git config user.name  "github-actions[bot]"
+          git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add data/matches.json data/live.json
-          if git diff --cached --quiet; then
-            echo "Nessuna novità."
-          else
+
+          if (git diff --cached --quiet) {
+            Write-Host "Nessuna novità."
+          }
+          else {
             git commit -m "Aggiorna risultati"
-            git pull --rebase
-            git push
-          fi
+            git pull --rebase origin $env:GITHUB_REF_NAME
+
+            if ($LASTEXITCODE -ne 0) {
+              exit $LASTEXITCODE
+            }
+
+            git push origin HEAD:$env:GITHUB_REF_NAME
+          }
 
       - name: Pagine di debug (solo se qualcosa non è stato letto)
         if: always() && steps.decide.outputs.run == 'true'
