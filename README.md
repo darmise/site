@@ -35,6 +35,22 @@ python scripts/update_matches.py --rounds 1-3                                  #
 python -m http.server                                                          # poi apri http://localhost:8000
 ```
 
+## Come la home sceglie le partite da mostrare
+Il contatore è la prima giornata ancora da giocare (o in corso):
+- se manca **meno di 2 giorni** all'inizio (o la partita è in corso) diventa la **partita attuale**, in alto
+  (con countdown, oppure punteggio se è in corso), e in "Prossima gara" va la giornata successiva;
+- altrimenti in alto resta l'**ultimo risultato** e in "Prossima gara" va la giornata del contatore;
+- a partita finita la giornata passa a "ultimo risultato" e il contatore avanza da solo.
+
+`data/manual.json` (facoltativo) permette di scrivere o correggere partite a mano, per esempio se Tuttocampo non
+si riesce a leggere: ogni voce sovrascrive quella automatica con lo stesso `id` (`g2` = giornata 2). Esempio:
+```json
+[ { "id": "g2", "round": 2, "date": "2026-11-14T19:00", "timeKnown": true, "competition": "Serie D Calcio a 5",
+    "home": "Football Tricarico", "away": "Boys Valleverde Academy", "status": "scheduled" } ]
+```
+(`status`: `scheduled`, `live` o `played`; per le partite giocate aggiungi `homeScore` e `awayScore`; i logo si
+indicano con `homeLogo` e `awayLogo`.)
+
 ## Pagelle e articoli (a mano)
 Vanno in `data/pagelle.json`, agganciati all'id della partita (`g1`, `g2`… = numero di giornata):
 ```json

@@ -42,25 +42,29 @@
   // pagelle e articoli scritti a mano stanno in data/pagelle.json, agganciati all'id della partita.
   const mergePagelle = (matches, extra) => matches.map(m => Object.assign({ pagelle: [], title: '', report: '' }, m, (extra || {})[m.id] || {}));
   async function refreshData() {
-    const [matches, live, extra] = await Promise.all([
-      getJSON('data/matches.json'), getJSON('data/live.json'), getJSON('data/pagelle.json').catch(() => ({}))
+    const [matches, live, extra, manual] = await Promise.all([
+      getJSON('data/matches.json'), getJSON('data/live.json'),
+      getJSON('data/pagelle.json').catch(() => ({})), getJSON('data/manual.json').catch(() => [])
     ]);
-    S.matches = mergePagelle(matches, extra);
+    // data/manual.json (facoltativo): partite scritte a mano, sovrascrivono quelle automatiche con lo stesso id
+    const byId = new Map(matches.map(m => [m.id, m]));
+    (manual || []).forEach(x => byId.set(x.id, Object.assign({}, byId.get(x.id) || {}, x)));
+    S.matches = mergePagelle([...byId.values()].sort(byRound), extra);
     S.live = live;
   }
   const PLACEHOLDER = 'assets/team-placeholder.svg';
-  const logo = src => `<img class="tlogo" src="${esc(src || PLACEHOLDER)}" alt="" width="64" height="64">`;
-  // se un logo non si carica, mostra lo scudo neutro
+  // logo dentro un "badge" tondo bianco; se non si carica, compare uno scudo neutro
+  const logo = src => `<span class="badge"><img class="tlogo" src="${esc(src || PLACEHOLDER)}" alt="" width="80" height="80"></span>`;
   document.addEventListener('error', e => {
     const i = e.target;
     if (i && i.tagName === 'IMG' && i.classList.contains('tlogo') && !i.dataset.fb) { i.dataset.fb = '1'; i.src = PLACEHOLDER; }
   }, true);
-  const timeLabel = m =>(m.timeKnown === false ? 'orario da definire' : 'ore ' + fmtTime(m.date));
+  const timeLabel = m => (m.timeKnown === false ? 'orario da definire' : 'ore ' + fmtTime(m.date));
 
   /* ---------- layout comune ---------- */
   function renderChrome() {
     const links = NAV.map(([href, label, key]) => {
-      const dot = key === 'live' && S.live.active ? '<span class="dot" title="In diretta"></span>' : '';
+      const dot = key === 'live' && (S.live.active || S.matches.some(m => m.status === 'live')) ? '<span class="dot" title="In diretta"></span>' : '';
       return `<a href="${href}" class="${key === page ? 'on' : ''}">${label}${dot}</a>`;
     }).join('');
     $('#site-header').innerHTML = `
@@ -85,70 +89,112 @@
   }
 
   /* ---------- HOME ---------- */
-  function renderHero() {
-    const el = $('#hero-content');
-    const lv = S.live;
-    if (lv.active) {
-      const st = { LIVE: 'Partita in corso', pre: 'Prepartita', '1T': "1° tempo", HT: 'Intervallo', '2T': "2° tempo", ET: 'Supplementari', FT: 'Finale' }[lv.status] || '';
-      const min = ['1T', '2T', 'ET'].includes(lv.status) ? ` · ${esc(lv.minute)}'` : '';
-      el.innerHTML = `
-        <div class="eyebrow"><span class="live-pill">● LIVE</span> ${esc(lv.competition)}</div>
-        <div class="scoreboard">
-          <div class="t">${logo(lv.homeLogo)}<span>${esc(lv.home)}</span></div>
-          <div class="s">${esc(lv.homeScore)} – ${esc(lv.awayScore)}</div>
-          <div class="t away"><span>${esc(lv.away)}</span>${logo(lv.awayLogo)}</div>
-        </div>
-        <div class="meta">${st}${min}</div>
-        <a class="btn" href="live.html">Segui la diretta</a>`;
-      return;
-    }
-    const last = played()[0];
-    if (!last) {
-      el.innerHTML = `<h1>${esc(S.config.teamName)}</h1><p>${esc(S.config.tagline)}</p>`;
-      return;
-    }
-    el.innerHTML = `
-      <div class="eyebrow">Ultimo risultato · ${esc(last.competition)}${last.round ? ' · ' + last.round + 'ª giornata' : ''} · ${fmtDate(last.date)}</div>
-      <div class="scoreboard">
-        <div class="t">${logo(last.homeLogo)}<span>${esc(last.home)}</span></div>
-        <div class="s">${esc(last.homeScore)} – ${esc(last.awayScore)}</div>
-        <div class="t away"><span>${esc(last.away)}</span>${logo(last.awayLogo)}</div>
-      </div>
-      ${last.title ? `<p>${esc(last.title)}</p>` : ''}
-      <a class="btn" href="pagelle.html">Leggi le pagelle</a>
-      <a class="btn ghost" href="live.html">Vai alla diretta</a>`;
+  const TWO_DAYS = 48 * 36e5;
+  const timers = {};
+
+  // Il contatore è la prima giornata ancora da giocare (o in corso).
+  //  - se manca meno di 2 giorni (o è in corso) diventa la partita ATTUALE e la "prossima gara" è la giornata dopo;
+  //  - altrimenti l'attuale non c'è: in alto l'ultimo risultato e in "prossima gara" la giornata del contatore.
+  function homeState() {
+    const pend = S.matches.filter(m => m.status === 'live' || m.status === 'scheduled').sort(byRound);
+    const counter = pend[0] || null;
+    const soon = counter && (counter.status === 'live' || (counter.date && new Date(counter.date) - Date.now() < TWO_DAYS));
+    return { current: soon ? counter : null, next: soon ? (pend[1] || null) : counter, last: played()[0] || null,
+      // finito solo se l'ultima giornata (22) risulta giocata: con dati incompleti non lo si può dire
+      ended: !pend.length && !!played()[0] && played()[0].round >= (S.config.totalRounds || 22) };
   }
 
-  function renderNext() {
-    const el = $('#next-match');
-    const m = upcoming()[0];
-    if (!m) { el.innerHTML = '<p class="empty">Nessuna partita in programma.</p>'; return; }
-    const where = m.home === S.config.teamName ? 'In casa' : 'In trasferta';
-    el.innerHTML = `
-      <div>
-        <div class="muted">${esc(m.competition)} · ${where}</div>
-        <div class="vs">
-          <span class="tm">${logo(m.homeLogo)}<span>${esc(m.home)}</span></span>
-          <i>vs</i>
-          <span class="tm"><span>${esc(m.away)}</span>${logo(m.awayLogo)}</span>
-        </div>
-        <div class="muted">${m.round ? m.round + 'ª giornata · ' : ''}${fmtDate(m.date)} · ${timeLabel(m)}</div>
-      </div>
-      <div class="countdown" id="cd"></div>`;
-    clearInterval(cdTimer);
+  function startCountdown(key, elId, date) {
+    clearInterval(timers[key]);
     const tick = () => {
-      let diff = new Date(m.date) - Date.now();
-      const cd = $('#cd');
+      const cd = document.getElementById(elId);
       if (!cd) return;
-      if (diff <= 0) { cd.innerHTML = '<b style="font:700 22px var(--display)">Si gioca!</b>'; return; }
+      let diff = new Date(date) - Date.now();
+      if (diff <= 0) { cd.innerHTML = `<b class="now">${diff < -4 * 36e5 ? 'In attesa del risultato' : 'Si gioca!'}</b>`; return; }
       const d = Math.floor(diff / 864e5); diff -= d * 864e5;
       const h = Math.floor(diff / 36e5); diff -= h * 36e5;
       const mi = Math.floor(diff / 6e4);
       cd.innerHTML = [[d, 'giorni'], [h, 'ore'], [mi, 'min']].map(([n, l]) => `<div><b>${n}</b><span>${l}</span></div>`).join('');
     };
-    tick(); cdTimer = setInterval(tick, 30000);
+    tick(); timers[key] = setInterval(tick, 30000);
   }
-  let cdTimer;
+
+  const teamBlock = (m, side) => {
+    const name = side === 'home' ? m.home : m.away;
+    const us = name === S.config.teamName;
+    return `<div class="mc-team${us ? ' is-us' : ''}">
+      ${logo(side === 'home' ? m.homeLogo : m.awayLogo)}
+      <div class="mc-name">${esc(name)}</div>
+      <span class="mc-tag">${side === 'home' ? 'Casa' : 'Trasferta'}</span>
+    </div>`;
+  };
+  const scoreBlock = m => `<div class="mc-score">
+      <b class="${m.homeScore < m.awayScore ? 'dim' : ''}">${esc(m.homeScore ?? 0)}</b><i>:</i><b class="${m.awayScore < m.homeScore ? 'dim' : ''}">${esc(m.awayScore ?? 0)}</b>
+    </div>`;
+  const RES = { V: 'Vittoria', N: 'Pareggio', P: 'Sconfitta' };
+  const sub = m => [esc(m.competition), m.round ? m.round + 'ª giornata' : '', fmtDate(m.date)].filter(Boolean).join(' · ');
+
+  function renderHero() {
+    const el = $('#hero-content');
+    const { current, last } = homeState();
+    clearInterval(timers.hero);
+
+    if (current && current.status === 'live') {
+      el.innerHTML = `<div class="mcard">
+        <div class="mc-meta"><span class="eyebrow"><span class="live-pill">● LIVE</span> Partita in corso</span><span class="sub">${sub(current)}</span></div>
+        <div class="mc-grid">${teamBlock(current, 'home')}
+          <div class="mc-center">${scoreBlock(current)}</div>${teamBlock(current, 'away')}</div>
+        <div class="mc-foot"><a class="btn" href="live.html">Segui la diretta</a></div></div>`;
+      return;
+    }
+    if (current) {
+      el.innerHTML = `<div class="mcard">
+        <div class="mc-meta"><span class="eyebrow">Partita attuale</span><span class="sub">${sub(current)}</span></div>
+        <div class="mc-grid">${teamBlock(current, 'home')}
+          <div class="mc-center"><div class="mc-vs">VS</div>
+            <div class="mc-when"><b>${current.timeKnown === false ? 'Orario da definire' : fmtTime(current.date)}</b>${fmtDate(current.date)}</div></div>
+          ${teamBlock(current, 'away')}</div>
+        <div class="mc-foot"><div class="countdown dark" id="cd-hero"></div></div></div>`;
+      startCountdown('hero', 'cd-hero', current.date);
+      return;
+    }
+    if (!last) {
+      el.innerHTML = `<div class="mcard"><h1>${esc(S.config.teamName)}</h1><p>${esc(S.config.tagline)}</p></div>`;
+      return;
+    }
+    const o = outcome(last);
+    el.innerHTML = `<div class="mcard">
+      <div class="mc-meta"><span class="eyebrow">Ultimo risultato</span><span class="sub">${sub(last)}</span></div>
+      <div class="mc-grid">${teamBlock(last, 'home')}
+        <div class="mc-center">${scoreBlock(last)}${o ? `<span class="res res-${o}">${RES[o]}</span>` : ''}</div>
+        ${teamBlock(last, 'away')}</div>
+      ${last.title ? `<p class="mc-title">${esc(last.title)}</p>` : ''}
+      <div class="mc-foot"><a class="btn" href="pagelle.html">Leggi le pagelle</a><a class="btn ghost" href="live.html">Vai alla diretta</a></div></div>`;
+  }
+
+  function renderNext() {
+    const el = $('#next-match');
+    const { next, ended } = homeState();
+    clearInterval(timers.next);
+    if (!next) {
+      el.innerHTML = `<p class="empty">${ended ? 'Il campionato è terminato: grazie per aver tifato con noi!' :
+        'La prossima gara comparirà qui appena il calendario sarà aggiornato.'}</p>`;
+      return;
+    }
+    const where = next.home === S.config.teamName ? 'In casa' : 'In trasferta';
+    el.innerHTML = `
+      <div>
+        <div class="muted">${esc(next.competition)} · ${where}</div>
+        <div class="vs">
+          <span class="tm">${logo(next.homeLogo)}<span>${esc(next.home)}</span></span>
+          <i>vs</i>
+          <span class="tm"><span>${esc(next.away)}</span>${logo(next.awayLogo)}</span>
+        </div>
+        <div class="muted">${next.round ? next.round + 'ª giornata · ' : ''}${fmtDate(next.date)} · ${timeLabel(next)}</div>
+      </div>
+      <div class="countdown" id="cd"></div>`;
+    startCountdown('next', 'cd', next.date);
+  }
 
   function renderAbout() {
     $('#about-text').textContent = S.config.about || '';
