@@ -345,12 +345,14 @@ def report(results, n, match):
 
 
 # ------------------------------------------------- lettura con il browser
-def read_rounds_browser(rounds, base_url, team, headless):
+def read_rounds_browser(rounds, base_url, team, headless, hidden=False):
     """Come la versione precedente: Chromium con Playwright."""
     from playwright.sync_api import sync_playwright, TimeoutError as PWTimeout
     results, failed = {}, []
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        # hidden: browser normale CON finestra, ma posizionata fuori dallo schermo (nessuna modifica al browser)
+        args = ["--window-position=-32000,-32000", "--window-size=1365,900"] if hidden else []
+        browser = p.chromium.launch(headless=headless, args=args)
         ctx = browser.new_context(locale="it-IT", timezone_id="Europe/Rome", viewport={"width": 1365, "height": 900})
         page = ctx.new_page()
         for i, n in enumerate(rounds):
@@ -418,6 +420,8 @@ def main():
     ap.add_argument("--mode", choices=["requests", "browser"], default="requests")
     ap.add_argument("--headless", action="store_true", help="solo con --mode browser (predefinito: finestra visibile)")
     ap.add_argument("--rounds", help="es. 1-22 oppure 3")
+    ap.add_argument("--hidden", action="store_true",
+                    help="solo con --mode browser: finestra normale ma fuori dallo schermo (non la vedi)")
     ap.add_argument("--smart", action="store_true",
                     help="legge solo la giornata del contatore e la successiva (poche richieste)")
     ap.add_argument("--from-file")
@@ -442,7 +446,7 @@ def main():
         print(f"Giornate da leggere: {', '.join(map(str, rounds))}")
         try:
             if args.mode == "browser":
-                results, failed = read_rounds_browser(rounds, args.base_url, team, args.headless)
+                results, failed = read_rounds_browser(rounds, args.base_url, team, args.headless, args.hidden)
             else:
                 results, failed = read_rounds_requests(rounds, args.base_url, team, config.get("tuttocampo"))
         except EndpointMissing as e:

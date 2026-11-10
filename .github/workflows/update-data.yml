@@ -27,10 +27,12 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Installa dipendenze (requests, beautifulsoup4, tzdata)
+      - name: Installa dipendenze e Chromium
         shell: powershell
         run: |
           python -m pip install -r scripts/requirements.txt
+          python -m pip install "playwright>=1.45"
+          python -m playwright install chromium
 
       - name: Serve aggiornare?
         id: decide
@@ -52,11 +54,11 @@ jobs:
             "run=$($shouldRun.Trim())" >> $env:GITHUB_OUTPUT
           }
 
-      - name: Leggi i risultati (giornate 1-22)
+      - name: Leggi i risultati (giornata attuale + successiva)
         if: steps.decide.outputs.run == 'true'
         shell: powershell
         run: |
-          python scripts/update_matches.py --mode requests
+          python scripts/update_matches.py --mode browser --hidden --smart
 
       - name: Salva le modifiche
         if: steps.decide.outputs.run == 'true'
