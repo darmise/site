@@ -350,7 +350,7 @@ def read_rounds_browser(rounds, base_url, team, headless):
     from playwright.sync_api import sync_playwright, TimeoutError as PWTimeout
     results, failed = {}, []
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=headless)
+        browser = p.chromium.launch(headless=True)
         ctx = browser.new_context(locale="it-IT", timezone_id="Europe/Rome", viewport={"width": 1365, "height": 900})
         page = ctx.new_page()
         for i, n in enumerate(rounds):
