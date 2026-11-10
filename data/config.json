@@ -30,5 +30,10 @@
       "d": "Pronostici e voti: i tifosi dicono la loro."
     }
   ],
-  "totalRounds": 22
+  "totalRounds": 22,
+  "tuttocampo": {
+    "resultsUrl": "",
+    "resultsMethod": "GET",
+    "resultsData": {}
+  }
 }

@@ -1,4 +1,3 @@
-
 name: Aggiorna risultati
 
 on:
@@ -18,6 +17,8 @@ jobs:
   update:
     runs-on: [self-hosted, windows, x64]
     timeout-minutes: 20
+    env:
+      PYTHONUTF8: '1'          # evita errori di accenti nella console di Windows
 
     steps:
       - uses: actions/checkout@v4
@@ -26,11 +27,10 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Installa dipendenze
+      - name: Installa dipendenze (requests, beautifulsoup4, tzdata)
         shell: powershell
         run: |
           python -m pip install -r scripts/requirements.txt
-          python -m playwright install chromium
 
       - name: Serve aggiornare?
         id: decide
@@ -56,7 +56,7 @@ jobs:
         if: steps.decide.outputs.run == 'true'
         shell: powershell
         run: |
-          python scripts/update_matches.py
+          python scripts/update_matches.py --mode requests
 
       - name: Salva le modifiche
         if: steps.decide.outputs.run == 'true'
