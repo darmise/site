@@ -227,3 +227,296 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
 
 /* ===== Footer: nota discreta sulle statistiche ===== */
 .stats-note{flex-basis:100%;font-size:12px;opacity:.65}
+
+
+/* ===== Rifinitura grafica: partita attuale e prossima gara ===== */
+
+/* Hero più pulita: niente aloni viola o ombre colorate sui loghi */
+.hero{
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.055), transparent 58%),
+    linear-gradient(145deg,#0b1d50 0%,#102b70 58%,#12377f 100%);
+}
+.mcard{
+  max-width:940px;
+  padding:clamp(8px,2vw,18px) clamp(0px,2vw,18px) 4px;
+}
+.mc-meta{
+  margin-bottom:14px;
+}
+.mc-meta .eyebrow{
+  font-weight:800;
+  letter-spacing:.045em;
+}
+.mc-meta .sub{
+  opacity:.82;
+}
+.mc-stage{
+  padding:30px 0 32px;
+}
+.mc-team{
+  gap:12px;
+}
+.badge,
+.mc-team.is-us .badge,
+.nm-team .badge,
+.nm-team.is-us .badge{
+  box-shadow:0 3px 10px rgba(0,0,0,.18), inset 0 0 0 1px rgba(16,19,26,.08);
+}
+.mc-team.is-us .badge{
+  outline:2px solid rgba(255,255,255,.78);
+  outline-offset:4px;
+}
+.mc-name{
+  text-shadow:none;
+}
+.mc-tag{
+  color:#c1cbe4;
+  font-weight:600;
+  letter-spacing:.025em;
+}
+.mc-score,
+.mc-vs{
+  background:linear-gradient(145deg,#102b70,#0a1a49);
+  border:1px solid rgba(255,255,255,.28);
+  box-shadow:0 8px 22px rgba(0,0,0,.16);
+}
+.mc-score{
+  font-variant-numeric:tabular-nums;
+}
+.res{
+  box-shadow:none;
+  margin-top:2px;
+}
+.mc-foot{
+  margin-top:12px;
+}
+.countdown.dark div{
+  background:rgba(255,255,255,.075);
+  border-color:rgba(255,255,255,.18);
+  box-shadow:none;
+}
+
+/* Prossima gara: card più leggibile, con gerarchia visiva netta */
+.next-card{
+  background:
+    linear-gradient(135deg,rgba(29,78,216,.035),transparent 48%),
+    var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:0 8px 24px rgba(10,26,74,.055);
+  gap:22px 28px;
+  padding:26px 28px;
+}
+.next-card::before{
+  height:3px;
+  opacity:.9;
+}
+.nm-date{
+  min-width:112px;
+  padding:15px 20px 13px;
+  border-radius:16px;
+  background:linear-gradient(155deg,#142d68,#0a1a4a);
+  box-shadow:0 5px 14px rgba(10,26,74,.13);
+}
+.nm-date .d{
+  font-size:66px;
+  letter-spacing:-.035em;
+}
+.nm-date .m{
+  color:#f5c84c;
+}
+.nm-date small{
+  color:#d0d8ee;
+}
+.nm-body{
+  min-width:0;
+}
+.nm-teams{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center;
+  gap:12px;
+}
+.nm-team{
+  gap:11px;
+  font-size:clamp(19px,2.4vw,27px);
+}
+.nm-team:first-child{
+  justify-content:flex-end;
+  text-align:right;
+}
+.nm-team:last-child{
+  justify-content:flex-start;
+  text-align:left;
+}
+.nm-team .badge{
+  width:54px;
+  height:54px;
+}
+.nm-vs{
+  margin:0;
+  display:grid;
+  place-items:center;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:var(--paper);
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-size:13px;
+}
+.nm-tags{
+  margin-top:18px;
+  gap:7px;
+}
+.nm-tags li{
+  padding:5px 11px;
+  background:var(--paper);
+  border-color:var(--line);
+  color:var(--muted);
+}
+.nm-tags .tag-home,
+.nm-tags .tag-away{
+  color:#fff;
+}
+.next-card .countdown{
+  align-self:center;
+  gap:7px;
+}
+.next-card .countdown div{
+  min-width:68px;
+  padding:9px 11px;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 3px 10px rgba(10,26,74,.1);
+}
+.next-card .countdown b{
+  font-size:32px;
+}
+.next-card .countdown span{
+  font-size:11px;
+  letter-spacing:.04em;
+}
+.next-card .countdown .now{
+  color:var(--ink);
+  background:var(--paper);
+  border:1px solid var(--line);
+  box-shadow:none;
+}
+
+/* Footer: indicatore discreto, senza mostrare numeri o dati personali */
+.stats-note{
+  flex-basis:100%;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin-top:5px;
+  font-size:11px;
+  letter-spacing:.025em;
+  color:inherit;
+  opacity:.48;
+}
+.stats-note i{
+  display:inline-block;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#62b889;
+  box-shadow:0 0 0 2px rgba(98,184,137,.13);
+}
+
+/* Adattamento tablet e smartphone */
+@media (max-width:980px){
+  .next-card{
+    grid-template-columns:100px minmax(0,1fr);
+    gap:18px 20px;
+  }
+  .next-card .countdown{
+    grid-column:1 / -1;
+    justify-content:center;
+  }
+}
+@media (max-width:640px){
+  .hero{
+    padding:30px 0 34px;
+  }
+  .mc-stage{
+    padding:22px 0 25px;
+  }
+  .mc-team.is-us .badge{
+    outline-offset:3px;
+  }
+  .next-card{
+    grid-template-columns:76px minmax(0,1fr);
+    gap:15px 13px;
+    padding:19px 14px 16px;
+  }
+  .nm-date{
+    min-width:0;
+    padding:11px 8px 9px;
+    border-radius:12px;
+  }
+  .nm-date .d{
+    font-size:46px;
+  }
+  .nm-date .m{
+    font-size:18px;
+  }
+  .nm-date small{
+    font-size:11px;
+  }
+  .nm-teams{
+    grid-template-columns:minmax(0,1fr) 27px minmax(0,1fr);
+    gap:5px;
+  }
+  .nm-team{
+    flex-direction:column;
+    gap:5px;
+    font-size:16px;
+    line-height:1.05;
+    text-align:center !important;
+  }
+  .nm-team:first-child,
+  .nm-team:last-child{
+    justify-content:flex-start;
+  }
+  .nm-team .badge{
+    width:42px;
+    height:42px;
+  }
+  .nm-team span:last-child{
+    max-width:100%;
+    overflow-wrap:anywhere;
+  }
+  .nm-vs{
+    width:27px;
+    height:27px;
+    font-size:11px;
+  }
+  .nm-tags{
+    margin-top:13px;
+    gap:6px;
+  }
+  .nm-tags li{
+    font-size:11px;
+    padding:4px 8px;
+  }
+  .next-card .countdown{
+    gap:6px;
+  }
+  .next-card .countdown div{
+    min-width:0;
+    flex:1;
+    padding:8px 5px;
+  }
+  .next-card .countdown b{
+    font-size:26px;
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  .next-card,
+  .mc-team,
+  .badge{
+    transition:none !important;
+  }
+}

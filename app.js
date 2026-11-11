@@ -74,7 +74,7 @@
     s.src = 'https://gc.zgo.at/count.js';
     document.head.appendChild(s);
     const f = document.querySelector('#site-footer .wrap');
-    if (f && !f.querySelector('.stats-note')) f.insertAdjacentHTML('beforeend', '<span class="stats-note">Statistiche anonime, senza cookie.</span>');
+    if (f && !f.querySelector('.stats-note')) f.insertAdjacentHTML('beforeend', '<span class="stats-note" aria-label="Statistiche anonime attive"><i aria-hidden="true"></i><span>Statistiche anonime</span></span>');
   }
 
   /* ---------- layout comune ---------- */
