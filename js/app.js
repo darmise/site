@@ -5,9 +5,10 @@
   const NAV = [
     ['index.html', 'Home', 'home'],
     ['rosa.html', 'Rosa', 'rosa'],
-    ['pagelle.html', 'Pagelle', 'pagelle']
+    ['pagelle.html', 'Pagelle', 'pagelle'],
+    ['community.html', 'Community', 'community'],
+    ['live.html', 'Live', 'live']
   ];
-  //['community.html', 'Community', 'community'], ['live.html', 'Live', 'live']
   const page = document.body.dataset.page;
 
   const getJSON = async url => {
@@ -60,6 +61,22 @@
   }, true);
   const timeLabel = m => (m.timeKnown === false ? 'orario da definire' : 'ore ' + fmtTime(m.date));
 
+  /* ---------- statistiche anonime (facoltative) ----------
+     Attive solo se in data/config.json c'è  "analytics": { "goatcounter": "nome-del-tuo-sito" }.
+     GoatCounter non usa cookie né identificativi personali; nessun numero compare sulla pagina. */
+  function startStats() {
+    const code = ((S.config || {}).analytics || {}).goatcounter;
+    if (!code || window.__stats || navigator.doNotTrack === '1' || /^(localhost|127\.|\[::1\])/.test(location.hostname)) return;
+    window.__stats = true;                       // renderChrome gira ogni minuto: la visita si conta una volta sola
+    const s = document.createElement('script');
+    s.async = true;
+    s.dataset.goatcounter = 'https://' + encodeURIComponent(code) + '.goatcounter.com/count';
+    s.src = 'https://gc.zgo.at/count.js';
+    document.head.appendChild(s);
+    const f = document.querySelector('#site-footer .wrap');
+    if (f && !f.querySelector('.stats-note')) f.insertAdjacentHTML('beforeend', '<span class="stats-note" aria-label="Statistiche anonime attive"><i aria-hidden="true"></i><span>Statistiche anonime</span></span>');
+  }
+
   /* ---------- layout comune ---------- */
   function renderChrome() {
     const links = NAV.map(([href, label, key]) => {
@@ -77,6 +94,7 @@
         <span>© ${new Date().getFullYear()} ${esc(S.config.teamName)} · Blog dei tifosi, non ufficiale</span>
         <span>Stagione ${esc(S.config.season || '')} · Risultati: <a href="https://www.tuttocampo.it/Basilicata/CalcioA5Dilettanti/GironeBPotenza/Risultati" target="_blank" rel="noopener">Tuttocampo.it</a></span>
       </div>`;
+    startStats();
     const burger = $('.burger'), nav = $('#nav');
     burger.addEventListener('click', () => {
       const open = nav.classList.toggle('open');
@@ -118,6 +136,10 @@
     tick(); timers[key] = setInterval(tick, 30000);
   }
 
+  const COURT = `<svg class="court" viewBox="0 0 800 360" preserveAspectRatio="none" aria-hidden="true">
+      <rect x="10" y="10" width="780" height="340"/><line x1="400" y1="10" x2="400" y2="350"/>
+      <path d="M10 40 A140 140 0 0 1 10 320"/><path d="M790 320 A140 140 0 0 1 790 40"/>
+      <circle cx="120" cy="180" r="3"/><circle cx="680" cy="180" r="3"/></svg>`;
   const teamBlock = (m, side) => {
     const name = side === 'home' ? m.home : m.away;
     const us = name === S.config.teamName;
@@ -127,9 +149,15 @@
       <span class="mc-tag">${side === 'home' ? 'Casa' : 'Trasferta'}</span>
     </div>`;
   };
-  const scoreBlock = m => `<div class="mc-score">
+  const scoreBlock = m => `<div class="mc-score" aria-label="Risultato ${esc(m.homeScore ?? 0)} a ${esc(m.awayScore ?? 0)}">
       <b class="${m.homeScore < m.awayScore ? 'dim' : ''}">${esc(m.homeScore ?? 0)}</b><i>:</i><b class="${m.awayScore < m.homeScore ? 'dim' : ''}">${esc(m.awayScore ?? 0)}</b>
     </div>`;
+  const dayLabel = d => {
+    const t = new Date(d), n = new Date(); n.setHours(0, 0, 0, 0);
+    const diff = Math.round((new Date(t.getFullYear(), t.getMonth(), t.getDate()) - n) / 864e5);
+    return diff === 0 ? 'oggi' : diff === 1 ? 'domani' : t.toLocaleDateString('it-IT', { weekday: 'long' });
+  };
+  const stage = (m, center) => `<div class="mc-stage">${COURT}<div class="mc-grid">${teamBlock(m, 'home')}<div class="mc-center">${center}</div>${teamBlock(m, 'away')}</div></div>`;
   const RES = { V: 'Vittoria', N: 'Pareggio', P: 'Sconfitta' };
   const sub = m => [esc(m.competition), m.round ? m.round + 'ª giornata' : '', fmtDate(m.date)].filter(Boolean).join(' · ');
 
@@ -141,18 +169,15 @@
     if (current && current.status === 'live') {
       el.innerHTML = `<div class="mcard">
         <div class="mc-meta"><span class="eyebrow"><span class="live-pill">● LIVE</span> Partita in corso</span><span class="sub">${sub(current)}</span></div>
-        <div class="mc-grid">${teamBlock(current, 'home')}
-          <div class="mc-center">${scoreBlock(current)}</div>${teamBlock(current, 'away')}</div>
+        ${stage(current, scoreBlock(current))}
         <div class="mc-foot"><a class="btn" href="live.html">Segui la diretta</a></div></div>`;
       return;
     }
     if (current) {
+      const time = current.timeKnown === false ? '' : fmtTime(current.date);
       el.innerHTML = `<div class="mcard">
         <div class="mc-meta"><span class="eyebrow">Partita attuale</span><span class="sub">${sub(current)}</span></div>
-        <div class="mc-grid">${teamBlock(current, 'home')}
-          <div class="mc-center"><div class="mc-vs">VS</div>
-            <div class="mc-when"><b>${current.timeKnown === false ? 'Orario da definire' : fmtTime(current.date)}</b>${fmtDate(current.date)}</div></div>
-          ${teamBlock(current, 'away')}</div>
+        ${stage(current, `<div class="mc-vs"><small>${time ? dayLabel(current.date) : 'orario da definire'}</small>${time || 'VS'}</div>`)}
         <div class="mc-foot"><div class="countdown dark" id="cd-hero"></div></div></div>`;
       startCountdown('hero', 'cd-hero', current.date);
       return;
@@ -164,9 +189,7 @@
     const o = outcome(last);
     el.innerHTML = `<div class="mcard">
       <div class="mc-meta"><span class="eyebrow">Ultimo risultato</span><span class="sub">${sub(last)}</span></div>
-      <div class="mc-grid">${teamBlock(last, 'home')}
-        <div class="mc-center">${scoreBlock(last)}${o ? `<span class="res res-${o}">${RES[o]}</span>` : ''}</div>
-        ${teamBlock(last, 'away')}</div>
+      ${stage(last, scoreBlock(last) + (o ? `<span class="res res-${o}">${RES[o]}</span>` : ''))}
       ${last.title ? `<p class="mc-title">${esc(last.title)}</p>` : ''}
       <div class="mc-foot"><a class="btn" href="pagelle.html">Leggi le pagelle</a><a class="btn ghost" href="live.html">Vai alla diretta</a></div></div>`;
   }
@@ -180,19 +203,26 @@
         'La prossima gara comparirà qui appena il calendario sarà aggiornato.'}</p>`;
       return;
     }
-    const where = next.home === S.config.teamName ? 'In casa' : 'In trasferta';
-    el.innerHTML = `
-      <div>
-        <div class="muted">${esc(next.competition)} · ${where}</div>
-        <div class="vs">
-          <span class="tm">${logo(next.homeLogo)}<span>${esc(next.home)}</span></span>
-          <i>vs</i>
-          <span class="tm"><span>${esc(next.away)}</span>${logo(next.awayLogo)}</span>
-        </div>
-        <div class="muted">${next.round ? next.round + 'ª giornata · ' : ''}${fmtDate(next.date)} · ${timeLabel(next)}</div>
+    const home = next.home === S.config.teamName;
+    const d = next.date ? new Date(next.date) : null;
+    const dateTile = d ? `<div class="nm-date"><span class="d">${d.getDate()}</span>
+        <span class="m">${d.toLocaleDateString('it-IT', { month: 'short' }).replace('.', '')}</span>
+        <small>${d.toLocaleDateString('it-IT', { weekday: 'long' })}</small></div>`
+      : `<div class="nm-date"><span class="d">?</span><span class="m">data</span><small>da definire</small></div>`;
+    const team = (n, src) => `<div class="nm-team${n === S.config.teamName ? ' is-us' : ''}">${logo(src)}<span>${esc(n)}</span></div>`;
+    const time = next.date && next.timeKnown !== false ? fmtTime(next.date) : '';
+    el.innerHTML = `${dateTile}
+      <div class="nm-body">
+        <div class="nm-teams">${team(next.home, next.homeLogo)}<span class="nm-vs">vs</span>${team(next.away, next.awayLogo)}</div>
+        <ul class="nm-tags">
+          <li>${esc(next.competition)}</li>
+          ${next.round ? `<li>${next.round}ª giornata</li>` : ''}
+          <li class="${home ? 'tag-home' : 'tag-away'}">${home ? 'In casa' : 'In trasferta'}</li>
+          <li>${time ? 'Inizio ore ' + time : 'Orario da definire'}</li>
+        </ul>
       </div>
       <div class="countdown" id="cd"></div>`;
-    startCountdown('next', 'cd', next.date);
+    if (next.date) startCountdown('next', 'cd', next.date);
   }
 
   function renderAbout() {

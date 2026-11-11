@@ -147,49 +147,376 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
 .goal-list li>span:last-child{flex:1;min-width:0}
 
 /* ---- Scheda partita (hero) ---- */
-.hero{padding:34px 0 40px}
-.mcard{position:relative;z-index:1;max-width:880px;margin:0 auto;text-align:center}
-.mc-meta{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;margin-bottom:24px}
-.mc-meta .eyebrow{margin:0}
-.mc-meta .sub{color:#c9cedb;font-size:14px}
-.mc-grid{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:clamp(8px,3vw,36px)}
+
+/* ===== Ultimo risultato: il campo ===== */
+.hero{background:#0c2670;padding:40px 0 48px}
+.hero::after{content:none}
+.mcard{position:relative;max-width:900px;margin:0 auto;text-align:center}
+.mc-meta{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 14px;margin-bottom:8px}
+.mc-meta .eyebrow{margin:0;font-size:15px;letter-spacing:.02em;text-transform:none;color:var(--gold)}
+.mc-meta .sub{color:#c3cbe6;font-size:14px}
+
+/* campo da calcio a 5: linea di metà campo e aree; il cerchio di centrocampo è il punteggio */
+.mc-stage{position:relative;padding:34px 0}
+.court{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.court *{fill:none;stroke:#fff;stroke-opacity:.2;stroke-width:2;vector-effect:non-scaling-stroke}
+.mc-grid{position:relative;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:clamp(6px,2vw,28px)}
 .mc-team{display:flex;flex-direction:column;align-items:center;gap:10px;min-width:0}
-.badge{display:grid;place-items:center;flex:0 0 auto;background:#fff;border-radius:50%;box-shadow:0 10px 26px #0006,inset 0 0 0 1px #0000001a}
+.badge{display:grid;place-items:center;flex:0 0 auto;background:#fff;border-radius:50%;box-shadow:0 8px 22px #0005,inset 0 0 0 1px #0000001a}
 .badge .tlogo{width:74%;height:74%;object-fit:contain;display:block}
-.mc-team .badge{width:clamp(80px,13vw,124px);height:clamp(80px,13vw,124px)}
-.mc-team.is-us .badge{box-shadow:0 0 0 4px var(--accent),0 0 0 8px #ffffff30,0 14px 30px #0007}
-.mc-name{font:700 clamp(20px,3.4vw,32px)/1.05 var(--display);text-transform:uppercase;letter-spacing:.03em;overflow-wrap:break-word;max-width:15ch}
-.mc-tag{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#c9cedb;border:1px solid #ffffff33;border-radius:999px;padding:2px 10px}
-.mc-center{display:flex;flex-direction:column;align-items:center;gap:12px}
-.mc-score{display:flex;align-items:center;gap:clamp(6px,1.5vw,14px);background:#ffffff14;border:1px solid #ffffff2e;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border-radius:22px;padding:4px clamp(14px,3vw,30px);font:700 clamp(54px,10vw,104px)/1.1 var(--display)}
-.mc-score i{font-style:normal;opacity:.45;font-size:.7em}
-.mc-score .dim{opacity:.5}
-.res{font:700 12px var(--body);letter-spacing:.14em;text-transform:uppercase;border-radius:999px;padding:4px 14px;color:#fff}
+.mc-team .badge{width:clamp(78px,12vw,118px);height:clamp(78px,12vw,118px)}
+.mc-team.is-us .badge{box-shadow:0 0 0 4px var(--accent),0 0 0 7px #0c2670,0 10px 22px #0005}
+.mc-name{font:700 clamp(20px,3.2vw,30px)/1.08 var(--display);text-transform:uppercase;letter-spacing:.03em;overflow-wrap:break-word;max-width:14ch}
+.mc-tag{font-size:13px;color:#a9b4da}
+.mc-center{position:relative;display:flex;flex-direction:column;align-items:center}
+.mc-score,.mc-vs{display:flex;align-items:center;justify-content:center;width:clamp(150px,21vw,212px);aspect-ratio:1;border-radius:50%;background:#0c2670;border:3px solid #ffffff55;box-shadow:0 0 0 8px #0c2670}
+.mc-score{gap:clamp(4px,1vw,10px);font:700 clamp(54px,9vw,88px)/1 var(--display);padding-bottom:6px}
+.mc-score i{font-style:normal;opacity:.4;font-size:.7em;padding-bottom:.08em}
+.mc-score .dim{opacity:.45}
+.mc-vs{flex-direction:column;gap:0;font:700 clamp(40px,6vw,60px)/1 var(--display)}
+.mc-vs small{font:600 15px var(--body);color:var(--gold);text-transform:capitalize;margin-bottom:2px}
+.res{position:relative;margin-top:-6px;font:700 14px var(--body);border-radius:999px;padding:5px 16px;color:#fff;box-shadow:0 0 0 4px #0c2670}
 .res-V{background:var(--good)}.res-N{background:var(--gold);color:#10131a}.res-P{background:var(--accent)}
-.mc-vs{font:700 clamp(44px,8vw,76px)/1 var(--display);opacity:.92}
-.mc-when{color:#d5daea;font-weight:600;line-height:1.3;text-transform:capitalize}
-.mc-when b{display:block;font:700 clamp(26px,4vw,36px) var(--display);color:#fff}
-.mc-title{color:#d5daea;margin:18px auto 0;max-width:56ch}
-.mc-foot{margin-top:26px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.mc-when{margin-top:12px;color:#c3cbe6;font-weight:600;line-height:1.3;text-transform:capitalize}
+.mc-title{color:#d5daea;margin:6px auto 0;max-width:56ch}
+.mc-foot{margin-top:6px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
 .mc-foot .btn{margin:0}
-.countdown.dark div{background:#ffffff14;border:1px solid #ffffff2e;border-radius:14px;padding:8px 16px;min-width:76px}
+.countdown.dark div{background:#ffffff14;border:1px solid #ffffff2e;border-radius:12px;padding:8px 16px;min-width:76px}
 .countdown.dark b{color:#fff;font-size:34px}
-.countdown.dark span{color:#c9cedb}
+.countdown.dark span{color:#c3cbe6}
 .countdown .now{font:700 22px var(--display);text-transform:uppercase;letter-spacing:.04em;padding:6px 0}
-@media (max-width:560px){
-  .mc-meta{margin-bottom:18px}
-  .mc-score{padding:2px 12px;border-radius:18px}
-  .mc-tag{font-size:10px;padding:1px 8px}
+@media (max-width:640px){
+  .mc-stage{padding:22px 0 26px}
+  .mc-grid{grid-template-columns:1fr 1fr;row-gap:22px}
+  .mc-center{grid-column:1 / -1;grid-row:1}
+  .mc-score,.mc-vs{width:148px}
+  .mc-name{font-size:18px;letter-spacing:.01em}
 }
 
-/* ---- Prossima gara ---- */
-.vs{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin:12px 0}
-.vs .tm{display:inline-flex;align-items:center;gap:12px;font:700 clamp(20px,3vw,30px) var(--display);text-transform:uppercase;letter-spacing:.02em}
-.vs .badge{width:52px;height:52px;box-shadow:0 3px 10px #0003,inset 0 0 0 1px #0000001a}
-.vs i{font-style:normal;font:700 18px var(--display);color:var(--accent);letter-spacing:.1em}
-@media (max-width:560px){
-  .mc-name{font-size:17px;letter-spacing:.01em}
-  .vs{flex-direction:column;align-items:flex-start;gap:4px}
-  .vs .tm:last-of-type{flex-direction:row-reverse}
-  .vs i{font-size:14px;padding-left:64px}
+/* ===== Prossima gara: foglio gara ===== */
+.next-card{display:grid;grid-template-columns:auto 1fr auto;justify-content:stretch;align-items:center;gap:20px 30px;padding:22px 26px;position:relative;overflow:hidden}
+.next-card::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:linear-gradient(90deg,var(--accent) 50%,var(--blue) 50%)}
+.nm-date{background:var(--navy);color:#fff;border-radius:14px;padding:12px 22px 11px;text-align:center;line-height:1;min-width:104px;box-shadow:0 6px 16px #0a1a4a40}
+.nm-date .d{display:block;font:700 62px/1 var(--display)}
+.nm-date .m{display:block;font:700 22px var(--display);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;color:var(--gold)}
+.nm-date small{display:block;margin-top:6px;font-size:13px;color:#b7c1e4;text-transform:capitalize}
+.nm-teams{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.nm-team{display:flex;align-items:center;gap:12px;font:700 clamp(21px,2.6vw,29px)/1.1 var(--display);text-transform:uppercase;letter-spacing:.02em;min-width:0}
+.nm-team span:last-child{overflow-wrap:break-word;min-width:0}
+.nm-team .badge{width:50px;height:50px;box-shadow:0 2px 8px #0003,inset 0 0 0 1px #0000001f}
+.nm-team.is-us .badge{box-shadow:0 0 0 3px var(--accent),inset 0 0 0 1px #0000001f}
+.nm-vs{font:700 14px var(--display);text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-left:62px}
+.nm-tags{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.nm-tags li{font-size:13px;font-weight:600;border:1px solid var(--line);border-radius:999px;padding:3px 12px;background:var(--paper)}
+.nm-tags .tag-home{background:var(--accent);border-color:var(--accent);color:#fff}
+.nm-tags .tag-away{background:var(--blue);border-color:var(--blue);color:#fff}
+.next-card .countdown{margin:0;gap:8px}
+.next-card .countdown div{background:var(--navy);border:0;border-radius:10px;padding:8px 10px;min-width:66px}
+.next-card .countdown b{color:#fff;font-size:30px;font-variant-numeric:tabular-nums}
+.next-card .countdown span{color:#b7c1e4;font-size:12px;text-transform:none;letter-spacing:.02em}
+@media (max-width:980px){
+  .next-card{grid-template-columns:auto 1fr}
+  .next-card .countdown{grid-column:1 / -1}
+  .next-card .countdown div{flex:1}
+}
+@media (max-width:640px){
+  .next-card{padding:20px 16px 16px}
+  .nm-date{min-width:84px;padding:10px 14px 8px;align-self:start}
+  .nm-date .d{font-size:48px}
+}
+
+/* ===== Footer: nota discreta sulle statistiche ===== */
+.stats-note{flex-basis:100%;font-size:12px;opacity:.65}
+
+
+/* ===== Rifinitura grafica: partita attuale e prossima gara ===== */
+
+/* Hero più pulita: niente aloni viola o ombre colorate sui loghi */
+.hero{
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.055), transparent 58%),
+    linear-gradient(145deg,#0b1d50 0%,#102b70 58%,#12377f 100%);
+}
+.mcard{
+  max-width:940px;
+  padding:clamp(8px,2vw,18px) clamp(0px,2vw,18px) 4px;
+}
+.mc-meta{
+  margin-bottom:14px;
+}
+.mc-meta .eyebrow{
+  font-weight:800;
+  letter-spacing:.045em;
+}
+.mc-meta .sub{
+  opacity:.82;
+}
+.mc-stage{
+  padding:30px 0 32px;
+}
+.mc-team{
+  gap:12px;
+}
+.badge,
+.mc-team.is-us .badge,
+.nm-team .badge,
+.nm-team.is-us .badge{
+  box-shadow:0 3px 10px rgba(0,0,0,.18), inset 0 0 0 1px rgba(16,19,26,.08);
+}
+.mc-team.is-us .badge{
+  outline:2px solid rgba(255,255,255,.78);
+  outline-offset:4px;
+}
+.mc-name{
+  text-shadow:none;
+}
+.mc-tag{
+  color:#c1cbe4;
+  font-weight:600;
+  letter-spacing:.025em;
+}
+.mc-score,
+.mc-vs{
+  background:linear-gradient(145deg,#102b70,#0a1a49);
+  border:1px solid rgba(255,255,255,.28);
+  box-shadow:0 8px 22px rgba(0,0,0,.16);
+}
+.mc-score{
+  font-variant-numeric:tabular-nums;
+}
+.res{
+  box-shadow:none;
+  margin-top:2px;
+}
+.mc-foot{
+  margin-top:12px;
+}
+.countdown.dark div{
+  background:rgba(255,255,255,.075);
+  border-color:rgba(255,255,255,.18);
+  box-shadow:none;
+}
+
+/* Prossima gara: card più leggibile, con gerarchia visiva netta */
+.next-card{
+  background:
+    linear-gradient(135deg,rgba(29,78,216,.035),transparent 48%),
+    var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:0 8px 24px rgba(10,26,74,.055);
+  gap:22px 28px;
+  padding:26px 28px;
+}
+.next-card::before{
+  height:3px;
+  opacity:.9;
+}
+.nm-date{
+  min-width:112px;
+  padding:15px 20px 13px;
+  border-radius:16px;
+  background:linear-gradient(155deg,#142d68,#0a1a4a);
+  box-shadow:0 5px 14px rgba(10,26,74,.13);
+}
+.nm-date .d{
+  font-size:66px;
+  letter-spacing:-.035em;
+}
+.nm-date .m{
+  color:#f5c84c;
+}
+.nm-date small{
+  color:#d0d8ee;
+}
+.nm-body{
+  min-width:0;
+}
+.nm-teams{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center;
+  gap:12px;
+}
+.nm-team{
+  gap:11px;
+  font-size:clamp(19px,2.4vw,27px);
+}
+.nm-team:first-child{
+  justify-content:flex-end;
+  text-align:right;
+}
+.nm-team:last-child{
+  justify-content:flex-start;
+  text-align:left;
+}
+.nm-team .badge{
+  width:54px;
+  height:54px;
+}
+.nm-vs{
+  margin:0;
+  display:grid;
+  place-items:center;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:var(--paper);
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-size:13px;
+}
+.nm-tags{
+  margin-top:18px;
+  gap:7px;
+}
+.nm-tags li{
+  padding:5px 11px;
+  background:var(--paper);
+  border-color:var(--line);
+  color:var(--muted);
+}
+.nm-tags .tag-home,
+.nm-tags .tag-away{
+  color:#fff;
+}
+.next-card .countdown{
+  align-self:center;
+  gap:7px;
+}
+.next-card .countdown div{
+  min-width:68px;
+  padding:9px 11px;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 3px 10px rgba(10,26,74,.1);
+}
+.next-card .countdown b{
+  font-size:32px;
+}
+.next-card .countdown span{
+  font-size:11px;
+  letter-spacing:.04em;
+}
+.next-card .countdown .now{
+  color:var(--ink);
+  background:var(--paper);
+  border:1px solid var(--line);
+  box-shadow:none;
+}
+
+/* Footer: indicatore discreto, senza mostrare numeri o dati personali */
+.stats-note{
+  flex-basis:100%;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin-top:5px;
+  font-size:11px;
+  letter-spacing:.025em;
+  color:inherit;
+  opacity:.48;
+}
+.stats-note i{
+  display:inline-block;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#62b889;
+  box-shadow:0 0 0 2px rgba(98,184,137,.13);
+}
+
+/* Adattamento tablet e smartphone */
+@media (max-width:980px){
+  .next-card{
+    grid-template-columns:100px minmax(0,1fr);
+    gap:18px 20px;
+  }
+  .next-card .countdown{
+    grid-column:1 / -1;
+    justify-content:center;
+  }
+}
+@media (max-width:640px){
+  .hero{
+    padding:30px 0 34px;
+  }
+  .mc-stage{
+    padding:22px 0 25px;
+  }
+  .mc-team.is-us .badge{
+    outline-offset:3px;
+  }
+  .next-card{
+    grid-template-columns:76px minmax(0,1fr);
+    gap:15px 13px;
+    padding:19px 14px 16px;
+  }
+  .nm-date{
+    min-width:0;
+    padding:11px 8px 9px;
+    border-radius:12px;
+  }
+  .nm-date .d{
+    font-size:46px;
+  }
+  .nm-date .m{
+    font-size:18px;
+  }
+  .nm-date small{
+    font-size:11px;
+  }
+  .nm-teams{
+    grid-template-columns:minmax(0,1fr) 27px minmax(0,1fr);
+    gap:5px;
+  }
+  .nm-team{
+    flex-direction:column;
+    gap:5px;
+    font-size:16px;
+    line-height:1.05;
+    text-align:center !important;
+  }
+  .nm-team:first-child,
+  .nm-team:last-child{
+    justify-content:flex-start;
+  }
+  .nm-team .badge{
+    width:42px;
+    height:42px;
+  }
+  .nm-team span:last-child{
+    max-width:100%;
+    overflow-wrap:anywhere;
+  }
+  .nm-vs{
+    width:27px;
+    height:27px;
+    font-size:11px;
+  }
+  .nm-tags{
+    margin-top:13px;
+    gap:6px;
+  }
+  .nm-tags li{
+    font-size:11px;
+    padding:4px 8px;
+  }
+  .next-card .countdown{
+    gap:6px;
+  }
+  .next-card .countdown div{
+    min-width:0;
+    flex:1;
+    padding:8px 5px;
+  }
+  .next-card .countdown b{
+    font-size:26px;
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  .next-card,
+  .mc-team,
+  .badge{
+    transition:none !important;
+  }
 }
