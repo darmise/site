@@ -78,8 +78,9 @@
       if (m !== baseMood) { baseMood = m; if (bubble.hidden) setMood(baseMood); }
     }, 60000);
 
+    // l'espressione dipende SOLO dall'ultima partita giocata: le azioni (battuta, pronostico, coro...) non la cambiano
     function speak(text, mood, link) {
-      setMood(mood || baseMood);
+      setMood(baseMood);
       bubble.textContent = text;
       if (link) {
         const a = document.createElement('a');
@@ -90,7 +91,7 @@
       body.classList.remove('jump'); void body.offsetWidth;
       if (!reduce) body.classList.add('jump');
       clearTimeout(timer);
-      timer = setTimeout(() => { bubble.hidden = true; setMood(baseMood); }, 8000);
+      timer = setTimeout(() => { bubble.hidden = true; }, 8000);
     }
 
     /* ---- frasi che dipendono dal sito ---- */
