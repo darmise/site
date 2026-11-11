@@ -2,6 +2,7 @@
 (function () {
   'use strict';
   const FC = window.FC;
+  console.info('[mascotte] versione 5: umore fisso sull\'ultima partita giocata');
   // immagini (PNG con sfondo trasparente) per ogni umore; "wow" usa quella contenta
   const IMG = {
     happy: 'assets/mascotte-happy.png',
@@ -78,9 +79,9 @@
       if (m !== baseMood) { baseMood = m; if (bubble.hidden) setMood(baseMood); }
     }, 60000);
 
-    // l'espressione dipende SOLO dall'ultima partita giocata: le azioni (battuta, pronostico, coro...) non la cambiano
+    // L'espressione NON si tocca qui: dipende solo dall'ultima partita giocata (vedi baseMood) e cambia
+    // soltanto quando arriva un nuovo risultato. Il parametro "mood" resta solo per compatibilità e viene ignorato.
     function speak(text, mood, link) {
-      setMood(baseMood);
       bubble.textContent = text;
       if (link) {
         const a = document.createElement('a');
