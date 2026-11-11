@@ -520,19 +520,3 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
     transition:none !important;
   }
 }
-
-
-/* Campo più basso su smartphone */
-@media (max-width: 640px) {
-  .mc-stage {
-    padding-top: 12px;
-    padding-bottom: 12px;
-  }
-
-  .court {
-    height: 55%;
-    top: 12.5%;
-    bottom: auto;
-  }
-}
-
