@@ -530,7 +530,7 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
   }
 
   .court {
-    height: 75%;
+    height: 55%;
     top: 12.5%;
     bottom: auto;
   }
