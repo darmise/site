@@ -26,7 +26,10 @@
     "resultsMethod": "GET",
     "resultsData": {}
   },
-  "analytics": { "counters": { "databaseURL": "https://football-site-66649-default-rtdb.europe-west1.firebasedatabase.app/" } }
-
+  "analytics": { 
+    "counters": { 
+      "databaseURL": "https://football-site-66649-default-rtdb.europe-west1.firebasedatabase.app/" 
+    }
+  }
 
 }

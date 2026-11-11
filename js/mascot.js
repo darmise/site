@@ -1,50 +1,27 @@
-/* Mascotte di prova: il lupo "Ringhio". Interattiva, tutta in SVG inline. */
+/* Mascotte ufficiale: la torre rossoblù. Tre espressioni (contenta, normale, triste) che dipendono dall'ultimo risultato. */
 (function () {
   'use strict';
   const FC = window.FC;
-  const MOODS = {
-    neutral: { d: 'M90 126Q100 132 110 126', fill: 'none', tongue: false },
-    happy: { d: 'M84 123Q100 147 116 123Z', fill: '#5a1224', tongue: true },
-    sad: { d: 'M90 134Q100 124 110 134', fill: 'none', tongue: false },
-    wow: { d: 'M94 124a6 8 0 1 0 12 0a6 8 0 1 0 -12 0Z', fill: '#5a1224', tongue: false }
+  // immagini (PNG con sfondo trasparente) per ogni umore; "wow" usa quella contenta
+  const IMG = {
+    happy: 'assets/mascotte-happy.png',
+    neutral: 'assets/mascotte-neutral.png',
+    sad: 'assets/mascotte-sad.png'
   };
-  const FUR = '#9aa3b5', FUR2 = '#e9edf5';
-  const SVG = `
-<svg viewBox="0 0 200 230" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-  <defs><clipPath id="jc"><path d="M50 228Q50 162 100 156Q150 162 150 228Z"/></clipPath></defs>
-  <g class="m-art">
-    <g clip-path="url(#jc)">
-      <rect x="40" y="150" width="60" height="80" fill="#d7263d"/><rect x="100" y="150" width="60" height="80" fill="#1d4ed8"/>
-    </g>
-    <text x="100" y="205" text-anchor="middle" font-family="Barlow Condensed,Impact,sans-serif" font-weight="700" font-size="34" fill="#fff">10</text>
-    <circle cx="50" cy="196" r="11" fill="${FUR}"/>
-    <g class="m-arm"><path d="M148 178L172 148" stroke="${FUR}" stroke-width="16" stroke-linecap="round"/><circle cx="173" cy="146" r="11" fill="${FUR}"/></g>
-    <path d="M62 150Q100 172 138 150L136 166Q100 188 64 166Z" fill="#d7263d"/>
-    <path d="M66 160Q100 181 134 160L133 166Q100 188 67 166Z" fill="#1d4ed8"/>
-    <rect x="118" y="164" width="14" height="30" rx="4" fill="#d7263d"/><rect x="118" y="182" width="14" height="6" fill="#1d4ed8"/>
-    <polygon points="52,72 60,16 94,52" fill="${FUR}"/><polygon points="62,62 64,34 82,52" fill="#f4a6b0"/>
-    <polygon points="148,72 140,16 106,52" fill="${FUR}"/><polygon points="138,62 136,34 118,52" fill="#f4a6b0"/>
-    <ellipse cx="100" cy="98" rx="53" ry="48" fill="${FUR}"/>
-    <ellipse cx="100" cy="118" rx="29" ry="22" fill="${FUR2}"/>
-    <g class="m-eye"><circle cx="78" cy="92" r="12" fill="#fff"/></g>
-    <g class="m-eye"><circle cx="122" cy="92" r="12" fill="#fff"/></g>
-    <g id="m-pupils"><circle cx="78" cy="93" r="5.5" fill="#10131a"/><circle cx="122" cy="93" r="5.5" fill="#10131a"/>
-      <circle cx="76" cy="90.5" r="1.8" fill="#fff"/><circle cx="120" cy="90.5" r="1.8" fill="#fff"/></g>
-    <ellipse cx="100" cy="108" rx="8.5" ry="6" fill="#1a1d26"/>
-    <path d="M100 114V124" stroke="#1a1d26" stroke-width="2.4" stroke-linecap="round"/>
-    <path id="m-mouth" d="" stroke="#1a1d26" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-    <ellipse id="m-tongue" cx="100" cy="135" rx="7" ry="4" fill="#f27a8c"/>
-  </g>
-</svg>`;
+  const FACE = { happy: 'happy', wow: 'happy', neutral: 'neutral', sad: 'sad' };
 
+  // frasi: calcio a 5 (5 in campo, pivot, tempo effettivo, falli cumulati, tiri liberi, palazzetto)
   const JOKES = [
-    'Il mio modulo preferito? Il 4-4-2... pizze, ovviamente! 🍕',
-    'Ho chiesto al VAR se sono bello. Sta ancora controllando. 📺',
-    'Sai qual è il colmo per un arbitro? Vedere tutto... tranne il fuorigioco!',
-    'Un lupo non perde mai: al massimo pareggia con la luna. 🌕',
-    'Oggi ho fatto 11 flessioni: una per ogni titolare! 💪',
-    'Il calcio è questione di centimetri. Io sono questione di croccantini.',
-    'Perché il centravanti è dal dentista? Deve sistemare il tiro a... denti! 🦷'
+    'Il mio modulo preferito? Il 3-1: tre punti e un pivot che la mette dentro! ⚽',
+    'Nel calcio a 5 il tempo è effettivo: il cronometro si ferma, il mio appetito mai. 🍕',
+    'Il pivot gioca spalle alla porta ed è l\'unico che segna senza guardare dove tira.',
+    'Cinque in campo e rotazioni continue: io mi stanco solo a guardarli dalla panchina! 🔄',
+    'Sesto fallo di squadra: tiro libero e silenzio in palazzetto. Persino io smetto di cantare. 🤫',
+    'Il pallone del futsal rimbalza poco, il mio entusiasmo molto! ⚽',
+    'Quattro secondi per rimettere in gioco: io ne impiego cinque solo per scegliere la sciarpa. 🧣',
+    'Time-out! Il mister parla ai ragazzi, io approfitto per riprendere fiato. ⏱️',
+    'Una torre non crolla mai: al massimo pareggia. 🏰',
+    'Il palazzetto è l\'unico stadio dove si sente il fischio delle scarpe sul parquet. 🏟️'
   ];
 
   const $ = (s, r = document) => r.querySelector(s);
@@ -57,7 +34,9 @@
 
   function start() {
     const S = FC.S;
-    const name = S.config.mascot || 'Ringhio';
+    const name = S.config.mascot || 'la Torre';
+    Object.values(IMG).forEach(src => { const i = new Image(); i.src = src; });   // pronte prima di cambiare espressione
+
     const root = document.createElement('div');
     root.innerHTML = `
       <div class="mascot" id="mascot" role="complementary" aria-label="Mascotte ${name}">
@@ -68,27 +47,39 @@
           <button type="button" data-a="cheer">📣 Coro <span id="m-cnt"></span></button>
           <button type="button" data-a="hide" aria-label="Nascondi la mascotte">✕</button>
         </div>
-        <button type="button" class="m-body" id="m-body" aria-label="Parla con ${name}, la mascotte">${SVG}</button>
+        <button type="button" class="m-body" id="m-body" aria-label="Parla con ${name}, la mascotte">
+          <img id="m-img" src="${IMG.neutral}" alt="" width="320" height="401" decoding="async">
+        </button>
       </div>
-      <button type="button" class="m-open" id="m-open" aria-label="Mostra la mascotte" hidden>🐺</button>`;
+      <button type="button" class="m-open" id="m-open" aria-label="Mostra la mascotte" hidden><img src="assets/mascotte-icona.png" alt="" width="40" height="40"></button>`;
     document.body.append(...root.children);
 
-    const mascot = $('#mascot'), bubble = $('#m-bubble'), menu = $('#m-menu'), body = $('#m-body'), openBtn = $('#m-open');
-    const mouth = $('#m-mouth'), tongue = $('#m-tongue'), pupils = $('#m-pupils');
+    const mascot = $('#mascot'), bubble = $('#m-bubble'), menu = $('#m-menu'), body = $('#m-body'), openBtn = $('#m-open'), img = $('#m-img');
     let timer, clicks = 0, cheers = +store.get('fc_cori') || 0;
     const cnt = $('#m-cnt');
     const showCount = () => { cnt.textContent = cheers ? '(' + cheers + ')' : ''; };
     showCount();
 
     function setMood(m) {
-      const d = MOODS[m] || MOODS.neutral;
-      mouth.setAttribute('d', d.d); mouth.setAttribute('fill', d.fill);
-      tongue.style.display = d.tongue ? '' : 'none';
+      const face = FACE[m] || 'neutral';
+      const src = IMG[face];
+      if (!img.src.endsWith(src)) img.src = src;
+      body.dataset.mood = m;
     }
-    setMood('happy');
+    // umore a riposo = ultimo risultato: vittoria contento, pareggio normale, sconfitta triste
+    const moodNow = () => {
+      const last = FC.played()[0], o = last ? FC.outcome(last) : '';
+      return o === 'V' ? 'happy' : o === 'P' ? 'sad' : 'neutral';
+    };
+    let baseMood = moodNow();
+    setMood(baseMood);
+    setInterval(() => {                      // i dati si rileggono ogni minuto: se arriva un nuovo risultato l'umore cambia
+      const m = moodNow();
+      if (m !== baseMood) { baseMood = m; if (bubble.hidden) setMood(baseMood); }
+    }, 60000);
 
     function speak(text, mood, link) {
-      setMood(mood || 'happy');
+      setMood(mood || baseMood);
       bubble.textContent = text;
       if (link) {
         const a = document.createElement('a');
@@ -99,7 +90,7 @@
       body.classList.remove('jump'); void body.offsetWidth;
       if (!reduce) body.classList.add('jump');
       clearTimeout(timer);
-      timer = setTimeout(() => { bubble.hidden = true; setMood('happy'); }, 8000);
+      timer = setTimeout(() => { bubble.hidden = true; setMood(baseMood); }, 8000);
     }
 
     /* ---- frasi che dipendono dal sito ---- */
@@ -107,19 +98,19 @@
       const out = [];
       const lv = S.live;
       if (lv && lv.active) {
-        out.push({ t: `Siamo in diretta: ${lv.home} ${lv.homeScore}-${lv.awayScore} ${lv.away}! Corri!`, m: 'wow', l: { text: 'Vai alla diretta →', href: 'live.html' } });
+        out.push({ t: `Siamo in diretta: ${lv.home} ${lv.homeScore}-${lv.awayScore} ${lv.away}!`, m: 'wow' });
       }
       const last = FC.played()[0];
       if (last) {
         const o = FC.outcome(last);
         const opp = last.home === S.config.teamName ? last.away : last.home;
         const sc = `${last.homeScore}-${last.awayScore}`;
-        if (o === 'V') out.push({ t: `Dopo il ${sc} con ${opp} ho ululato fino a mezzanotte! 🎉`, m: 'happy' });
-        if (o === 'N') out.push({ t: `Il ${sc} con ${opp} è un punto d'oro... ma io volevo i tre! 😤`, m: 'neutral' });
-        if (o === 'P') out.push({ t: `Il ${sc} con ${opp} fa male, ma i lupi si rialzano sempre. 💪`, m: 'sad' });
+        if (o === 'V') out.push({ t: `Dopo il ${sc} con ${opp} ho cantato fino a tardi! 🎉`, m: 'happy' });
+        if (o === 'N') out.push({ t: `Il ${sc} con ${opp} è un punto che vale, ma io volevo i tre! 😤`, m: 'neutral' });
+        if (o === 'P') out.push({ t: `Il ${sc} con ${opp} fa male, ma le torri non crollano: si riparte! 💪`, m: 'sad' });
       }
       const next = FC.upcoming()[0];
-      if (next) {
+      if (next && next.date) {
         const days = Math.ceil((new Date(next.date) - Date.now()) / 864e5);
         const opp = next.home === S.config.teamName ? next.away : next.home;
         out.push({ t: days > 0 ? `Mancano ${days} giorni a ${opp}. Intanto preparo la sciarpa! 🧣` : `Oggi si gioca con ${opp}! Forza ragazzi!`, m: 'wow' });
@@ -127,15 +118,33 @@
       return out;
     }
 
-    function joke() { speak(pick(JOKES), 'happy'); }
+    function joke() { speak(pick(JOKES), baseMood); }
 
+    /* Pronostico: calcolato (non a caso) dalla media gol delle nostre partite giocate, con un piccolo vantaggio per chi gioca in casa.
+       Una volta fatto per una partita viene ricordato: i click successivi (anche dopo aver ricaricato la pagina) danno sempre lo stesso. */
+    function forecast(m) {
+      const us = S.config.teamName, homeUs = m.home === us;
+      const games = FC.played().filter(g => g.homeScore != null && (g.home === us || g.away === us));
+      const PRIOR = 3.5, K = 2;              // media tipica di gol a squadra nel calcio a 5, pesata come 2 partite
+      let gf = PRIOR * K, ga = PRIOR * K;
+      games.forEach(g => { const h = g.home === us; gf += h ? g.homeScore : g.awayScore; ga += h ? g.awayScore : g.homeScore; });
+      gf /= games.length + K; ga /= games.length + K;
+      const ours = Math.max(0, Math.round(gf + (homeUs ? .25 : -.25)));
+      const theirs = Math.max(0, Math.round(ga + (homeUs ? -.25 : .25)));
+      return { ours, theirs, n: games.length };
+    }
     function predict() {
       const m = FC.upcoming()[0];
-      if (!m) { speak('Non ci sono partite in programma: la mia sfera di cristallo è in ferie. 🔮', 'neutral'); return; }
-      const [a, b] = pick([[2, 0], [2, 1], [1, 0], [3, 1], [1, 1], [3, 0], [0, 0]]);
+      if (!m) { speak('Non ci sono partite in programma: appena esce il calendario faccio il pronostico.', 'neutral'); return; }
+      const key = 'fc_pred_' + m.id;
+      let p = null;
+      try { p = JSON.parse(store.get(key) || 'null'); } catch (e) { p = null; }
+      if (!p) { p = forecast(m); store.set(key, JSON.stringify(p)); }
       const homeUs = m.home === S.config.teamName;
-      const h = homeUs ? a : b, w = homeUs ? b : a;
-      speak(`Il mio pronostico per ${m.home} – ${m.away}: ${h}-${w}! (Il lupo non sbaglia mai... quasi mai.)`, 'wow');
+      const h = homeUs ? p.ours : p.theirs, w = homeUs ? p.theirs : p.ours;
+      const esito = p.ours > p.theirs ? 'Vedo un successo del ' + S.config.teamName : p.ours < p.theirs ? 'Vedo una gara difficile' : 'Vedo una gara in equilibrio';
+      const base = p.n === 0 ? 'Non ci sono ancora partite giocate, quindi uso la media del girone' : p.n === 1 ? 'Si basa sull\'unica partita giocata finora, quindi è molto prudente' : `Si basa sulla media gol delle nostre ${p.n} partite giocate`;
+      speak(`Pronostico ${m.home} – ${m.away}: ${h}-${w}. ${esito}. ${base}: è solo un'indicazione, la decide il campo.`, 'neutral');
     }
 
     function confetti() {
@@ -158,9 +167,9 @@
 
     function cheer() {
       cheers++; store.set('fc_cori', cheers); showCount(); confetti();
-      let t = pick(['Uuuuh! Rossoblù! 🔴🔵', 'Più forte! Non ti sento! 📣', 'Ahhh-uuuu! Che coro!']);
+      let t = pick(['Uuuuh! Rossoblù! 🔴🔵', 'Più forte! Non vi sento! 📣', 'Forza Tricarico! Che coro!']);
       if (cheers === 10) t = 'Dieci cori! Sei ufficialmente un ultrà in prova! 🎖️';
-      if (cheers === 50) t = 'Cinquanta cori! Ti nomino tifoso d\'onore del branco! 🐺🏆';
+      if (cheers === 50) t = 'Cinquanta cori! Ti nomino tifoso d\'onore della torre! 🏰🏆';
       if (cheers === 100) t = 'CENTO CORI! Sei leggenda. Ti porto io in trasferta! 🚌';
       speak(t, 'happy');
     }
@@ -182,25 +191,29 @@
       const b = e.target.closest('button'); if (!b) return;
       ({ joke, predict, cheer, hide })[b.dataset.a]();
     });
-    openBtn.addEventListener('click', () => { show(); speak('Rieccomi! Mi eri mancato! 🐺', 'happy'); });
+    openBtn.addEventListener('click', () => { show(); speak('Rieccomi! Mi eri mancato! 🏰', baseMood); });
 
-    /* occhi che seguono il puntatore */
+    /* la torre si inclina leggermente verso il puntatore (come se ti seguisse con lo sguardo) */
     let raf = 0;
-    document.addEventListener('pointermove', e => {
+    if (!reduce) document.addEventListener('pointermove', e => {
       if (raf || mascot.hidden) return;
       raf = requestAnimationFrame(() => {
         raf = 0;
         const r = body.getBoundingClientRect();
-        const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height * .45);
-        const dist = Math.hypot(dx, dy) || 1, k = Math.min(1, dist / 160);
-        pupils.setAttribute('transform', `translate(${(dx / dist * 4.5 * k).toFixed(1)} ${(dy / dist * 4 * k).toFixed(1)})`);
+        const dx = e.clientX - (r.left + r.width / 2);
+        const tilt = Math.max(-1, Math.min(1, dx / 400)) * 4;
+        body.style.setProperty('--tilt', tilt.toFixed(1) + 'deg');
       });
     }, { passive: true });
 
     if (store.get('fc_mascot') === 'off') { mascot.hidden = true; openBtn.hidden = false; }
     else {
       let seen = false; try { seen = sessionStorage.getItem('fc_greet'); sessionStorage.setItem('fc_greet', '1'); } catch (e) { /* ignora */ }
-      if (!seen) setTimeout(() => speak(`Ciao tifoso! Sono ${name}, la mascotte. Toccami, non mordo! 🐺`, 'happy'), 1500);
+      if (!seen) setTimeout(() => {
+        const last = FC.played()[0], o = last ? FC.outcome(last) : '';
+        const tail = o === 'V' ? 'Dopo l\'ultima vittoria sono carichissimo!' : o === 'P' ? 'L\'ultima è andata male, ma in cinque si può ripartire.' : o === 'N' ? 'Ultimo risultato in parità: ora si cerca il colpo in più.' : 'Pronto per il prossimo fischio d\'inizio!';
+        speak(`Ciao! Sono ${name}, la mascotte del palazzetto. ${tail} Toccami, non crollo! 🏰`, baseMood);
+      }, 1500);
     }
   }
 
