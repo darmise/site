@@ -5,9 +5,7 @@
   const NAV = [
     ['index.html', 'Home', 'home'],
     ['rosa.html', 'Rosa', 'rosa'],
-    ['pagelle.html', 'Pagelle', 'pagelle'],
-    ['community.html', 'Community', 'community'],
-    ['live.html', 'Live', 'live']
+    ['pagelle.html', 'Pagelle', 'pagelle']
   ];
   const page = document.body.dataset.page;
 

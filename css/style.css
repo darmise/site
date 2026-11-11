@@ -520,3 +520,184 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
     transition:none !important;
   }
 }
+
+
+/* ==========================================
+   NUOVO RESTYLING HOME PAGE
+   ========================================== */
+
+/* Sezioni Chi siamo e Obiettivo del sito */
+.g2.even {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+.g2.even > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.g2.even .section-head {
+  margin-bottom: 16px;
+}
+
+.g2.even .section-head h2 {
+  font-size: clamp(27px, 3vw, 34px);
+  letter-spacing: .025em;
+}
+
+.g2.even .card.about {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--card);
+  box-shadow: 0 8px 26px rgba(10, 26, 74, .07);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.g2.even .card.about::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    var(--accent) 0%,
+    var(--blue) 100%
+  );
+}
+
+.g2.even .card.about:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(10, 26, 74, .12);
+}
+
+.g2.even .card.about p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.goal-list {
+  margin-top: 20px;
+  gap: 14px;
+}
+
+.goal-list li {
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  line-height: 1.45;
+}
+
+.goal-list .ico {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex-basis: 38px;
+  border-radius: 10px;
+  background: var(--card);
+}
+
+/* ==========================================
+   PULSANTE PAGELLE CENTRATO
+   ========================================== */
+
+.mc-foot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.mc-foot .btn {
+  margin: 0;
+}
+
+/* ==========================================
+   PROSSIMA GARA
+   ========================================== */
+
+.next-card {
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(10, 26, 74, .09);
+}
+
+.next-card:hover {
+  box-shadow: 0 14px 36px rgba(10, 26, 74, .13);
+}
+
+/* ==========================================
+   FOOTER E CONTATORI
+   ========================================== */
+
+.site-footer {
+  padding: 32px 0;
+}
+
+.site-footer .wrap {
+  align-items: center;
+}
+
+.footer-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.footer-stat {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 16px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 12px;
+  background: rgba(255,255,255,.06);
+  color: #fff;
+  font-size: 13px;
+}
+
+.footer-stat .stat-value {
+  color: var(--gold);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 860px) {
+  .g2.even {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .g2.even .card.about {
+    padding: 23px 20px;
+  }
+
+  .footer-stats {
+    flex-direction: column;
+  }
+
+  .footer-stat {
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g2.even .card.about,
+  .next-card {
+    transition: none;
+  }
+}
+
