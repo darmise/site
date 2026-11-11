@@ -59,20 +59,49 @@
   }, true);
   const timeLabel = m => (m.timeKnown === false ? 'orario da definire' : 'ore ' + fmtTime(m.date));
 
-  /* ---------- statistiche anonime (facoltative) ----------
-     Attive solo se in data/config.json c'è  "analytics": { "goatcounter": "nome-del-tuo-sito" }.
-     GoatCounter non usa cookie né identificativi personali; nessun numero compare sulla pagina. */
-  function startStats() {
-    const code = ((S.config || {}).analytics || {}).goatcounter;
-    if (!code || window.__stats || navigator.doNotTrack === '1' || /^(localhost|127\.|\[::1\])/.test(location.hostname)) return;
-    window.__stats = true;                       // renderChrome gira ogni minuto: la visita si conta una volta sola
-    const s = document.createElement('script');
-    s.async = true;
-    s.dataset.goatcounter = 'https://' + encodeURIComponent(code) + '.goatcounter.com/count';
-    s.src = 'https://gc.zgo.at/count.js';
-    document.head.appendChild(s);
+  /* ---------- contatori: utenti online e visite del mese (facoltativi) ----------
+     Attivi solo se in data/config.json c'è  "analytics": { "counters": { "databaseURL": "https://...firebasedatabase.app" } }.
+     Usano un Firebase Realtime Database (vedi README): nessun cookie, nessun dato personale, solo un codice casuale
+     per sessione e due numeri. */
+  const STATS = { online: null, month: null };
+  function paintStats() {
     const f = document.querySelector('#site-footer .wrap');
-    if (f && !f.querySelector('.stats-note')) f.insertAdjacentHTML('beforeend', '<span class="stats-note" aria-label="Statistiche anonime attive"><i aria-hidden="true"></i><span>Statistiche anonime</span></span>');
+    if (!f || STATS.online == null) return;
+    let el = f.querySelector('.stats-live');
+    if (!el) { el = document.createElement('span'); el.className = 'stats-live'; f.appendChild(el); }
+    el.innerHTML = `<span class="on-dot"></span>${STATS.online} ${STATS.online === 1 ? 'utente online' : 'utenti online'}<span class="sep">·</span>${STATS.month} ${STATS.month === 1 ? 'visita' : 'visite'} questo mese`;
+  }
+  function startCounters() {
+    const url = (((S.config || {}).analytics || {}).counters || {}).databaseURL;
+    if (!url || window.__counters || /^(localhost|127\.|\[::1\])/.test(location.hostname) && !window.__countersLocal) return;
+    window.__counters = true;                    // renderChrome gira ogni minuto: si avvia una volta sola
+    const base = url.replace(/\/+$/, '');
+    const d = new Date(), month = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+    let id = ''; try { id = sessionStorage.getItem('fc_sid') || ''; } catch (e) { /* ignora */ }
+    if (!id) { id = Math.random().toString(36).slice(2, 12).padEnd(8, 'x'); try { sessionStorage.setItem('fc_sid', id); } catch (e) { /* ignora */ } }
+    const api = (path, opt) => fetch(`${base}/${path}.json`, opt).then(r => r.ok ? r.json() : Promise.reject(r.status));
+    const SV = { '.sv': 'timestamp' };
+    const beat = async () => {
+      try {
+        let counted = false; try { counted = sessionStorage.getItem('fc_m') === month; } catch (e) { /* ignora */ }
+        if (!counted) {                          // una visita per sessione del browser
+          await api(`visits/${month}`, { method: 'PUT', body: JSON.stringify({ '.sv': { increment: 1 } }) });
+          try { sessionStorage.setItem('fc_m', month); } catch (e) { /* ignora */ }
+        }
+        await api(`online/${id}`, { method: 'PUT', body: JSON.stringify(SV) });
+        const [all, m] = await Promise.all([api('online'), api(`visits/${month}`)]);
+        const mine = (all || {})[id], list = Object.entries(all || {});
+        STATS.online = Math.max(1, list.filter(([, t]) => typeof t === 'number' && t >= mine - 75000).length);
+        STATS.month = m || 0;
+        paintStats();
+        // pulizia: chi è sparito da più di 10 minuti viene tolto (al massimo 5 alla volta)
+        list.filter(([, t]) => typeof t === 'number' && t < mine - 600000).slice(0, 5)
+          .forEach(([k]) => fetch(`${base}/online/${k}.json`, { method: 'DELETE' }).catch(() => {}));
+      } catch (e) { /* i contatori non devono mai rompere il sito */ }
+    };
+    beat();
+    setInterval(() => { if (!document.hidden) beat(); }, 30000);
+    addEventListener('pagehide', () => { fetch(`${base}/online/${id}.json`, { method: 'DELETE', keepalive: true }).catch(() => {}); });
   }
 
   /* ---------- layout comune ---------- */
@@ -92,7 +121,8 @@
         <span>© ${new Date().getFullYear()} ${esc(S.config.teamName)} · Blog dei tifosi, non ufficiale</span>
         <span>Stagione ${esc(S.config.season || '')} · Risultati: <a href="https://www.tuttocampo.it/Basilicata/CalcioA5Dilettanti/GironeBPotenza/Risultati" target="_blank" rel="noopener">Tuttocampo.it</a></span>
       </div>`;
-    startStats();
+    paintStats();
+    startCounters();
     const burger = $('.burger'), nav = $('#nav');
     burger.addEventListener('click', () => {
       const open = nav.classList.toggle('open');
@@ -134,10 +164,8 @@
     tick(); timers[key] = setInterval(tick, 30000);
   }
 
-  const COURT = `<svg class="court" viewBox="0 0 800 360" preserveAspectRatio="none" aria-hidden="true">
-      <rect x="10" y="10" width="780" height="340"/><line x1="400" y1="10" x2="400" y2="350"/>
-      <path d="M10 40 A140 140 0 0 1 10 320"/><path d="M790 320 A140 140 0 0 1 790 40"/>
-      <circle cx="120" cy="180" r="3"/><circle cx="680" cy="180" r="3"/></svg>`;
+  // campo disegnato con il CSS (non con un'immagine che si deforma): bordo, linea di metà campo e due aree
+  const COURT = '<div class="court" aria-hidden="true"><i class="pa l"></i><i class="pa r"></i></div>';
   const teamBlock = (m, side) => {
     const name = side === 'home' ? m.home : m.away;
     const us = name === S.config.teamName;
@@ -167,8 +195,7 @@
     if (current && current.status === 'live') {
       el.innerHTML = `<div class="mcard">
         <div class="mc-meta"><span class="eyebrow"><span class="live-pill">● LIVE</span> Partita in corso</span><span class="sub">${sub(current)}</span></div>
-        ${stage(current, scoreBlock(current))}
-        <div class="mc-foot"><a class="btn" href="live.html">Segui la diretta</a></div></div>`;
+        ${stage(current, scoreBlock(current))}</div>`;
       return;
     }
     if (current) {
@@ -189,7 +216,7 @@
       <div class="mc-meta"><span class="eyebrow">Ultimo risultato</span><span class="sub">${sub(last)}</span></div>
       ${stage(last, scoreBlock(last) + (o ? `<span class="res res-${o}">${RES[o]}</span>` : ''))}
       ${last.title ? `<p class="mc-title">${esc(last.title)}</p>` : ''}
-      <div class="mc-foot"><a class="btn" href="pagelle.html">Leggi le pagelle</a><a class="btn ghost" href="live.html">Vai alla diretta</a></div></div>`;
+      <div class="mc-foot"><a class="btn" href="pagelle.html">Leggi le pagelle</a></div></div>`;
   }
 
   function renderNext() {

@@ -79,12 +79,16 @@ Vanno in `data/pagelle.json`, agganciati all'id della partita (`g1`, `g2`… = n
 ## Fonte dei dati
 Risultati: Tuttocampo.it (il sito lo cita in basso). Verifica le condizioni d'uso del servizio.
 
-## Statistiche anonime (facoltative)
-Per sapere quante persone visitano il sito, senza mostrare numeri nelle pagine, il sito può usare
-[GoatCounter](https://www.goatcounter.com) (gratuito, senza cookie). Crea un sito su goatcounter.com, poi in `data/config.json` aggiungi:
+## Utenti online e visite del mese (footer)
+Nel footer compare una riga piccola: "N utenti online · N visite questo mese". Serve un database gratuito di Firebase
+(un sito statico da solo non può contare chi è collegato). Nessun cookie e nessun dato personale: per ogni scheda del browser
+si salva solo un codice casuale e l'orario dell'ultimo segnale; si è "online" se il segnale è di meno di 75 secondi fa.
+Una visita si conta una volta per sessione del browser.
+
+1. Su console.firebase.google.com crea un progetto (Analytics non serve) → *Build → Realtime Database → Create database*.
+2. Scheda *Rules*: incolla il contenuto di `firebase-rules.json` e pubblica.
+3. Copia l'indirizzo del database (es. `https://nome-default-rtdb.europe-west1.firebasedatabase.app`) e in `data/config.json` aggiungi:
 ```json
-"analytics": { "goatcounter": "nome-scelto" }
+"analytics": { "counters": { "databaseURL": "https://nome-default-rtdb.europe-west1.firebasedatabase.app" } }
 ```
-(il nome è la parte prima di `.goatcounter.com`). Le visite si guardano nella dashboard di GoatCounter, anche per mese.
-Se il campo manca o è vuoto, non succede nulla. Non conta le visite da `localhost` né chi ha attivato "Do Not Track".
-Nel footer compare una riga piccola: "Statistiche anonime, senza cookie."
+Se il campo manca la riga non compare. Da `localhost` i contatori non partono.
