@@ -112,7 +112,7 @@
     }).join('');
     $('#site-header').innerHTML = `
       <div class="wrap">
-        <a class="brand" href="index.html"><img class="logo" src="assets/logo.jpg" alt="" width="38" height="44"><b>${esc(S.config.teamName)}</b></a>
+        <a class="brand" href="index.html"><img class="logo" src="assets/logo.png" alt="" width="38" height="44"><b>${esc(S.config.teamName)}</b></a>
         <button class="burger" aria-label="Apri il menu" aria-expanded="false">☰</button>
         <nav class="nav" id="nav">${links}</nav>
       </div>`;
