@@ -23,8 +23,9 @@
     'Time-out! Il mister parla ai ragazzi, io approfitto per riprendere fiato. ⏱️',
     'Una torre non crolla mai: al massimo pareggia. 🏰',
     'Il palazzetto è l\'unico stadio dove si sente il fischio delle scarpe sul parquet. 🏟️',
-    'L cavadd bun s vern alla fin. 🐎',
-    'Racet a pall allu pivot e sciat a calcià. ⚽'  
+    'L cavadd bun s vern alla fin! 🐎',
+    'Racet a pall allu pivot e sciat a calcià! ⚽',
+    'Sabato ci saranno mill prsun! 🏟️'  
   ];
 
   const $ = (s, r = document) => r.querySelector(s);
