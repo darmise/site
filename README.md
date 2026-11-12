@@ -76,6 +76,14 @@ Vanno in `data/pagelle.json`, agganciati all'id della partita (`g1`, `g2`… = n
 }
 ```
 
+## Valore dei giocatori e bestemmie dello staff (automatico)
+Dopo ogni giornata `scripts/update_values.py` aggiorna i valori e il sito mostra una freccia verde ▲ (aumento) o rossa ▼ (calo) accanto al numero, sul retro della scheda.
+- **Giocatori** (serve la pagella della giornata in `data/pagelle.json`): cammelli = `(voto - 6) × 4`, più 2 per ogni gol e meno 1 per ogni tunnel subito. Nella pagella puoi aggiungere i campi facoltativi `goals` e `tunnels` della partita, che vengono sommati ai totali:
+  `{ "playerId": "p10", "vote": 8, "goals": 2, "tunnels": 0, "comment": "..." }`. Chi non ha la pagella non cambia (e non ha freccia).
+- **Staff** (basta il risultato): vittoria −3 bestemmie, pareggio +2, sconfitta +6.
+- Ogni giornata viene applicata una sola volta (lo stato è in `data/values.json`). Parte da sola dopo "Aggiorna risultati" e quando salvi `data/pagelle.json` (workflow "Aggiorna valori da pagelle"); a mano: `python scripts/update_values.py`.
+- I valori nei file sono il punto di partenza: scrivi quelli veri prima della prima giornata. Per i numeri delle regole modifica le costanti in cima allo script.
+
 ## Fonte dei dati
 Risultati: Tuttocampo.it (il sito lo cita in basso). Verifica le condizioni d'uso del servizio.
 

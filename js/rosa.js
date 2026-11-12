@@ -29,6 +29,9 @@
     goals: v => tier(v, [[0, 'Il pallone lo cerca ancora'], [3, 'Si sblocca quando serve'], [8, 'Fa tremare le reti'], [Infinity, 'Capocannoniere da palazzetto']]),
     bestemmie: v => tier(v, [[0, 'Zen assoluto: monaco in panchina'], [20, 'Si trattiene, ma si vede'], [60, 'Tipico stress da panchina'], [Infinity, 'Record da palazzetto: il cielo trema']])
   };
+  // freccia verde in alto (aumento) o rossa in basso (calo); nulla se il valore non è cambiato
+  const trend = c => { c = num(c); return c === 0 ? '' :
+    `<span class="trend ${c > 0 ? 'up' : 'down'}" title="${c > 0 ? 'In rialzo' : 'In calo'} rispetto alla scorsa giornata"><i aria-hidden="true">${c > 0 ? '▲' : '▼'}</i>${Math.abs(c)}<span class="sr">${c > 0 ? ' in più' : ' in meno'}</span></span>`; };
   const stat = (emoji, label, value, note) =>
     `<div class="st"><span class="st-ico" aria-hidden="true">${emoji}</span>
       <div class="st-txt"><span class="st-lab">${label}</span><b class="st-val">${value}</b><span class="st-note">${note}</span></div></div>`;
@@ -48,8 +51,8 @@
       : `<img class="pl-img ph" src="${ph}" alt="" loading="lazy" width="320" height="401">`;
     const big = staff ? '<span class="pl-num staff" aria-label="Staff">STAFF</span>' : `<span class="pl-num" aria-label="Numero ${esc(p.number)}">${esc(p.number)}</span>`;
     const stats = staff
-      ? stat('🤬', 'Bestemmie', num(p.bestemmie), NOTE.bestemmie(num(p.bestemmie)))
-      : stat('🐪', 'Valore', `${num(p.camels)} <small>${pl(num(p.camels), 'cammello', 'cammelli')}</small>`, NOTE.camels(num(p.camels))) +
+      ? stat('🤬', 'Bestemmie', `${num(p.bestemmie)}${trend(p.bestemmieChange)}`, NOTE.bestemmie(num(p.bestemmie)))
+      : stat('🐪', 'Valore', `${num(p.camels)} <small>${pl(num(p.camels), 'cammello', 'cammelli')}</small>${trend(p.camelsChange)}`, NOTE.camels(num(p.camels))) +
         stat('🕳️', 'Tunnel subiti', num(p.tunnels), NOTE.tunnels(num(p.tunnels))) +
         stat('⚽', 'Gol fatti', num(p.goals), NOTE.goals(num(p.goals)));
     const status = STATUS[p.status] ? `<p class="bk-status st-${esc(p.status)}">${STATUS[p.status]}${p.statusNote ? ' · ' + esc(p.statusNote) : ''}</p>` : '';

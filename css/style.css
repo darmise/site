@@ -639,3 +639,12 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
   .pl-flip{transition:none}
 }
 .page-hint{margin:10px 0 0;color:var(--gold);font-weight:600;font-size:15px}
+
+/* freccia di variazione del valore */
+.trend{display:inline-flex;align-items:center;gap:2px;margin-left:8px;padding:1px 7px 1px 5px;border-radius:999px;font:700 13px/1.4 var(--body);vertical-align:middle;white-space:nowrap}
+.trend i{font-style:normal;font-size:11px}
+.trend.up{background:rgba(34,197,94,.2);color:#4ade80}
+.trend.down{background:rgba(239,68,68,.22);color:#ff7b7b}
+.trend .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.is-staff .trend{margin-left:0;margin-top:2px;font-size:15px}
+@media (max-width:640px){.trend{margin-left:5px;font-size:12px}}
