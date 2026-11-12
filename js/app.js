@@ -112,7 +112,7 @@
     }).join('');
     $('#site-header').innerHTML = `
       <div class="wrap">
-        <a class="brand" href="index.html"><img class="logo" src="assets/logo.png" alt="" width="38" height="44"><b>${esc(S.config.teamName)}</b></a>
+        <a class="brand" href="index.html"><img class="logo" src="assets/logo.jpg" alt="" width="38" height="44"><b>${esc(S.config.teamName)}</b></a>
         <button class="burger" aria-label="Apri il menu" aria-expanded="false">☰</button>
         <nav class="nav" id="nav">${links}</nav>
       </div>`;
@@ -216,7 +216,7 @@
       <div class="mc-meta"><span class="eyebrow">Ultimo risultato</span><span class="sub">${sub(last)}</span></div>
       ${stage(last, scoreBlock(last) + (o ? `<span class="res res-${o}">${RES[o]}</span>` : ''))}
       ${last.title ? `<p class="mc-title">${esc(last.title)}</p>` : ''}
-      <div class="mc-foot"><a class="btn" href="pagelle.html">Leggi le pagelle</a></div></div>`;
+      <div class="mc-foot"><a class="btn" href="pagelle.html#${last.id}">Leggi le pagelle</a></div></div>`;
   }
 
   function renderNext() {

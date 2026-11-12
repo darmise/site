@@ -652,3 +652,53 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
 /* colori del ruolo: universale e staff ben distinti dagli altri */
 .pl-card[data-role=UNI] .pl-tag{background:#8b3dff;color:#fff}
 .pl-card[data-role=STAFF] .pl-tag{background:#12c2d6;color:#04222a}
+
+/* ===== Pagina Pagelle ===== */
+.pgl{padding-bottom:12px}
+.rounds{display:grid;grid-template-columns:repeat(11,1fr);gap:8px;margin:24px 0 22px}
+.rd{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;aspect-ratio:1/.9;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;font-family:var(--body);padding:0}
+.rd b{font:700 22px/1 var(--display)}
+.rd i{font:700 11px/1 var(--body);font-style:normal;margin-top:3px;min-height:11px;color:var(--muted)}
+.rd:hover{border-color:var(--blue)}
+.rd.future{background:transparent;border-style:dashed;color:var(--muted)}
+.rd.o-V{box-shadow:inset 0 -4px 0 var(--good)}.rd.o-N{box-shadow:inset 0 -4px 0 var(--gold)}.rd.o-P{box-shadow:inset 0 -4px 0 var(--accent)}
+.rd.has::after{content:"";position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--blue)}
+.rd[aria-pressed=true]{background:var(--navy);border-color:var(--navy);color:#fff}
+.rd[aria-pressed=true] i{color:#c3cbe6}
+.rd:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.pg-match{background:#0c2670;color:#fff;border-radius:20px;padding:18px 20px 26px;display:flex;flex-direction:column;align-items:center;gap:14px;position:relative;overflow:hidden}
+.pg-match.soon{align-items:flex-start}
+.pg-meta{display:flex;justify-content:space-between;gap:12px;width:100%;font-size:13px;color:#c3cbe6}
+.pg-teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;width:100%}
+.pg-team{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.pg-team b{font:700 20px/1.1 var(--display);text-transform:uppercase;letter-spacing:.02em}
+.pg-team .badge{width:76px;height:76px}
+.pg-score{font:700 64px/1 var(--display);display:flex;align-items:center;gap:10px}
+.pg-score span{color:#7d8bbd;font-size:42px}
+.pg-score.vs{font-size:42px;color:#c3cbe6}
+.pg-note{margin:0;color:#c3cbe6}
+.pg-title{margin:26px 0 6px;font-size:30px}
+.pg-report{margin:0 0 4px;max-width:70ch;color:var(--muted)}
+.pg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.pg-card{display:flex;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px}
+.pg-vote{flex:0 0 auto;display:grid;place-items:center;width:64px;height:64px;border-radius:16px;font:700 30px var(--display);color:#fff;background:var(--muted)}
+.pg-vote.v-top{background:var(--good)}.pg-vote.v-good{background:#58b368}.pg-vote.v-mid{background:var(--gold);color:#10131a}.pg-vote.v-low{background:var(--bad)}
+.pg-body{min-width:0;flex:1}
+.pg-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pg-top h3{margin:0;font-size:22px;letter-spacing:.01em;display:flex;align-items:baseline;gap:8px;min-width:0}
+.pg-n{font:700 15px var(--display);color:var(--accent);flex:0 0 auto}
+.pg-best{flex:0 0 auto;font:700 12px var(--body);padding:3px 9px;border-radius:999px;background:var(--gold);color:#10131a;white-space:nowrap}
+.pg-tags{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 8px}
+.pg-adj{font:700 12px var(--body);padding:3px 10px;border-radius:999px;background:var(--navy);color:#fff}
+.pg-role{font:600 12px var(--body);padding:3px 10px;border-radius:999px;background:var(--paper);color:var(--muted);border:1px solid var(--line)}
+.pg-stats{display:flex;flex-wrap:wrap;gap:14px;font-size:14px;color:var(--muted)}
+.pg-stats b{font:700 17px var(--display);color:var(--ink)}
+.pg-stats .on b{color:var(--good)}.pg-stats .on.bad b{color:var(--bad)}
+.pg-comment{margin:10px 0 0;font-size:15px;line-height:1.45;color:var(--ink)}
+@media (max-width:760px){
+  .rounds{grid-template-columns:repeat(6,1fr);gap:6px}
+  .pg-grid{grid-template-columns:1fr}
+  .pg-score{font-size:46px}.pg-score span{font-size:30px}
+  .pg-team b{font-size:16px}.pg-team .badge{width:58px;height:58px}
+  .pg-meta{flex-direction:column;gap:2px;text-align:center}
+}

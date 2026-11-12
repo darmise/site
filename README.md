@@ -64,17 +64,24 @@ si riesce a leggere: ogni voce sovrascrive quella automatica con lo stesso `id` 
 (`status`: `scheduled`, `live` o `played`; per le partite giocate aggiungi `homeScore` e `awayScore`; i logo si
 indicano con `homeLogo` e `awayLogo`.)
 
-## Pagelle e articoli (a mano)
-Vanno in `data/pagelle.json`, agganciati all'id della partita (`g1`, `g2`… = numero di giornata):
+## Pagelle (archivio delle 22 giornate)
+La pagina `pagelle.html` mostra le giornate in alto (verde/giallo/rosso = vittoria/pareggio/sconfitta, puntino blu = pagelle disponibili) e sotto la giornata scelta. Il pulsante "Leggi le pagelle" della home porta direttamente alla giornata dell'ultimo risultato (`pagelle.html#g5` = quinta giornata).
+Le pagelle si scrivono a mano in `data/pagelle.json`, agganciate all'id della partita (`g1`, `g2`… = numero di giornata). Un esempio completo è in `data/pagelle.esempio.json`:
 ```json
 {
   "g1": {
     "title": "Titolo del resoconto",
     "report": "Testo breve della partita.",
-    "pagelle": [ { "playerId": "p1", "vote": 6.5, "comment": "Commento" } ]
+    "pagelle": [
+      { "playerId": "p10", "vote": 8, "label": "Devastante", "goals": 2, "tunnels": 0, "comment": "Commento scherzoso." }
+    ]
   }
 }
 ```
+- `vote`: voto finale (anche con decimali, es. 6.5); `label`: l'aggettivo della prestazione; `goals` e `tunnels`: gol fatti e tunnel subiti **in quella partita**; `comment`: la battuta.
+- Le pagelle compaiono ordinate dal voto più alto; il migliore ha la stella. Chi non è in lista non ha giocato.
+- I campi `goals`, `tunnels` e `vote` alimentano anche l'aggiornamento automatico dei cammelli (vedi sezione sopra).
+- Per vedere le pagelle d'esempio copia il contenuto di `pagelle.esempio.json` in `pagelle.json` (ma i valori dei giocatori cambierebbero davvero).
 
 ## Valore dei giocatori e bestemmie dello staff (automatico)
 Dopo ogni giornata `scripts/update_values.py` aggiorna i valori e il sito mostra una freccia verde ▲ (aumento) o rossa ▼ (calo) accanto al numero, sul retro della scheda.
