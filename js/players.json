@@ -1,0 +1,17 @@
+[
+  {"id":"p1","number":1,"name":"Luca Ferrante","role":"POR","birth":1996,"nat":"Italia","status":"ok","camels":42,"tunnels":1,"goals":0},
+  {"id":"p13","number":22,"name":"Alessio Barone","role":"POR","birth":2001,"nat":"Italia","status":"ok","camels":9,"tunnels":0,"goals":0},
+  {"id":"p2","number":2,"name":"Marco Bellini","role":"CEN","birth":1998,"nat":"Italia","status":"ok","camels":35,"tunnels":4,"goals":1},
+  {"id":"p5","number":3,"name":"Simone Rinaldi","role":"CEN","birth":1999,"nat":"Italia","status":"injured","statusNote":"Rientro previsto a dicembre","camels":28,"tunnels":5,"goals":0},
+  {"id":"p4","number":4,"name":"Davide Moretti","role":"CEN","birth":1995,"nat":"Italia","status":"ok","camels":31,"tunnels":3,"goals":0},
+  {"id":"p3","number":5,"name":"Andrea Colombo","role":"LAT","birth":1994,"nat":"Italia","status":"ok","camels":25,"tunnels":6,"goals":1},
+  {"id":"p7","number":6,"name":"Lorenzo De Santis","role":"LAT","birth":1996,"nat":"Italia","status":"suspended","statusNote":"Squalificato per 1 giornata","camels":30,"tunnels":7,"goals":2},
+  {"id":"p6","number":8,"name":"Matteo Greco","role":"LAT","birth":1997,"nat":"Italia","status":"ok","camels":48,"tunnels":2,"goals":3},
+  {"id":"p14","number":13,"name":"Emanuele Gallo","role":"LAT","birth":2000,"nat":"Italia","status":"ok","camels":12,"tunnels":2,"goals":0},
+  {"id":"p10","number":7,"name":"Riccardo Serra","role":"PIV","birth":1999,"nat":"Italia","status":"ok","camels":55,"tunnels":1,"goals":6},
+  {"id":"p11","number":9,"name":"Nicolò Vitale","role":"PIV","birth":1997,"nat":"Italia","status":"ok","camels":68,"tunnels":0,"goals":9},
+  {"id":"p12","number":11,"name":"Tommaso Caruso","role":"PIV","birth":2000,"nat":"Italia","status":"ok","camels":40,"tunnels":2,"goals":4},
+  {"id":"p8","number":10,"name":"Federico Marchetti","role":"UNI","birth":1998,"nat":"Italia","status":"ok","camels":72,"tunnels":1,"goals":5},
+  {"id":"p9","number":14,"name":"Gabriele Fontana","role":"UNI","birth":2002,"nat":"Italia","status":"ok","camels":14,"tunnels":3,"goals":1},
+  {"id":"p20","number":21,"name":"Kevin Amoah","role":"UNI","birth":2003,"nat":"Ghana","status":"doubt","statusNote":"Affaticamento muscolare","camels":20,"tunnels":4,"goals":2}
+]

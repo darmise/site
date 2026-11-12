@@ -92,3 +92,15 @@ Una visita si conta una volta per sessione del browser.
 "analytics": { "counters": { "databaseURL": "https://nome-default-rtdb.europe-west1.firebasedatabase.app" } }
 ```
 Se il campo manca la riga non compare. Da `localhost` i contatori non partono.
+
+## Rosa (`data/players.json` e `data/staff.json`)
+Davanti a ogni scheda si vedono solo numero di maglia (sullo sfondo), ruolo, nome e cognome. Toccando la scheda si gira e compaiono le statistiche.
+**Giocatori** (`data/players.json`). Campi: `id`, `number`, `name` ("Nome Cognome"), `role`, `birth`, `nat`, più:
+- `camels`: valore del giocatore, in cammelli 🐪
+- `tunnels`: tunnel subiti 🕳️
+- `goals`: gol fatti ⚽
+- facoltativi: `photo`, `status` (`ok`, `injured`, `suspended`, `doubt`) e `statusNote`.
+- `role`: `POR`, `CEN`, `LAT`, `PIV`, `UNI` (va bene anche per esteso: Portiere, Centrale...).
+- `photo`: per esempio `"assets/giocatori/serra.jpg"`. Meglio verticale (4:5), soggetto in alto. Se manca compare la mascotte.
+**Staff** (`data/staff.json`). Campi: `id`, `name`, `role` (es. "Allenatore") e `bestemmie` (solo un numero, il contatore 🤬). Sulla scheda al posto del numero di maglia compare "STAFF". Facoltativo: `photo`.
+La pagina si apre su "Tutta la squadra"; `rosa.html#pivot` o `rosa.html#staff` aprono direttamente una sezione.
