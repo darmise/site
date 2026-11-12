@@ -109,6 +109,7 @@ Davanti a ogni scheda si vedono solo numero di maglia (sullo sfondo), ruolo, nom
 - `goals`: gol fatti ⚽
 - facoltativi: `photo`, `status` (`ok`, `injured`, `suspended`, `doubt`) e `statusNote`.
 - `role`: `POR`, `CEN`, `LAT`, `PIV`, `UNI` (va bene anche per esteso: Portiere, Centrale...).
+- Foto: la strada più semplice è salvare il file `assets/giocatori/<id>.png` oppure `.jpg` (es. `assets/giocatori/p10.png`; per lo staff `assets/staff/s1.png`). Un PNG con sfondo trasparente (giocatore ritagliato) è il più bello: dietro resta visibile il numero di maglia: compare da sola. Chi non ha il file resta con la mascotte, scheda per scheda. In alternativa, `photo` con un percorso qualsiasi.
 - `photo`: per esempio `"assets/giocatori/serra.jpg"`. Meglio verticale (4:5), soggetto in alto. Se manca compare la mascotte.
 **Staff** (`data/staff.json`). Campi: `id`, `name`, `role` (es. "Allenatore") e `bestemmie` (solo un numero, il contatore 🤬). Sulla scheda al posto del numero di maglia compare "STAFF". Facoltativo: `photo`.
 La pagina si apre su "Tutta la squadra"; `rosa.html#pivot` o `rosa.html#staff` aprono direttamente una sezione.

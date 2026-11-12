@@ -46,9 +46,10 @@
     const { first, last } = splitName(p.name);
     const staff = o.kind === 'staff';
     const ph = staff ? PH_STAFF : PH_PLAYER;
-    const photo = p.photo
-      ? `<img class="pl-img real" src="${esc(p.photo)}" alt="Foto di ${esc(p.name)}" loading="lazy" width="320" height="400">`
-      : `<img class="pl-img ph" src="${ph}" alt="" loading="lazy" width="320" height="401">`;
+    // foto: campo "photo" della scheda, altrimenti il file assets/giocatori/<id>.png o .jpg (assets/staff/<id>.* per lo staff);
+    // se non esiste nessuno dei due resta la mascotte
+    const base = `assets/${staff ? 'staff' : 'giocatori'}/${p.id}`;
+    const photo = `<img class="pl-img real" src="${esc(p.photo || base + '.png')}" data-alt="${p.photo ? '' : base + '.jpg'}" data-ph="${ph}" alt="Foto di ${esc(p.name)}" loading="lazy" width="320" height="400">`;
     const big = staff ? '<span class="pl-num staff" aria-label="Staff">STAFF</span>' : `<span class="pl-num" aria-label="Numero ${esc(p.number)}">${esc(p.number)}</span>`;
     const stats = staff
       ? stat('🤬', 'Bestemmie', `${num(p.bestemmie)}${trend(p.bestemmieChange)}`, NOTE.bestemmie(num(p.bestemmie)))
@@ -124,6 +125,13 @@
       el.querySelector('.pl-front').setAttribute('aria-hidden', String(on));
     };
     const list = $('#rosa-list');
+    // foto non trovata: si torna alla mascotte
+    list.addEventListener('error', e => {
+      const im = e.target;
+      if (im.tagName !== 'IMG' || !im.dataset.ph || im.dataset.failed) return;
+      if (im.dataset.alt) { const n = im.dataset.alt; im.dataset.alt = ''; im.src = n; return; }   // .png non trovato: prova .jpg
+      im.dataset.failed = '1'; im.alt = ''; im.className = 'pl-img ph'; im.src = im.dataset.ph;
+    }, true);
     list.addEventListener('click', e => { const f = e.target.closest('.pl-flip'); if (f) flip(f); });
     list.addEventListener('keydown', e => {
       if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('pl-flip')) { e.preventDefault(); flip(e.target); }

@@ -583,12 +583,12 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
 .pl-card[data-role=POR] .pl-photo{background:
   radial-gradient(circle at 50% 112%,transparent 0 40%,rgba(255,255,255,.16) 40.5% 42%,transparent 42.5%),
   linear-gradient(165deg,#2a2f3d 0%,#10131a 100%)}
-.pl-num{position:absolute;right:12px;top:2px;font:700 104px/1 var(--display);color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.3);letter-spacing:-.02em;pointer-events:none}
+.pl-num{position:absolute;z-index:2;right:12px;top:4px;font:700 92px/1 var(--display);color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.62);text-shadow:0 0 14px rgba(5,15,60,.45);letter-spacing:-.02em;pointer-events:none}
 .pl-num.staff{font-size:54px;top:8px;letter-spacing:.02em}
 .pl-img{position:absolute;display:block}
 .pl-img.real{inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 18%}
 .pl-img.ph{left:50%;top:6%;width:160%;max-width:none;height:auto;transform:translateX(-50%)}
-.pl-tag{position:absolute;left:12px;bottom:12px;max-width:calc(100% - 24px);font:700 13px var(--body);padding:4px 11px;border-radius:999px;background:#fff;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-tag{position:absolute;z-index:3;left:12px;bottom:12px;max-width:calc(100% - 24px);font:700 13px var(--body);padding:4px 11px;border-radius:999px;background:#fff;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pl-card[data-role=POR] .pl-tag{background:var(--gold)}
 .pl-card[data-role=CEN] .pl-tag{background:var(--blue);color:#fff}
 .pl-card[data-role=LAT] .pl-tag{background:var(--good);color:#fff}
@@ -618,7 +618,7 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
 .bk-status.st-doubt{background:rgba(242,183,5,.35)}
 @media (max-width:640px){
   .pl-grid{grid-template-columns:repeat(2,1fr);gap:12px}
-  .pl-num{font-size:78px;right:8px}
+  .pl-num{font-size:68px;right:8px;-webkit-text-stroke-width:1.5px}
   .pl-num.staff{font-size:40px}
   .pl-name{font-size:20px}
   .pl-info{padding:12px 12px 14px}
@@ -648,3 +648,7 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
 .trend .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .is-staff .trend{margin-left:0;margin-top:2px;font-size:15px}
 @media (max-width:640px){.trend{margin-left:5px;font-size:12px}}
+
+/* colori del ruolo: universale e staff ben distinti dagli altri */
+.pl-card[data-role=UNI] .pl-tag{background:#8b3dff;color:#fff}
+.pl-card[data-role=STAFF] .pl-tag{background:#12c2d6;color:#04222a}
