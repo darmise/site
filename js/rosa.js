@@ -13,8 +13,8 @@
     { key: 'UNI', plural: 'Universali', single: 'Universale', slug: 'universali' }
   ];
   // in players.json il ruolo può essere scritto come codice (POR, CEN, LAT, PIV, UNI) o per esteso (Portiere, Centrale...)
-  const ALIAS = { por: 'POR', portiere: 'POR', cen: 'CEN', centrale: 'CEN', lat: 'LAT', laterale: 'LAT', piv: 'PIV', pivot: 'PIV', uni: 'UNI', universale: 'UNI' };
-  const roleOf = p => ALIAS[String(p.role || '').trim().toLowerCase()] || '';
+  const ALIAS = { por: 'POR', portiere: 'POR', cen: 'CEN', centrale: 'CEN', lat: 'LAT', laterale: 'LAT', piv: 'PIV', pivot: 'PIV', uni: 'UNI', universale: 'UNI', staff: 'STAFF' };
+  const roleOf = p => ALIAS[String(p.role || '').trim().toLowerCase()] || 'UNI';   // ruolo mancante o non riconosciuto: Universale
   const STATUS = { injured: '🩹 Infortunato', suspended: '🟥 Squalificato', doubt: '❓ In dubbio' };
   const esc = s => FC.esc(s);
   const $ = (s, r = document) => r.querySelector(s);
@@ -60,7 +60,7 @@
           <div class="pl-info"><h3 class="pl-name">${first ? `<small>${esc(first)}</small>` : ''}${esc(last)}</h3></div>
         </div>
         <div class="pl-face pl-back" aria-hidden="true">
-          <div class="bk-head"><b>${esc(p.name)}</b><span>${esc(o.tag)}</span></div>
+          <div class="bk-head"><b>${esc(p.name)}</b><span>${esc(staff && p.role && roleOf(p) !== 'STAFF' ? p.role : o.tag)}</span></div>
           <div class="bk-stats">${stats}</div>
           ${status}
         </div>
@@ -69,15 +69,15 @@
   }
 
   async function start() {
-    const players = (FC.S.players || []).slice();
+    const all = (FC.S.players || []).slice();
     let staff = [];
     try { staff = await FC.getJSON('data/staff.json'); } catch (e) { staff = []; }
+    staff = staff.concat(all.filter(p => roleOf(p) === 'STAFF'));   // anche chi in players.json ha ruolo Staff
+    const players = all.filter(p => roleOf(p) !== 'STAFF');
 
     const byRole = key => players.filter(p => roleOf(p) === key).sort((a, b) => (a.number || 0) - (b.number || 0));
     const groups = ROLES.map(r => ({ ...r, kind: 'player', list: byRole(r.key) })).filter(g => g.list.length);
-    const others = players.filter(p => !roleOf(p));       // ruoli non previsti: finiscono in "Altri"
-    if (others.length) groups.push({ key: 'ALT', plural: 'Altri', single: 'Giocatore', slug: 'altri', kind: 'player', list: others });
-    if (staff.length) groups.push({ key: 'STAFF', plural: 'Staff', single: 'Staff', slug: 'staff', kind: 'staff', list: staff });
+        if (staff.length) groups.push({ key: 'STAFF', plural: 'Staff', single: 'Staff', slug: 'staff', kind: 'staff', list: staff });
 
     $('#rosa-sub').textContent = [FC.S.config.season ? 'Stagione ' + FC.S.config.season : '',
       `${players.length} ${pl(players.length, 'giocatore', 'giocatori')}`, staff.length ? `${staff.length} nello staff` : ''].filter(Boolean).join(' · ');
@@ -97,7 +97,7 @@
     $('#rosa-list').innerHTML = groups.map(g => `
       <section class="rosa-group" data-g="${g.slug}" aria-label="${g.plural}">
         <div class="section-head"><h2>${g.plural}</h2><span class="muted">${g.list.length}</span></div>
-        <div class="pl-grid">${g.list.map(p => card(p, { kind: g.kind, roleKey: g.key, tag: g.kind === 'staff' ? (p.role || 'Staff') : g.single })).join('')}</div>
+        <div class="pl-grid">${g.list.map(p => card(p, { kind: g.kind, roleKey: g.key, tag: g.single })).join('')}</div>
       </section>`).join('');
 
     function apply() {
