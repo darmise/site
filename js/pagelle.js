@@ -48,12 +48,12 @@
     const v = Number(r.vote);
     const g = n0(r.goals), t = n0(r.tunnels), sv = n0(r.saves), cn = n0(r.conceded);
     const gk = /^(por|portiere)$/i.test(String(p.role || ''));
-    return `<article class="pg-card">
+    return `<article class="pg-card${best ? ' is-best' : ''}">
       <div class="pg-vote ${Number.isFinite(v) ? FC.voteClass(v) : ''}" aria-label="Voto ${Number.isFinite(v) ? vote(v) : 'non assegnato'}">${Number.isFinite(v) ? vote(v) : 's.v.'}</div>
       <div class="pg-body">
         <div class="pg-top">
           <h3>${p.number != null ? `<span class="pg-n">${esc(p.number)}</span>` : ''}${esc(name)}</h3>
-          ${best ? '<span class="pg-best" title="Migliore in campo">⭐ Migliore</span>' : ''}
+          ${best ? '<img class="pg-best" src="assets/migliore-in-campo.png" alt="Migliore in campo" width="156" height="57">' : ''}
         </div>
         <div class="pg-tags">
           ${r.label ? `<span class="pg-adj">${esc(r.label)}</span>` : ''}
@@ -73,8 +73,13 @@
     const m = byRound.get(n);
     const list = (m && m.pagelle ? m.pagelle.slice() : []).sort((a, b) => (Number(b.vote) || 0) - (Number(a.vote) || 0));
     let html = head(m, n);
-    if (m && m.title) html += `<h2 class="pg-title">${esc(m.title)}</h2>`;
-    if (m && m.report) html += `<p class="pg-report">${esc(m.report)}</p>`;
+    if (m && (m.title || m.report)) {
+      html += `<section class="pg-story" aria-label="Commento della partita">
+        <span class="pg-kicker">Il commento della partita</span>
+        ${m.title ? `<h2 class="pg-title">${esc(m.title)}</h2>` : ''}
+        ${m.report ? `<p class="pg-report">${esc(m.report)}</p>` : ''}
+      </section>`;
+    }
     if (list.length) {
       const voted = list.filter(r => Number.isFinite(Number(r.vote)));
       const avg = voted.length ? voted.reduce((s, r) => s + Number(r.vote), 0) / voted.length : null;
