@@ -607,7 +607,7 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
 .st-lab{font-size:11px;color:#c3cbe6}
 .st-val{font:700 26px/1.05 var(--display)}
 .st-val small{font:600 12px var(--body);color:#c3cbe6}
-.st-note{font-size:11px;line-height:1.25;color:#aeb9e0;margin-top:2px}
+.st-note{font-size:11px;line-height:1.25;color:#aeb9e0;margin-top:2px;overflow-wrap:anywhere;hyphens:auto}
 .is-staff .st{flex-direction:column;text-align:center;padding:16px 10px;gap:6px}
 .is-staff .st-ico{font-size:40px}
 .is-staff .st-val{font-size:44px}
@@ -625,10 +625,11 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
   .pl-back{padding:10px 9px 9px;gap:5px}
   .bk-stats{gap:5px}
   .bk-head b{font-size:15px}
-  .st{padding:4px 8px;gap:8px}
+  .st{padding:5px 8px;gap:8px;align-items:flex-start}
+  .st-ico{margin-top:2px}
   .st-ico{font-size:21px}
   .st-val{font-size:21px}
-  .st-note{display:none}
+  .st-note{font-size:10.5px;line-height:1.2}
     .rosa-tools{flex-wrap:nowrap;overflow-x:auto;margin-right:-16px;padding-right:16px;scrollbar-width:none}
   .rf{flex:0 0 auto}
   .page-hero::after{display:none}
@@ -711,3 +712,7 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
 .fun-note[hidden]{display:none}
 .fun-note .fun-ico{font-size:26px;line-height:1;flex:0 0 auto}
 .fun-note p{margin:0;font-size:14.5px;line-height:1.45;color:#4a3d05}
+
+/* nota a fine rosa */
+.rosa-foot{margin:26px 0 8px;font-size:12.5px;line-height:1.5;color:var(--muted);max-width:70ch}
+.rosa-foot[hidden]{display:none}

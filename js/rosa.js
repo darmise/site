@@ -110,6 +110,7 @@
     function apply() {
       document.querySelectorAll('.rf').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.f === current)));
       document.querySelectorAll('.rosa-group').forEach(s => { s.hidden = !(current === 'tutti' || s.dataset.g === current); });
+      const foot = $('#rosa-foot'); if (foot) foot.hidden = current === 'staff';   // lo staff non ha cammelli
       $('#rosa-list').classList.toggle('single', current !== 'tutti');   // con un ruolo solo il titolo è già nel filtro
     }
     $('#rosa-filters').addEventListener('click', e => {
