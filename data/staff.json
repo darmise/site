@@ -1,5 +1,5 @@
 [
-  {"id":"s1","name":"Pancrazio Novellino","role":"Allenatore","bestemmie":93,"bestemmieChange":0},
-  {"id":"s2","name":"Antonio Esposito","role":"Vice allenatore","bestemmie":40,"bestemmieChange":0},
-  {"id":"s3","name":"Franco Leone","role":"Preparatore dei portieri","bestemmie":18,"bestemmieChange":0}
+  {"id":"s1","name":"Pancrazio Novellino","role":"Allenatore","bestemmie":0,"bestemmieChange":0},
+  {"id":"s2","name":"Antonio Esposito","role":"Vice allenatore","bestemmie":0,"bestemmieChange":0},
+  {"id":"s3","name":"Pino Lacovara","role":"Preparatore dei portieri","bestemmie":0,"bestemmieChange":0}
 ]

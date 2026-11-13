@@ -112,7 +112,7 @@
     }).join('');
     $('#site-header').innerHTML = `
       <div class="wrap">
-        <a class="brand" href="index.html"><img class="logo" src="assets/logo.png" alt="" width="38" height="44"><b>${esc(S.config.teamName)}</b></a>
+        <a class="brand" href="index.html"><img class="logo" src="assets/logo.jpg" alt="" width="38" height="44"><b>${esc(S.config.teamName)}</b></a>
         <button class="burger" aria-label="Apri il menu" aria-expanded="false">☰</button>
         <nav class="nav" id="nav">${links}</nav>
       </div>`;
@@ -251,6 +251,14 @@
 
   function renderAbout() {
     $('#about-text').textContent = S.config.about || '';
+    const note = $('#fun-note');
+    if (note) {
+      const txt = S.config.disclaimer === undefined
+        ? 'Questo sito è fatto solo per divertirci tra tifosi. Pagelle, statistiche, battute e soprannomi sono scherzosi e inventati, e non vogliono offendere nessuno: se qualcosa non ti fa ridere, prendila con spirito. 😄'
+        : S.config.disclaimer;
+      note.innerHTML = txt ? `<span class="fun-ico" aria-hidden="true">🎭</span><p>${esc(txt)}</p>` : '';
+      note.hidden = !txt;
+    }
     $('#goal-text').textContent = S.config.goal || '';
     $('#goal-list').innerHTML = (S.config.goalPoints || []).map(g =>
       `<li><span class="ico">${esc(g.ico)}</span><span><b>${esc(g.t)}</b><br><small class="muted">${esc(g.d)}</small></span></li>`).join('');

@@ -687,7 +687,8 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
 .pg-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .pg-top h3{margin:0;font-size:22px;letter-spacing:.01em;display:flex;align-items:baseline;gap:8px;min-width:0}
 .pg-n{font:700 15px var(--display);color:var(--accent);flex:0 0 auto}
-.pg-best{flex:0 0 auto;display:block;height:34px;width:auto;margin:-6px 0 -6px auto}
+.pg-best{flex:0 0 auto;display:block;height:66px;width:auto;margin:-4px -2px -34px auto}
+.pg-top{align-items:flex-start}
 .pg-card.is-best{border-color:#c3aa57;box-shadow:0 0 0 1px #c3aa57 inset}
 .pg-tags{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 8px}
 .pg-adj{font:700 12px var(--body);padding:3px 10px;border-radius:999px;background:var(--navy);color:#fff}
@@ -699,8 +700,14 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
 @media (max-width:760px){
   .rounds{grid-template-columns:repeat(6,1fr);gap:6px}
   .pg-grid{grid-template-columns:1fr}
-  .pg-best{height:28px}
+  .pg-best{height:54px;margin-bottom:-28px}
   .pg-score{font-size:46px}.pg-score span{font-size:30px}
   .pg-team b{font-size:16px}.pg-team .badge{width:58px;height:58px}
   .pg-meta{flex-direction:column;gap:2px;text-align:center}
 }
+
+/* banner "solo per divertimento" */
+.fun-note{display:flex;gap:12px;align-items:center;margin-top:16px;padding:12px 14px;border-radius:12px;background:#fff6d6;border:1px solid #ecd277;border-left:6px solid var(--gold)}
+.fun-note[hidden]{display:none}
+.fun-note .fun-ico{font-size:26px;line-height:1;flex:0 0 auto}
+.fun-note p{margin:0;font-size:14.5px;line-height:1.45;color:#4a3d05}
