@@ -1,7 +1,7 @@
 [
-  {"id":"s1","name":"Giuseppe Rossi","role":"Allenatore","bestemmie":87},
-  {"id":"s2","name":"Antonio Esposito","role":"Vice allenatore","bestemmie":34},
-  {"id":"s3","name":"Franco Leone","role":"Preparatore dei portieri","bestemmie":12},
-  {"id":"s4","name":"Carmine Basile","role":"Dirigente","bestemmie":0},
-  {"id":"s5","name":"Pasquale Greco","role":"Magazziniere","bestemmie":23}
+  {"id":"s1","name":"Giuseppe Rossi","role":"Allenatore","bestemmie":93,"bestemmieChange":6},
+  {"id":"s2","name":"Antonio Esposito","role":"Vice allenatore","bestemmie":40,"bestemmieChange":6},
+  {"id":"s3","name":"Franco Leone","role":"Preparatore dei portieri","bestemmie":18,"bestemmieChange":6},
+  {"id":"s4","name":"Carmine Basile","role":"Dirigente","bestemmie":6,"bestemmieChange":6},
+  {"id":"s5","name":"Pasquale Greco","role":"Magazziniere","bestemmie":29,"bestemmieChange":6}
 ]

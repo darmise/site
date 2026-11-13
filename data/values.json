@@ -1,1 +1,8 @@
-{ "players": [], "staff": [] }
+{
+  "players": [
+    "g1"
+  ],
+  "staff": [
+    "g1"
+  ]
+}
