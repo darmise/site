@@ -716,3 +716,9 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
 /* nota a fine rosa */
 .rosa-foot{margin:26px 0 8px;font-size:12.5px;line-height:1.5;color:var(--muted);max-width:70ch}
 .rosa-foot[hidden]{display:none}
+.rf-short{display:none}
+@media (max-width:640px){
+  .rosa-foot{margin:20px 0 6px;font-size:12px;line-height:1.45;padding:10px 12px;border-top:1px solid var(--line)}
+  .rf-long{display:none}
+  .rf-short{display:inline}
+}
