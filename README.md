@@ -87,6 +87,7 @@ Le pagelle si scrivono a mano in `data/pagelle.json`, agganciate all'id della pa
 Dopo ogni giornata `scripts/update_values.py` aggiorna i valori e il sito mostra una freccia verde ▲ (aumento) o rossa ▼ (calo) accanto al numero, sul retro della scheda.
 - **Giocatori** (serve la pagella della giornata in `data/pagelle.json`): cammelli = `(voto - 6) × 4`, più 2 per ogni gol e meno 1 per ogni tunnel subito. Nella pagella puoi aggiungere i campi facoltativi `goals` e `tunnels` della partita, che vengono sommati ai totali:
   `{ "playerId": "p10", "vote": 8, "goals": 2, "tunnels": 0, "comment": "..." }`. Chi non ha la pagella non cambia (e non ha freccia).
+- **Portieri**: cammelli = `(voto - 6) × 4`, più 1 ogni 3 parate, meno 1 per ogni gol subito, più 3 se la porta è rimasta inviolata. Nella pagella usa `"saves"` (parate) e `"conceded"` (gol subiti mentre era in porta): `{ "playerId": "p1", "vote": 6.5, "saves": 14, "conceded": 3 }`.
 - **Staff** (basta il risultato): vittoria −3 bestemmie, pareggio +2, sconfitta +6.
 - Ogni giornata viene applicata una sola volta (lo stato è in `data/values.json`). Parte da sola dopo "Aggiorna risultati" e quando salvi `data/pagelle.json` (workflow "Aggiorna valori da pagelle"); a mano: `python scripts/update_values.py`.
 - I valori nei file sono il punto di partenza: scrivi quelli veri prima della prima giornata. Per i numeri delle regole modifica le costanti in cima allo script.
@@ -112,8 +113,8 @@ Se il campo manca la riga non compare. Da `localhost` i contatori non partono.
 Davanti a ogni scheda si vedono solo numero di maglia (sullo sfondo), ruolo, nome e cognome. Toccando la scheda si gira e compaiono le statistiche.
 **Giocatori** (`data/players.json`). Campi: `id`, `number`, `name` ("Nome Cognome"), `role`, `birth`, `nat`, più:
 - `camels`: valore del giocatore, in cammelli 🐪
-- `tunnels`: tunnel subiti 🕳️
-- `goals`: gol fatti ⚽
+- giocatori di movimento: `tunnels` (tunnel subiti 🕳️) e `goals` (gol fatti ⚽)
+- portieri: `saves` (parate 🧤) e `conceded` (gol subiti 🥅) al posto di tunnel e gol
 - facoltativi: `photo`, `status` (`ok`, `injured`, `suspended`, `doubt`) e `statusNote`.
 - `role`: `POR`, `CEN`, `LAT`, `PIV`, `UNI` (va bene anche per esteso: Portiere, Centrale...).
 - Foto: la strada più semplice è salvare il file `assets/giocatori/<id>.png` oppure `.jpg` (es. `assets/giocatori/p10.png`; per lo staff `assets/staff/s1.png`). Un PNG con sfondo trasparente (giocatore ritagliato) è il più bello: dietro resta visibile il numero di maglia: compare da sola. Chi non ha il file resta con la mascotte, scheda per scheda. In alternativa, `photo` con un percorso qualsiasi.

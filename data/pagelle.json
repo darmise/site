@@ -7,9 +7,9 @@
         "playerId": "p1",
         "vote": 6.5,
         "label": "Reattivo",
-        "goals": 0,
-        "tunnels": 1,
-        "comment": "Para tutto quello che può, il tunnel lo ha preso per educazione."
+        "comment": "Quattordici parate, tre gol subiti: ha fatto quel che poteva, il resto lo ha fatto la difesa.",
+        "saves": 14,
+        "conceded": 3
       },
       {
         "playerId": "p10",

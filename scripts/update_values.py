@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """Aggiorna dopo ogni giornata il valore dei giocatori (cammelli) e le bestemmie dello staff.
 
-Giocatori (serve la pagella della giornata in data/pagelle.json):
+Giocatori di movimento (serve la pagella della giornata in data/pagelle.json):
     variazione cammelli = arrotonda((voto - 6) * 4) + 2 per ogni gol - 1 per ogni tunnel subito
     Nella pagella si possono aggiungere i campi facoltativi "goals" e "tunnels" (della sola partita):
     vengono sommati ai totali della scheda.  Chi non ha la pagella in quella giornata non cambia.
+Portieri:
+    variazione cammelli = arrotonda((voto - 6) * 4) + 1 ogni 3 parate - 1 per ogni gol subito + 3 se porta inviolata
+    (campi di pagella "saves" = parate e "conceded" = gol subiti mentre era in porta; sommati ai totali).
 Staff (basta il risultato in data/matches.json):
     vittoria -3 bestemmie, pareggio +2, sconfitta +6.
 
@@ -36,6 +39,10 @@ def save(name, obj, rows=False):
 def norm(s):
     s = unicodedata.normalize("NFKD", str(s or "")).encode("ascii", "ignore").decode()
     return " ".join(s.lower().split())
+
+
+def is_keeper(p):
+    return norm(p.get("role")) in ("por", "portiere")
 
 
 def outcome(m, team):
@@ -80,8 +87,16 @@ def main():
                 if not v or v.get("vote") is None:
                     p["camelsChange"] = 0
                     continue
-                g, t = int(v.get("goals", 0)), int(v.get("tunnels", 0))
-                delta = round((float(v["vote"]) - 6) * 4) + 2 * g - t
+                base = round((float(v["vote"]) - 6) * 4)
+                if is_keeper(p):
+                    sv, cn = int(v.get("saves", 0)), int(v.get("conceded", 0))
+                    delta = base + sv // 3 - cn + (3 if cn == 0 else 0)
+                    p["saves"] = int(p.get("saves", 0)) + sv
+                    p["conceded"] = int(p.get("conceded", 0)) + cn
+                    g = t = 0
+                else:
+                    g, t = int(v.get("goals", 0)), int(v.get("tunnels", 0))
+                    delta = base + 2 * g - t
                 new = max(0, int(p.get("camels", 0)) + delta)
                 p["camelsChange"] = new - int(p.get("camels", 0))
                 p["camels"] = new

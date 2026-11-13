@@ -46,7 +46,8 @@
     const p = FC.S.players.find(x => x.id === r.playerId) || {};
     const name = p.name || r.name || 'Giocatore';
     const v = Number(r.vote);
-    const g = n0(r.goals), t = n0(r.tunnels);
+    const g = n0(r.goals), t = n0(r.tunnels), sv = n0(r.saves), cn = n0(r.conceded);
+    const gk = /^(por|portiere)$/i.test(String(p.role || ''));
     return `<article class="pg-card">
       <div class="pg-vote ${Number.isFinite(v) ? FC.voteClass(v) : ''}" aria-label="Voto ${Number.isFinite(v) ? vote(v) : 'non assegnato'}">${Number.isFinite(v) ? vote(v) : 's.v.'}</div>
       <div class="pg-body">
@@ -58,10 +59,11 @@
           ${r.label ? `<span class="pg-adj">${esc(r.label)}</span>` : ''}
           ${p.role ? `<span class="pg-role">${esc(roleLabel(p.role))}</span>` : ''}
         </div>
-        <div class="pg-stats">
-          <span class="${g ? 'on' : ''}" title="Gol fatti">⚽ <b>${g}</b> ${g === 1 ? 'gol' : 'gol'}</span>
-          <span class="${t ? 'on bad' : ''}" title="Tunnel subiti">🕳️ <b>${t}</b> ${t === 1 ? 'tunnel' : 'tunnel'}</span>
-        </div>
+        <div class="pg-stats">${gk
+          ? `<span class="${sv ? 'on' : ''}" title="Parate">🧤 <b>${sv}</b> ${sv === 1 ? 'parata' : 'parate'}</span>
+             <span class="${cn ? 'on bad' : ''}" title="Gol subiti">🥅 <b>${cn}</b> ${cn === 1 ? 'gol subito' : 'gol subiti'}</span>`
+          : `<span class="${g ? 'on' : ''}" title="Gol fatti">⚽ <b>${g}</b> gol</span>
+             <span class="${t ? 'on bad' : ''}" title="Tunnel subiti">🕳️ <b>${t}</b> tunnel</span>`}</div>
         ${r.comment ? `<p class="pg-comment">“${esc(r.comment)}”</p>` : ''}
       </div>
     </article>`;

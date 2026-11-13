@@ -1,6 +1,6 @@
 [
-  {"id":"p1","number":1,"name":"Luca Ferrante","role":"POR","birth":1996,"nat":"Italia","status":"ok","camels":42,"tunnels":1,"goals":0},
-  {"id":"p13","number":22,"name":"Alessio Barone","role":"POR","birth":2001,"nat":"Italia","status":"ok","camels":9,"tunnels":0,"goals":0},
+  {"id":"p1","number":1,"name":"Luca Ferrante","role":"POR","birth":1996,"nat":"Italia","status":"ok","camels":42,"saves":86,"conceded":19},
+  {"id":"p13","number":22,"name":"Alessio Barone","role":"POR","birth":2001,"nat":"Italia","status":"ok","camels":9,"saves":21,"conceded":9},
   {"id":"p2","number":2,"name":"Marco Bellini","role":"CEN","birth":1998,"nat":"Italia","status":"ok","camels":35,"tunnels":4,"goals":1},
   {"id":"p5","number":3,"name":"Simone Rinaldi","role":"CEN","birth":1999,"nat":"Italia","status":"injured","statusNote":"Rientro previsto a dicembre","camels":28,"tunnels":5,"goals":0},
   {"id":"p4","number":4,"name":"Davide Moretti","role":"CEN","birth":1995,"nat":"Italia","status":"ok","camels":31,"tunnels":3,"goals":0},

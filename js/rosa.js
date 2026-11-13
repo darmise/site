@@ -27,6 +27,8 @@
     camels: v => tier(v, [[0, 'Ancora da valutare: nessuna carovana in vista'], [10, 'Valore da dromedario di provincia'], [30, 'Una piccola carovana, mica male'], [60, 'Carovana di tutto rispetto'], [Infinity, 'Clausola rescissoria in mezzo al deserto']]),
     tunnels: v => tier(v, [[0, 'Mai umiliato: muro di mattoni'], [2, 'Qualche caviglia ancora sotto shock'], [5, 'Il parquet ricorda tutto'], [Infinity, 'Per lui il tunnel è un pedaggio']]),
     goals: v => tier(v, [[0, 'Il pallone lo cerca ancora'], [3, 'Si sblocca quando serve'], [8, 'Fa tremare le reti'], [Infinity, 'Capocannoniere da palazzetto']]),
+    saves: v => tier(v, [[0, 'I guantoni sono ancora nel sacchetto'], [20, 'Si scalda, ma bene'], [60, 'Para anche i pensieri'], [Infinity, 'Muro di mattoni: oltre non si passa']]),
+    conceded: v => tier(v, [[0, 'Porta blindata: ancora inviolata'], [10, 'Qualche gol, ma con dignità'], [25, 'Il pallone in rete lo conosce bene'], [Infinity, 'La rete ormai fa quasi parte del bagaglio']]),
     bestemmie: v => tier(v, [[0, 'Zen assoluto: monaco in panchina'], [20, 'Si trattiene, ma si vede'], [60, 'Tipico stress da panchina'], [Infinity, 'Record da palazzetto: il cielo trema']])
   };
   // freccia verde in alto (aumento) o rossa in basso (calo); nulla se il valore non è cambiato
@@ -54,8 +56,9 @@
     const stats = staff
       ? stat('🤬', 'Bestemmie', `${num(p.bestemmie)}${trend(p.bestemmieChange)}`, NOTE.bestemmie(num(p.bestemmie)))
       : stat('🐪', 'Valore', `${num(p.camels)} <small>${pl(num(p.camels), 'cammello', 'cammelli')}</small>${trend(p.camelsChange)}`, NOTE.camels(num(p.camels))) +
-        stat('🕳️', 'Tunnel subiti', num(p.tunnels), NOTE.tunnels(num(p.tunnels))) +
-        stat('⚽', 'Gol fatti', num(p.goals), NOTE.goals(num(p.goals)));
+        (o.roleKey === 'POR'
+          ? stat('🧤', 'Parate', num(p.saves), NOTE.saves(num(p.saves))) + stat('🥅', 'Gol subiti', num(p.conceded), NOTE.conceded(num(p.conceded)))
+          : stat('🕳️', 'Tunnel subiti', num(p.tunnels), NOTE.tunnels(num(p.tunnels))) + stat('⚽', 'Gol fatti', num(p.goals), NOTE.goals(num(p.goals))));
     const status = STATUS[p.status] ? `<p class="bk-status st-${esc(p.status)}">${STATUS[p.status]}${p.statusNote ? ' · ' + esc(p.statusNote) : ''}</p>` : '';
     return `<article class="pl-card${staff ? ' is-staff' : ''}" data-role="${o.roleKey}">
       <div class="pl-flip" role="button" tabindex="0" aria-pressed="false" aria-label="${esc(p.name)}: tocca per vedere le statistiche">
