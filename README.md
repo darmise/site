@@ -121,3 +121,16 @@ Davanti a ogni scheda si vedono solo numero di maglia (sullo sfondo), ruolo, nom
 - `photo`: per esempio `"assets/giocatori/serra.jpg"`. Meglio verticale (4:5), soggetto in alto. Se manca compare la mascotte.
 **Staff** (`data/staff.json`). Campi: `id`, `name`, `role` (es. "Allenatore") e `bestemmie` (solo un numero, il contatore 🤬). Sulla scheda al posto del numero di maglia compare "STAFF". Facoltativo: `photo`.
 La pagina si apre su "Tutta la squadra"; `rosa.html#pivot` o `rosa.html#staff` aprono direttamente una sezione.
+
+## Bot Telegram per le pagelle
+Il bot (`bot/telegram_bot.py`) ti guida a inserire le pagelle dal telefono e le salva in `data/pagelle.json` con un commit; il commit fa partire da solo il calcolo dei valori.
+**Come si usa:** `/pagelle` (o `/pagelle 5`) → tocchi chi ha giocato → per ognuno scegli il voto con i bottoni, poi l'aggettivo suggerito, poi scrivi `g2 t1 commento` (per i portieri `p14 s3 commento`). Scorciatoia: una riga sola, `7.5 Brillante g2 t0 - Corre per due`. Finiti i giocatori, il bot ti chiede il **commento della partita** e un titolo (si possono saltare), poi riepilogo e «Pubblica». Dal riepilogo puoi correggerli con `/resoconto testo` e `/titolo testo`. Altri comandi: `/stato` (giornate con o senza pagelle), `/indietro`, `/annulla`.
+**Su Render (gratis, senza computer acceso):** `bot/render_server.py`, istruzioni in `bot/RENDER.md`.
+**Su Cloudflare:** `bot/cloudflare/worker.js` fa la stessa cosa su Cloudflare Workers, gratis e senza computer acceso. Istruzioni passo passo in `bot/cloudflare/LEGGIMI.md`. La versione Python qui sotto gira solo mentre il computer è acceso.
+**Configurazione della versione Python (una tantum)**
+1. Su Telegram scrivi a **@BotFather**, `/newbot`, scegli nome e username: ti dà il *token*.
+2. Su GitHub: Settings > Developer settings > Fine-grained tokens > nuovo token, solo sul repository del sito, permesso **Contents: Read and write**.
+3. Copia `bot/.env.esempio` in `bot/.env` e compila token, repository e token GitHub. In `TELEGRAM_ALLOWED_IDS` metti il tuo id Telegram: scrivi al bot e ti risponde con il numero.
+4. Avvio: `python bot/telegram_bot.py` (su Windows doppio clic su `bot/avvia-bot.bat`). Il bot risponde finché il programma resta acceso, quindi va bene il computer del runner. Non servono librerie da installare.
+Solo gli id elencati possono usarlo. `bot/.env` non va mai caricato su GitHub (è già nel `.gitignore`).
+Per provarlo senza toccare il sito: `python bot/telegram_bot.py --local data` salva soltanto in locale.
