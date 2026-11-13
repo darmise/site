@@ -9,7 +9,9 @@ Portieri:
     variazione cammelli = arrotonda((voto - 6) * 4) + 1 ogni 3 parate - 1 per ogni gol subito + 3 se porta inviolata
     (campi di pagella "saves" = parate e "conceded" = gol subiti mentre era in porta; sommati ai totali).
 Staff (basta il risultato in data/matches.json):
-    vittoria -3 bestemmie, pareggio +2, sconfitta +6.
+    base: vittoria 0 (non scendono mai), pareggio +2, sconfitta +6, moltiplicata per il ruolo:
+    Allenatore x2, Vice allenatore x1,5, tutti gli altri x1 (quindi per l'allenatore: 0 / +4 / +12).
+    Su una scheda dello staff si può forzare il peso con il campo facoltativo "peso" (es. "peso": 3).
 
 Ogni giornata viene applicata una volta sola (lo stato è in data/values.json), quindi si può rilanciare quando si vuole.
 Le schede ricevono "camelsChange" / "bestemmieChange" (l'ultima variazione), che il sito mostra come freccia.
@@ -18,7 +20,8 @@ import json, sys, unicodedata
 from pathlib import Path
 
 DATA = Path(__file__).resolve().parent.parent / "data"
-STAFF_DELTA = {"V": -3, "N": 2, "P": 6}
+STAFF_DELTA = {"V": 0, "N": 2, "P": 6}   # le bestemmie salgono solo con pareggi e sconfitte, non scendono mai
+STAFF_WEIGHT = {"allenatore": 2.0, "vice allenatore": 1.5}   # chi non c'è qui pesa 1
 
 
 def load(name, default):
@@ -39,6 +42,12 @@ def save(name, obj, rows=False):
 def norm(s):
     s = unicodedata.normalize("NFKD", str(s or "")).encode("ascii", "ignore").decode()
     return " ".join(s.lower().split())
+
+
+def staff_delta(s, base):
+    w = float(s["peso"]) if s.get("peso") is not None else STAFF_WEIGHT.get(norm(s.get("role")), 1.0)
+    x = base * w
+    return int((abs(x) + 0.5) // 1) * (1 if x >= 0 else -1)   # arrotonda per eccesso lontano da zero
 
 
 def is_keeper(p):
@@ -73,11 +82,11 @@ def main():
         if mid not in done_s and res:
             d = STAFF_DELTA[res]
             for s in staff:
-                new = max(0, int(s.get("bestemmie", 0)) + d)
+                new = max(0, int(s.get("bestemmie", 0)) + staff_delta(s, d))
                 s["bestemmieChange"] = new - int(s.get("bestemmie", 0))
                 s["bestemmie"] = new
             done_s.add(mid); changed = True
-            print(f"{mid}: staff {d:+d} bestemmie (esito {res})")
+            print(f"{mid}: staff {d:+d} bestemmie di base (esito {res}), pesate per ruolo")
         # giocatori: serve la pagella
         votes = (pagelle.get(mid) or {}).get("pagelle") or []
         if mid not in done_p and votes:

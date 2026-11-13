@@ -88,7 +88,7 @@ Dopo ogni giornata `scripts/update_values.py` aggiorna i valori e il sito mostra
 - **Giocatori** (serve la pagella della giornata in `data/pagelle.json`): cammelli = `(voto - 6) × 4`, più 2 per ogni gol e meno 1 per ogni tunnel subito. Nella pagella puoi aggiungere i campi facoltativi `goals` e `tunnels` della partita, che vengono sommati ai totali:
   `{ "playerId": "p10", "vote": 8, "goals": 2, "tunnels": 0, "comment": "..." }`. Chi non ha la pagella non cambia (e non ha freccia).
 - **Portieri**: cammelli = `(voto - 6) × 4`, più 1 ogni 3 parate, meno 1 per ogni gol subito, più 3 se la porta è rimasta inviolata. Nella pagella usa `"saves"` (parate) e `"conceded"` (gol subiti mentre era in porta): `{ "playerId": "p1", "vote": 6.5, "saves": 14, "conceded": 3 }`.
-- **Staff** (basta il risultato): vittoria −3 bestemmie, pareggio +2, sconfitta +6.
+- **Staff** (basta il risultato): le bestemmie salgono solo con pareggi e sconfitte e non scendono mai: base vittoria 0, pareggio +2, sconfitta +6, moltiplicata per il ruolo: **Allenatore ×2** (0 / +4 / +12), **Vice allenatore ×1,5**, tutti gli altri ×1. Su una scheda dello staff puoi forzare il peso con il campo facoltativo `peso`.
 - Ogni giornata viene applicata una sola volta (lo stato è in `data/values.json`). Parte da sola dopo "Aggiorna risultati" e quando salvi `data/pagelle.json` (workflow "Aggiorna valori da pagelle"); a mano: `python scripts/update_values.py`.
 - I valori nei file sono il punto di partenza: scrivi quelli veri prima della prima giornata. Per i numeri delle regole modifica le costanti in cima allo script.
 
