@@ -1,1 +1,102 @@
-{}
+{
+  "g1": {
+    "pagelle": [
+      {
+        "playerId": "p1",
+        "vote": 6,
+        "label": "Devastante",
+        "saves": 4,
+        "conceded": 2,
+        "comment": "si"
+      },
+      {
+        "playerId": "p3",
+        "vote": 6,
+        "label": "Devastante",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "si"
+      },
+      {
+        "playerId": "p4",
+        "vote": 6,
+        "label": "Devastante",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "si"
+      },
+      {
+        "playerId": "p5",
+        "vote": 6,
+        "label": "Devastante",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "si"
+      },
+      {
+        "playerId": "p6",
+        "vote": 6,
+        "label": "Devastante",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "si"
+      },
+      {
+        "playerId": "p8",
+        "vote": 6,
+        "label": "Devastante",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "si"
+      },
+      {
+        "playerId": "p10",
+        "vote": 6,
+        "label": "Devastante",
+        "goals": 0,
+        "tunnels": 1,
+        "comment": "si"
+      },
+      {
+        "playerId": "p11",
+        "vote": 6.5,
+        "label": "Devastante",
+        "goals": 2,
+        "tunnels": 0,
+        "comment": "si"
+      },
+      {
+        "playerId": "p13",
+        "vote": 6,
+        "label": "Devastante",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "si"
+      },
+      {
+        "playerId": "p14",
+        "vote": 6,
+        "label": "Devastante",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "si"
+      },
+      {
+        "playerId": "p15",
+        "vote": 6,
+        "label": "Straordinario",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "si"
+      },
+      {
+        "playerId": "s1",
+        "vote": 6,
+        "label": "Devastante",
+        "comment": "si"
+      }
+    ],
+    "title": "Tricarico, esordio a testa alta: a Tito passa l'Abriola 3-2",
+    "report": "Debutto assoluto nel futsal per il neonato Football Tricarico, che cade di misura (3-2) sul campo di Tito contro l'Abriola. A sbloccare e condizionare il match è stata una controversa decisione arbitrale a sfavore del Tricarico, ma il bilancio resta ampiamente positivo.\nNonostante l'inesperienza del gruppo, la squadra ha mostrato grande grinta. Su tutti spicca l'ottima prova di Vinciguerra, l'unico a rendersi veramente pericoloso per gli avversari: la sua preziosa doppietta ha trascinato i compagni, sfiorando fino all'ultimo l'impresa della rimonta. C'è sicuramente da lavorare sui meccanismi tattici, ma l'impegno visto sul parquet regala tanta fiducia per la prossima gara."
+  }
+}
