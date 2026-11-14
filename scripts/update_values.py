@@ -75,6 +75,14 @@ def main():
     done_p, done_s = set(state.get("players", [])), set(state.get("staff", []))
     changed = False
 
+    # riepilogo sempre stampato: da qui si capisce subito perché una giornata non viene applicata
+    print(f"Squadra (config.json teamName): «{load('config.json', {}).get('teamName')}» | partite giocate: {len(matches)} | giornate con pagelle: {', '.join(pagelle) or 'nessuna'}")
+    for m in matches:
+        n_voti = len((pagelle.get(m["id"]) or {}).get("pagelle") or [])
+        res = outcome(m, team) or "NON RICONOSCIUTO (il nome della squadra in config.json non coincide con la partita)"
+        print(f"  {m['id']}: {m.get('home')} {m.get('homeScore')}-{m.get('awayScore')} {m.get('away')} | esito {res} | "
+              f"pagelle: {n_voti} | staff già applicato: {m['id'] in done_s} | giocatori già applicati: {m['id'] in done_p}")
+
     for k in pagelle:   # diagnosi: pagelle per cui non c'è una partita giocata (id diverso o risultato non ancora letto)
         if k not in {m["id"] for m in matches}:
             print(f"Nota: ci sono pagelle per {k} ma la partita {k} non risulta ancora giocata in matches.json: i valori aspettano il risultato")
