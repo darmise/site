@@ -11,6 +11,7 @@
   const n0 = v => (Number.isFinite(+v) ? +v : 0);
   const logo = src => `<span class="badge"><img class="tlogo" src="${esc(src || PLACEHOLDER)}" alt="" width="80" height="80"></span>`;
   const byRound = new Map();
+  let STAFF = [];   // data/staff.json: anche lo staff può avere la pagella
 
   const roleLabel = r => ({ POR: 'Portiere', CEN: 'Centrale', LAT: 'Laterale', PIV: 'Pivot', UNI: 'Universale' })[r] || r || '';
 
@@ -43,7 +44,10 @@
   }
 
   function card(r, best) {
-    const p = FC.S.players.find(x => x.id === r.playerId) || {};
+    const pl0 = FC.S.players.find(x => x.id === r.playerId);
+    const st0 = pl0 ? null : STAFF.find(x => x.id === r.playerId);
+    const isStaff = !!st0;
+    const p = pl0 || st0 || {};
     const name = p.name || r.name || 'Giocatore';
     const v = Number(r.vote);
     const g = n0(r.goals), t = n0(r.tunnels), sv = n0(r.saves), cn = n0(r.conceded);
@@ -53,17 +57,17 @@
       <div class="pg-body">
         <div class="pg-top">
           <h3>${p.number != null ? `<span class="pg-n">${esc(p.number)}</span>` : ''}${esc(name)}</h3>
-          ${best ? '<img class="pg-best" src="assets/migliore-in-campo.png" alt="Migliore in campo" width="156" height="57">' : ''}
+          ${best ? '<img class="pg-best" src="assets/migliore-in-campo.png" alt="Migliore in campo" width="441" height="316">' : ''}
         </div>
         <div class="pg-tags">
           ${r.label ? `<span class="pg-adj">${esc(r.label)}</span>` : ''}
-          ${p.role ? `<span class="pg-role">${esc(roleLabel(p.role))}</span>` : ''}
+          ${isStaff ? `<span class="pg-role pg-staff">Staff${p.role ? ' · ' + esc(p.role) : ''}</span>` : (p.role ? `<span class="pg-role">${esc(roleLabel(p.role))}</span>` : '')}
         </div>
-        <div class="pg-stats">${gk
+        ${isStaff ? '' : `<div class="pg-stats">${gk
           ? `<span class="${sv ? 'on' : ''}" title="Parate">🧤 <b>${sv}</b> ${sv === 1 ? 'parata' : 'parate'}</span>
              <span class="${cn ? 'on bad' : ''}" title="Gol subiti">🥅 <b>${cn}</b> ${cn === 1 ? 'gol subito' : 'gol subiti'}</span>`
           : `<span class="${g ? 'on' : ''}" title="Gol fatti">⚽ <b>${g}</b> gol</span>
-             <span class="${t ? 'on bad' : ''}" title="Tunnel subiti">🕳️ <b>${t}</b> tunnel</span>`}</div>
+             <span class="${t ? 'on bad' : ''}" title="Tunnel subiti">🕳️ <b>${t}</b> tunnel</span>`}</div>`}
         ${r.comment ? `<p class="pg-comment">“${esc(r.comment)}”</p>` : ''}
       </div>
     </article>`;
@@ -83,16 +87,19 @@
     if (list.length) {
       const voted = list.filter(r => Number.isFinite(Number(r.vote)));
       const avg = voted.length ? voted.reduce((s, r) => s + Number(r.vote), 0) / voted.length : null;
-      const top = voted.length ? Number(voted[0].vote) : null;
+      const isPl = r => FC.S.players.some(x => x.id === r.playerId);
+      const votedPl = voted.filter(isPl);
+      const top = votedPl.length ? Number(votedPl[0].vote) : null;
       html += `<div class="section-head"><h2>Le pagelle</h2><span class="muted">${avg != null ? 'Media squadra ' + vote(Math.round(avg * 100) / 100) : ''}</span></div>
-        <div class="pg-grid">${list.map((r, i) => card(r, top != null && i === 0 && list.filter(x => Number(x.vote) === top).length === 1)).join('')}</div>`;
+        <div class="pg-grid">${list.map(r => card(r, top != null && isPl(r) && Number(r.vote) === top && votedPl.filter(x => Number(x.vote) === top).length === 1)).join('')}</div>`;
     } else if (m && m.status === 'played') {
       html += '<p class="empty">Le pagelle di questa partita sono in arrivo. Passa a trovarci dopo il fischio finale!</p>';
     }
     $('#pg-detail').innerHTML = html;
   }
 
-  function start() {
+  async function start() {
+    try { STAFF = await FC.getJSON('data/staff.json'); } catch (e) { STAFF = []; }
     FC.S.matches.forEach(m => { if (m.round) byRound.set(m.round, m); });
     const withPag = [...byRound.values()].filter(m => m.pagelle && m.pagelle.length).map(m => m.round);
     const pl = FC.played();

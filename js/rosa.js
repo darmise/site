@@ -36,7 +36,7 @@
     `<span class="trend ${c > 0 ? 'up' : 'down'}" title="${c > 0 ? 'In rialzo' : 'In calo'} rispetto alla scorsa giornata"><i aria-hidden="true">${c > 0 ? '▲' : '▼'}</i>${Math.abs(c)}<span class="sr">${c > 0 ? ' in più' : ' in meno'}</span></span>`; };
   const stat = (emoji, label, value, note) =>
     `<div class="st"><span class="st-ico" aria-hidden="true">${emoji}</span>
-      <div class="st-txt"><span class="st-lab">${label}</span><b class="st-val">${value}</b><span class="st-note">${note}</span></div></div>`;
+      <div class="st-txt">${label ? `<span class="st-lab">${label}</span>` : ''}<b class="st-val">${value}</b><span class="st-note">${note}</span></div></div>`;
 
   const splitName = full => {
     const parts = String(full || '').trim().split(/\s+/);
@@ -54,7 +54,7 @@
     const photo = `<img class="pl-img real" src="${esc(p.photo || base + '.png')}" data-alt="${p.photo ? '' : base + '.jpg'}" data-ph="${ph}" alt="Foto di ${esc(p.name)}" loading="lazy" width="320" height="400">`;
     const big = staff ? '<span class="pl-num staff" aria-label="Staff">STAFF</span>' : `<span class="pl-num" aria-label="Numero ${esc(p.number)}">${esc(p.number)}</span>`;
     const stats = staff
-      ? stat('🤬', 'Bestemmie', `${num(p.bestemmie)}${trend(p.bestemmieChange)}`, NOTE.bestemmie(num(p.bestemmie)))
+      ? stat('🤬', '', `${num(p.bestemmie)}${trend(p.bestemmieChange)}`, NOTE.bestemmie(num(p.bestemmie)))
       : stat('🐪', 'Valore', `${num(p.camels)} <small>${pl(num(p.camels), 'cammello', 'cammelli')}</small>${trend(p.camelsChange)}`, NOTE.camels(num(p.camels))) +
         (o.roleKey === 'POR'
           ? stat('🧤', 'Parate', num(p.saves), NOTE.saves(num(p.saves))) + stat('🥅', 'Gol subiti', num(p.conceded), NOTE.conceded(num(p.conceded)))

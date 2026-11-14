@@ -1,0 +1,21 @@
+id,nome,ruolo,sigla,numero
+p1,Luca Ferrante,Portiere,POR,1
+p2,Marco Bellini,Centrale,CEN,2
+p5,Simone Rinaldi,Centrale,CEN,3
+p4,Davide Moretti,Centrale,CEN,4
+p3,Andrea Colombo,Laterale,LAT,5
+p7,Lorenzo De Santis,Laterale,LAT,6
+p10,Riccardo Serra,Pivot,PIV,7
+p6,Matteo Greco,Laterale,LAT,8
+p11,Nicolò Vitale,Pivot,PIV,9
+p8,Federico Marchetti,Universale,UNI,10
+p12,Tommaso Caruso,Pivot,PIV,11
+p14,Emanuele Gallo,Laterale,LAT,13
+p9,Gabriele Fontana,Universale,UNI,14
+p20,Kevin Amoah,Universale,UNI,21
+p13,Alessio Barone,Portiere,POR,22
+s1,Giuseppe Rossi,Staff - Allenatore,STAFF,
+s2,Antonio Esposito,Staff - Vice allenatore,STAFF,
+s3,Franco Leone,Staff - Preparatore dei portieri,STAFF,
+s4,Carmine Basile,Staff - Dirigente,STAFF,
+s5,Pasquale Greco,Staff - Magazziniere,STAFF,

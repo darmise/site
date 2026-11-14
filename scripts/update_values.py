@@ -90,7 +90,7 @@ def main():
         # giocatori: serve la pagella
         votes = (pagelle.get(mid) or {}).get("pagelle") or []
         if mid not in done_p and votes:
-            byid = {v.get("playerId"): v for v in votes}
+            byid = {v.get("playerId"): v for v in votes if any(x["id"] == v.get("playerId") for x in players)}   # le pagelle dello staff non toccano i valori
             for p in players:
                 v = byid.get(p["id"])
                 if not v or v.get("vote") is None:

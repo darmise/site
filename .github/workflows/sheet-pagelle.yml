@@ -1,0 +1,57 @@
+name: Pagelle dal foglio Google
+
+# Ogni 30 minuti (e a mano, da Actions > Run workflow) legge il foglio Google con le pagelle.
+# Se ci sono giornate con Pubblica = SI aggiorna data/pagelle.json e ricalcola cammelli e bestemmie.
+# Se nel foglio c'è un errore il lavoro diventa rosso e il log dice scheda e riga da correggere.
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  foglio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SHEET_GIORNATE_URL: ${{ vars.SHEET_GIORNATE_URL }}
+      SHEET_PAGELLE_URL: ${{ vars.SHEET_PAGELLE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Leggi il foglio e aggiorna le pagelle
+        shell: bash
+        run: |
+          set +e
+          python scripts/import_sheet.py 2>&1 | tee import.log
+          status=${PIPESTATUS[0]}
+          grep '^ERRORE' import.log | while read -r line; do echo "::error::$line"; done
+          exit $status
+
+      - name: Ricalcola i valori (cammelli, frecce, bestemmie)
+        run: |
+          python scripts/update_values.py
+          python scripts/export_sheet_data.py
+
+      - name: Salva le modifiche
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/pagelle.json data/players.json data/staff.json data/values.json data/foglio-rosa.csv data/foglio-partite.csv
+          if git diff --cached --quiet; then
+            echo "Nessuna novità."
+          else
+            git commit -m "Pagelle dal foglio Google"
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin HEAD:"$GITHUB_REF_NAME"
+          fi
