@@ -187,6 +187,9 @@
   const RES = { V: 'Vittoria', N: 'Pareggio', P: 'Sconfitta' };
   const sub = m => [esc(m.competition), m.round ? m.round + 'ª giornata' : '', fmtDate(m.date)].filter(Boolean).join(' · ');
 
+  // pulsante verso le pagelle dell'ultima partita giocata (visibile in ogni stato della card)
+  const pagelleBtn = last => last ? `<div class="mc-foot mc-pg"><a class="btn" href="pagelle.html#${esc(last.id)}">Leggi le pagelle</a></div>` : '';
+
   function renderHero() {
     const el = $('#hero-content');
     const { current, last } = homeState();
@@ -195,7 +198,7 @@
     if (current && current.status === 'live') {
       el.innerHTML = `<div class="mcard">
         <div class="mc-meta"><span class="eyebrow"><span class="live-pill">● LIVE</span> Partita in corso</span><span class="sub">${sub(current)}</span></div>
-        ${stage(current, scoreBlock(current))}</div>`;
+        ${stage(current, scoreBlock(current))}${pagelleBtn(last)}</div>`;
       return;
     }
     if (current) {
@@ -203,7 +206,7 @@
       el.innerHTML = `<div class="mcard">
         <div class="mc-meta"><span class="eyebrow">Partita attuale</span><span class="sub">${sub(current)}</span></div>
         ${stage(current, `<div class="mc-vs"><small>${time ? dayLabel(current.date) : 'orario da definire'}</small>${time || 'VS'}</div>`)}
-        <div class="mc-foot"><div class="countdown dark" id="cd-hero"></div></div></div>`;
+        <div class="mc-foot"><div class="countdown dark" id="cd-hero"></div></div>${pagelleBtn(last)}</div>`;
       startCountdown('hero', 'cd-hero', current.date);
       return;
     }
@@ -260,8 +263,14 @@
       note.hidden = !txt;
     }
     $('#goal-text').textContent = S.config.goal || '';
-    $('#goal-list').innerHTML = (S.config.goalPoints || []).map(g =>
-      `<li><span class="ico">${esc(g.ico)}</span><span><b>${esc(g.t)}</b><br><small class="muted">${esc(g.d)}</small></span></li>`).join('');
+    // le voci Pagelle e Rosa portano alla loro pagina (altre voci: campo facoltativo "link" in config.json)
+    const last = played()[0];
+    const LINKS = { pagelle: 'pagelle.html' + (last ? '#' + last.id : ''), rosa: 'rosa.html' };
+    $('#goal-list').innerHTML = (S.config.goalPoints || []).map(g => {
+      const inner = `<span class="ico">${esc(g.ico)}</span><span><b>${esc(g.t)}</b><br><small class="muted">${esc(g.d)}</small></span>`;
+      const href = g.link || LINKS[String(g.t || '').trim().toLowerCase()];
+      return href ? `<li><a class="goal-link" href="${esc(href)}">${inner}<span class="goal-go" aria-hidden="true">›</span></a></li>` : `<li>${inner}</li>`;
+    }).join('');
   }
 
   function renderHome() {
