@@ -81,10 +81,10 @@
      applica pagelle e risultati e ricava valori attuali e ultima variazione (le frecce). Nessun lavoro automatico deve
      riscrivere quei file: basta che data/pagelle.json e data/matches.json siano aggiornati.
      Giocatori: arrotonda((voto-6)*4) + 2 per gol - 1 per tunnel.  Portieri: arrotonda((voto-6)*4) + parate/3 - gol subiti + 3 se inviolata.
-     Staff: vittoria 0, pareggio +2, sconfitta +6, per Allenatore x2, Vice allenatore x1,5 (o campo "peso"). Mai sotto zero. */
+     Staff: vittoria -1, pareggio 0, sconfitta +6, per Allenatore x2, Vice allenatore x1,5 (o campo "peso"). Mai sotto zero. */
   const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().split(/\s+/).filter(Boolean).join(' ');
   const roundAway = x => Math.sign(x) * Math.floor(Math.abs(x) + 0.5);
-  const STAFF_BASE = { V: 0, N: 2, P: 6 };
+  const STAFF_BASE = { V: -1, N: 0, P: 6 };   // vittoria: scendono di poco, pareggio: nulla, sconfitta: salgono
   const STAFF_W = { 'allenatore': 2, 'vice allenatore': 1.5 };
   function outcomeOf(m, team) {
     if (m.homeScore == null || m.awayScore == null) return '';
