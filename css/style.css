@@ -681,7 +681,9 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
 .pg-story{margin:18px 0 6px;padding:18px 22px;background:var(--card);border:1px solid var(--line);border-left:6px solid var(--accent);border-radius:14px}
 .pg-kicker{font:700 13px var(--body);color:var(--muted)}
 .pg-title{margin:4px 0 8px;font-size:30px}
-.pg-report{margin:0;max-width:70ch;font-size:17px;line-height:1.55}
+.pg-report{margin:0;max-width:none;font-size:clamp(17px,1.35vw,20px);line-height:1.6;white-space:pre-line;text-wrap:pretty}
+.pg-story{padding:clamp(18px,2vw,28px) clamp(22px,3vw,40px)}
+.pg-title{font-size:clamp(28px,2.6vw,38px)}
 .pg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 .pg-card{display:flex;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px}
 .pg-vote{flex:0 0 auto;display:grid;place-items:center;width:64px;height:64px;border-radius:16px;font:700 30px var(--display);color:#fff;background:var(--muted)}
