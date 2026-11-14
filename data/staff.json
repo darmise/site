@@ -1,6 +1,5 @@
 [
   {"id":"s1","name":"Pancrazio Novellino","role":"Allenatore","bestemmie":0,"bestemmieChange":0},
   {"id":"s2","name":"Loris Amato","role":"Vice allenatore","bestemmie":0,"bestemmieChange":0},
-  {"id":"s3","name":"Pino Lacovara","role":"Preparatore dei portieri","bestemmie":0,"bestemmieChange":0},
-  {"id":"s4","name":"Cristian Delfino","role":"Presidente","bestemmie":0,"bestemmieChange":0}
+  {"id":"s3","name":"Cristian Delfino","role":"Presidente","bestemmie":0,"bestemmieChange":0}
 ]

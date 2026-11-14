@@ -17,8 +17,11 @@ GIORNI = ["lun", "mar", "mer", "gio", "ven", "sab", "dom"]
 
 def load(name, default):
     try:
-        return json.loads((DATA / name).read_text(encoding="utf-8"))
-    except (OSError, ValueError):
+        return json.loads((DATA / name).read_text(encoding="utf-8-sig"))   # utf-8-sig: regge anche il BOM di Windows
+    except OSError:
+        return default
+    except ValueError as e:
+        print(f"ATTENZIONE: {name} non è un JSON valido ({e}): uso un elenco vuoto")
         return default
 
 
@@ -43,19 +46,30 @@ def when(m):
 
 
 def main():
+    def num(p):
+        try:
+            return int(str(p.get("number", "")).strip())
+        except ValueError:
+            return 9999            # numero mancante o scritto male: in fondo, senza bloccare tutto
+
     rosa = [["id", "nome", "ruolo", "sigla", "numero"]]
-    for p in sorted(load("players.json", []), key=lambda p: p.get("number", 0)):
+    giocatori = [p for p in load("players.json", []) if p.get("id") and p.get("name")]
+    for p in sorted(giocatori, key=num):
         sigla, label = ROLE.get(str(p.get("role", "")).strip().lower(), ("UNI", "Universale"))
         rosa.append([p["id"], p["name"], label, sigla, p.get("number", "")])
-    for s in load("staff.json", []):
+    staff = [s for s in load("staff.json", []) if s.get("id") and s.get("name")]
+    for s in staff:
         rosa.append([s["id"], s["name"], "Staff - " + str(s.get("role", "")).strip() if s.get("role") else "Staff", "STAFF", ""])
+    print(f"rosa: {len(giocatori)} giocatori + {len(staff)} staff")
     write("foglio-rosa.csv", rosa)
 
     part = [["giornata", "partita", "stato"]]
-    for m in sorted(load("matches.json", []), key=lambda m: m.get("round", 0)):
-        if not m.get("round"):
-            continue
+    tutte = [m for m in sorted(load("matches.json", []), key=lambda m: m.get("round", 0)) if m.get("round")]
+    prossima = next((m["round"] for m in tutte if m.get("status") != "played"), None)   # solo la prossima gara, non tutto il calendario
+    for m in tutte:
         played = m.get("status") == "played"
+        if not played and m["round"] != prossima:
+            continue
         if played:
             text = f"{m['home']} {m.get('homeScore')}-{m.get('awayScore')} {m['away']}"
         else:
