@@ -24,9 +24,9 @@
     'Una torre non crolla mai: al massimo pareggia. 🏰',
     'Il palazzetto è l\'unico stadio dove si sente il fischio delle scarpe sul parquet. 🏟️',
     'L cavadd bun s vern alla fin! 🐎',
-    'Racet a pall allu pivot e sciat a calcià! ⚽',
+    'Racet a pall allu pivot e sciat a calcià! 🦵⚽',
     'Sabato ci saranno mill prsun! 🏟️',
-    'Racet a pall ar Amoros e sciat a calcià! ⚽' 
+    'Racet a pall ar Amoros e sciat a calcià! 🦵⚽' 
   ];
 
   const $ = (s, r = document) => r.querySelector(s);
