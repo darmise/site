@@ -687,7 +687,7 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
 .pg-story{margin:18px 0 6px;padding:18px 22px;background:var(--card);border:1px solid var(--line);border-left:6px solid var(--accent);border-radius:14px}
 .pg-kicker{font:700 13px var(--body);color:var(--muted)}
 .pg-title{margin:4px 0 8px;font-size:30px}
-.pg-report{margin:0;max-width:none;font-size:clamp(17px,1.35vw,20px);line-height:1.6;white-space:pre-line;text-wrap:pretty}
+.pg-report{margin:0;max-width:none;font-size:clamp(17px,1.35vw,20px);line-height:1.6;white-space:pre-line;text-align:justify;text-align-last:left;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word}
 .pg-story{padding:clamp(18px,2vw,28px) clamp(22px,3vw,40px)}
 .pg-title{font-size:clamp(28px,2.6vw,38px)}
 .pg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
@@ -707,7 +707,7 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
 .pg-stats{display:flex;flex-wrap:wrap;gap:14px;font-size:14px;color:var(--muted)}
 .pg-stats b{font:700 17px var(--display);color:var(--ink)}
 .pg-stats .on b{color:var(--good)}.pg-stats .on.bad b{color:var(--bad)}
-.pg-comment{margin:10px 0 0;font-size:15px;line-height:1.45;color:var(--ink)}
+.pg-comment{margin:10px 0 0;font-size:15px;line-height:1.45;color:var(--ink);text-align:justify;text-align-last:left;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word}
 @media (max-width:760px){
   .rounds{grid-template-columns:repeat(6,1fr);gap:6px}
   .pg-grid{grid-template-columns:1fr}
