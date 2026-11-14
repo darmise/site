@@ -1,21 +1,20 @@
 id,nome,ruolo,sigla,numero
-p1,Luca Ferrante,Portiere,POR,1
-p2,Marco Bellini,Centrale,CEN,2
-p5,Simone Rinaldi,Centrale,CEN,3
-p4,Davide Moretti,Centrale,CEN,4
-p3,Andrea Colombo,Laterale,LAT,5
-p7,Lorenzo De Santis,Laterale,LAT,6
-p10,Riccardo Serra,Pivot,PIV,7
-p6,Matteo Greco,Laterale,LAT,8
-p11,Nicolò Vitale,Pivot,PIV,9
-p8,Federico Marchetti,Universale,UNI,10
-p12,Tommaso Caruso,Pivot,PIV,11
-p14,Emanuele Gallo,Laterale,LAT,13
-p9,Gabriele Fontana,Universale,UNI,14
-p20,Kevin Amoah,Universale,UNI,21
-p13,Alessio Barone,Portiere,POR,22
-s1,Giuseppe Rossi,Staff - Allenatore,STAFF,
-s2,Antonio Esposito,Staff - Vice allenatore,STAFF,
-s3,Franco Leone,Staff - Preparatore dei portieri,STAFF,
-s4,Carmine Basile,Staff - Dirigente,STAFF,
-s5,Pasquale Greco,Staff - Magazziniere,STAFF,
+p1,Gianluca Coviello,Portiere,POR,1
+p3,Enzo Atlante,Universale,UNI,3
+p4,Paky Amato,Laterale,LAT,4
+p5,Lucio Novellino,Pivot,PIV,5
+p6,Cristian Tito,Centrale,CEN,6
+p8,Simone Trabace,Laterale,LAT,8
+p9,Antonio Dabraio,Pivot,PIV,9
+p10,Nicolas Novellino,Laterale,LAT,10
+p11,Alessandro Vinciguerra,Pivot,PIV,11
+p12,Antonio Naselli,Portiere,POR,12
+p13,Cristian Amato,Laterale,LAT,13
+p14,Daniele Tunzi,Laterale,LAT,14
+p15,Daniele Casella,Centrale,CEN,15
+p16,Alessandrio D'Acunto,Laterale,LAT,16
+p17,Francesco Caputo,Pivot,PIV,17
+s1,Pancrazio Novellino,Staff - Allenatore,STAFF,
+s2,Loris Amato,Staff - Vice allenatore,STAFF,
+s3,Pino Lacovara,Staff - Preparatore dei portieri,STAFF,
+s4,Cristian Delfino,Staff - Presidente,STAFF,
