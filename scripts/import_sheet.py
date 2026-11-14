@@ -140,6 +140,25 @@ def main():
     except Exception as e:
         print(f"Non riesco a leggere il foglio: {e}")
         return 1
+    # diagnosi: cosa è stato letto davvero (utile se «tutto verde ma niente pubblicato»)
+    def heads(url):
+        try:
+            return [norm(h) for h in next(csv.reader(io.StringIO((urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "pagelle-import"}), timeout=60) if url.startswith("http") else open(url, "rb")).read().decode("utf-8-sig"))))]
+        except Exception:
+            return []
+    hg, hp = heads(a.giornate), heads(a.pagelle)
+    bad = []
+    if not {"giornata", "pubblica"} <= set(hg):
+        bad.append(f"SHEET_GIORNATE_URL non porta alla scheda Giornate (colonne trovate: {', '.join(hg) or 'nessuna'}). Pubblica sul web la scheda Giornate, non l'intero documento.")
+    if not {"giornata", "id", "voto"} <= set(hp):
+        bad.append(f"SHEET_PAGELLE_URL non porta alla scheda Pagelle (colonne trovate: {', '.join(hp) or 'nessuna'}). Pubblica sul web la scheda Pagelle.")
+    if bad:
+        for b in bad:
+            print("ERRORE:", b)
+        return 1
+    pubbl = [r.get("giornata") for r in giornate if norm(r.get("pubblica")) in YES]
+    print(f"Letto il foglio: {len(giornate)} righe in Giornate ({len(pubbl)} con Pubblica = SI: {', '.join(pubbl) or 'nessuna'}), "
+          f"{len(pagelle)} righe in Pagelle ({sum(1 for r in pagelle if r.get('voto'))} con un voto).")
     load = lambda n, d: json.loads((DATA / n).read_text(encoding="utf-8")) if (DATA / n).exists() else d
     new, errors, warnings = build(giornate, pagelle, load("players.json", []), load("matches.json", []), load("staff.json", []))
     for w in warnings:
