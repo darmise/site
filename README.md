@@ -84,12 +84,12 @@ Le pagelle si scrivono a mano in `data/pagelle.json`, agganciate all'id della pa
 - Per vedere le pagelle d'esempio copia il contenuto di `pagelle.esempio.json` in `pagelle.json` (ma i valori dei giocatori cambierebbero davvero).
 
 ## Valore dei giocatori e bestemmie dello staff (automatico)
-Dopo ogni giornata `scripts/update_values.py` aggiorna i valori e il sito mostra una freccia verde ▲ (aumento) o rossa ▼ (calo) accanto al numero, sul retro della scheda.
+Dopo ogni giornata il sito stesso (`js/rosa.js`) ricalcola i valori e mostra una freccia verde ▲ (aumento) o rossa ▼ (calo) accanto al numero, sul retro della scheda.
 - **Giocatori** (serve la pagella della giornata in `data/pagelle.json`): cammelli = `(voto - 6) × 4`, più 2 per ogni gol e meno 1 per ogni tunnel subito. Nella pagella puoi aggiungere i campi facoltativi `goals` e `tunnels` della partita, che vengono sommati ai totali:
   `{ "playerId": "p10", "vote": 8, "goals": 2, "tunnels": 0, "comment": "..." }`. Chi non ha la pagella non cambia (e non ha freccia).
 - **Portieri**: cammelli = `(voto - 6) × 4`, più 1 ogni 3 parate, meno 1 per ogni gol subito, più 3 se la porta è rimasta inviolata. Nella pagella usa `"saves"` (parate) e `"conceded"` (gol subiti mentre era in porta): `{ "playerId": "p1", "vote": 6.5, "saves": 14, "conceded": 3 }`.
 - **Staff** (basta il risultato): le bestemmie salgono solo con pareggi e sconfitte e non scendono mai: base vittoria 0, pareggio +2, sconfitta +6, moltiplicata per il ruolo: **Allenatore ×2** (0 / +4 / +12), **Vice allenatore ×1,5**, tutti gli altri ×1. Su una scheda dello staff puoi forzare il peso con il campo facoltativo `peso`.
-- Ogni giornata viene applicata una sola volta (lo stato è in `data/values.json`). Parte da sola dopo "Aggiorna risultati" e quando salvi `data/pagelle.json` (workflow "Aggiorna valori da pagelle"); a mano: `python scripts/update_values.py`.
+- `data/players.json` e `data/staff.json` contengono i valori **iniziali** e non vengono più riscritti da nessun lavoro automatico. Il sito parte da lì e applica, in ordine, le partite giocate (`data/matches.json`) e le pagelle pubblicate (`data/pagelle.json`): appena una di queste cambia, Rosa mostra i valori nuovi e le frecce. Non c'è più niente da lanciare. Il file `data/values.json` e il workflow "Aggiorna valori da pagelle" non servono più (puoi cancellarli).
 - I valori nei file sono il punto di partenza: scrivi quelli veri prima della prima giornata. Per i numeri delle regole modifica le costanti in cima allo script.
 
 ## Fonte dei dati
@@ -135,7 +135,7 @@ Inserisci voti, commenti e titolo in un foglio Google condiviso: il sito si aggi
 2. Nel foglio: **Estensioni > Apps Script**. Cancella il codice, incolla `foglio/Sincronizza.gs`, modifica in cima `SITO` con l'indirizzo del tuo sito (senza `/` finale) e salva. Ricarica il foglio: compare il menu **Pagelle**. Premi **Pagelle > Aggiorna dal sito** (la prima volta Google chiede i permessi: Avanzate > Vai a... > Consenti), poi **Pagelle > Attiva aggiornamento automatico**.
 3. Nel foglio: File > Condividi > Pubblica sul web. Scegli la scheda **Giornate** e il formato **CSV**, pubblica e copia l'indirizzo. Ripeti per **Pagelle**.
 4. Su GitHub: Settings > Secrets and variables > Actions > scheda **Variables** > New repository variable: `SHEET_GIORNATE_URL` e `SHEET_PAGELLE_URL` con i due indirizzi. In Settings > Actions > General > Workflow permissions attiva "Read and write permissions".
-5. Carica nel repository: `scripts/import_sheet.py`, `scripts/export_sheet_data.py`, `scripts/update_values.py`, `.github/workflows/sheet-pagelle.yml`, `.github/workflows/update-data.yml` e i due file `data/foglio-rosa.csv` e `data/foglio-partite.csv`.
+5. Carica nel repository: `scripts/import_sheet.py`, `scripts/export_sheet_data.py`, `.github/workflows/sheet-pagelle.yml`, `.github/workflows/update-data.yml` e i due file `data/foglio-rosa.csv` e `data/foglio-partite.csv`.
 Se cambia la rosa (nuovo giocatore o staff) basta aggiornare i JSON: le righe mancanti compaiono nelle giornate già giocate alla sincronizzazione successiva.
 **Errori:** se nel foglio c'è un voto fuori da 1-10, un numero non valido o un id ripetuto, il lavoro in Actions diventa rosso e dice scheda e riga da correggere; finché c'è un errore non viene importato niente. Dopo la pubblicazione i cammelli di quella giornata non si ricalcolano.
 

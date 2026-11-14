@@ -75,12 +75,64 @@
     </article>`;
   }
 
+
+  /* ---------- valori calcolati dal sito ----------
+     players.json e staff.json contengono i valori INIZIALI. Giornata dopo giornata (partite giocate, in ordine) il sito
+     applica pagelle e risultati e ricava valori attuali e ultima variazione (le frecce). Nessun lavoro automatico deve
+     riscrivere quei file: basta che data/pagelle.json e data/matches.json siano aggiornati.
+     Giocatori: arrotonda((voto-6)*4) + 2 per gol - 1 per tunnel.  Portieri: arrotonda((voto-6)*4) + parate/3 - gol subiti + 3 se inviolata.
+     Staff: vittoria 0, pareggio +2, sconfitta +6, per Allenatore x2, Vice allenatore x1,5 (o campo "peso"). Mai sotto zero. */
+  const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().split(/\s+/).filter(Boolean).join(' ');
+  const roundAway = x => Math.sign(x) * Math.floor(Math.abs(x) + 0.5);
+  const STAFF_BASE = { V: 0, N: 2, P: 6 };
+  const STAFF_W = { 'allenatore': 2, 'vice allenatore': 1.5 };
+  function outcomeOf(m, team) {
+    if (m.homeScore == null || m.awayScore == null) return '';
+    const h = norm(m.home) === team, a = norm(m.away) === team;
+    if (!h && !a) return '';
+    const mine = h ? +m.homeScore : +m.awayScore, their = h ? +m.awayScore : +m.homeScore;
+    return mine > their ? 'V' : mine < their ? 'P' : 'N';
+  }
+  function applyValues(players, staff, matches, teamName) {
+    const team = norm(teamName);
+    const P = players.map(p => ({ ...p, camels: num(p.camels), goals: num(p.goals), tunnels: num(p.tunnels), saves: num(p.saves), conceded: num(p.conceded), camelsChange: 0 }));
+    const S = staff.map(s => ({ ...s, bestemmie: num(s.bestemmie), bestemmieChange: 0 }));
+    const played = (matches || []).filter(m => m.status === 'played').sort((a, b) => (a.round || 0) - (b.round || 0));
+    played.forEach(m => {
+      const res = outcomeOf(m, team);
+      if (res) S.forEach(s => {
+        const w = s.peso != null ? +s.peso : (STAFF_W[norm(s.role)] || 1);
+        const d = roundAway(STAFF_BASE[res] * w), nv = Math.max(0, s.bestemmie + d);
+        s.bestemmieChange = nv - s.bestemmie; s.bestemmie = nv;
+      });
+      const votes = Array.isArray(m.pagelle) ? m.pagelle : [];
+      if (!votes.length) return;
+      const byId = {}; votes.forEach(v => { if (v && v.playerId) byId[v.playerId] = v; });
+      P.forEach(p => {
+        const v = byId[p.id];
+        if (!v || v.vote == null || v.vote === '') { p.camelsChange = 0; return; }
+        const base = roundAway((+v.vote - 6) * 4);
+        let d, g = 0, t = 0;
+        if (roleOf(p) === 'POR') {
+          const sv = num(v.saves), cn = num(v.conceded);
+          d = base + Math.floor(sv / 3) - cn + (cn === 0 ? 3 : 0);
+          p.saves += sv; p.conceded += cn;
+        } else { g = num(v.goals); t = num(v.tunnels); d = base + 2 * g - t; }
+        const nv = Math.max(0, p.camels + d);
+        p.camelsChange = nv - p.camels; p.camels = nv; p.goals += g; p.tunnels += t;
+      });
+    });
+    return { players: P, staff: S };
+  }
+
   async function start() {
     const all = (FC.S.players || []).slice();
     let staff = [];
     try { staff = await FC.getJSON('data/staff.json'); } catch (e) { staff = []; }
     staff = staff.concat(all.filter(p => roleOf(p) === 'STAFF'));   // anche chi in players.json ha ruolo Staff
-    const players = all.filter(p => roleOf(p) !== 'STAFF');
+    const calc = applyValues(all.filter(p => roleOf(p) !== 'STAFF'), staff, FC.S.matches, FC.S.config.teamName);
+    staff = calc.staff;
+    const players = calc.players;
 
     const byRole = key => players.filter(p => roleOf(p) === key).sort((a, b) => (a.number || 0) - (b.number || 0));
     const groups = ROLES.map(r => ({ ...r, kind: 'player', list: byRole(r.key) })).filter(g => g.list.length);
