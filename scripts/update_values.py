@@ -75,8 +75,13 @@ def main():
     done_p, done_s = set(state.get("players", [])), set(state.get("staff", []))
     changed = False
 
+    for k in pagelle:   # diagnosi: pagelle per cui non c'è una partita giocata (id diverso o risultato non ancora letto)
+        if k not in {m["id"] for m in matches}:
+            print(f"Nota: ci sono pagelle per {k} ma la partita {k} non risulta ancora giocata in matches.json: i valori aspettano il risultato")
     for m in matches:
         mid = m["id"]
+        if mid in done_p and mid in done_s:
+            print(f"{mid}: valori già applicati in precedenza (è in data/values.json), niente da fare")
         # staff: basta il risultato
         res = outcome(m, team)
         if mid not in done_s and res:
