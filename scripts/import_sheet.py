@@ -100,7 +100,7 @@ def build(giornate, pagelle, players, matches, staff=()):
                 continue
             e["label"] = r.get("aggettivo", "")
             if is_staff:   # lo staff ha solo voto, aggettivo e commento
-                if any(r.get(c) for c in ("gol", "tunnel subiti", "parate", "gol subiti")):
+                if any(r.get(c) not in (None, "", "0") for c in ("gol", "tunnel subiti", "parate", "gol subiti")):
                     warnings.append(f"{where}: {p['name']} è dello staff, ignoro le statistiche")
                 e["label"] = r.get("aggettivo", "")
                 e["comment"] = r.get("commento", "")
@@ -114,7 +114,7 @@ def build(giornate, pagelle, players, matches, staff=()):
                 except ValueError as ex:
                     errors.append(f"{where}: {col} «{r.get(col)}» {ex}")
             other = ("gol", "tunnel subiti") if keeper else ("parate", "gol subiti")
-            if any(r.get(c) for c in other):
+            if any(r.get(c) not in (None, "", "0") for c in other):
                 warnings.append(f"{where}: {p['name']} è {'un portiere' if keeper else 'un giocatore di movimento'}, ignoro {' e '.join(other)}")
             e["comment"] = r.get("commento", "")
             entries.append(e)
@@ -159,7 +159,15 @@ def main():
     pubbl = [r.get("giornata") for r in giornate if norm(r.get("pubblica")) in YES]
     print(f"Letto il foglio: {len(giornate)} righe in Giornate ({len(pubbl)} con Pubblica = SI: {', '.join(pubbl) or 'nessuna'}), "
           f"{len(pagelle)} righe in Pagelle ({sum(1 for r in pagelle if r.get('voto'))} con un voto).")
-    load = lambda n, d: json.loads((DATA / n).read_text(encoding="utf-8")) if (DATA / n).exists() else d
+    def load(n, d):   # file mancante, vuoto o con il BOM di Windows: si riparte dal valore di default
+        try:
+            t = (DATA / n).read_text(encoding="utf-8-sig").strip()
+            return json.loads(t) if t else d
+        except OSError:
+            return d
+        except ValueError:
+            print(f"Nota: {n} non è un JSON valido, lo considero vuoto")
+            return d
     new, errors, warnings = build(giornate, pagelle, load("players.json", []), load("matches.json", []), load("staff.json", []))
     for w in warnings:
         print("Nota:", w)
