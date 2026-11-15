@@ -74,7 +74,8 @@
       },
       {
         "playerId": "p12",
-        "vote": 6,
+        "vote": null,
+        "voteLabel": "s.v.",
         "label": "Influenzato",
         "saves": 0,
         "conceded": 0,
