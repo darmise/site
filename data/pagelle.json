@@ -1,1 +1,137 @@
-{}
+{
+  "g1": {
+    "pagelle": [
+      {
+        "playerId": "p1",
+        "vote": 5.25,
+        "voteLabel": "5+",
+        "label": "Distratto",
+        "saves": 7,
+        "conceded": 3,
+        "comment": "Sul primo gol incomprensione con l'arbitro. Distratto. Fa alcune buone parate ma anche sul secondo gol poteva fare di più. Da rivedere"
+      },
+      {
+        "playerId": "p3",
+        "vote": 6.25,
+        "voteLabel": "6+",
+        "label": "Didattico",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "È il più esperto in campo e si vede. Preciso, ordinato. Mister in campo"
+      },
+      {
+        "playerId": "p4",
+        "vote": 5.25,
+        "voteLabel": "5+",
+        "label": "Esordiente",
+        "goals": 0,
+        "tunnels": 1,
+        "comment": "Sente la pressione dell'esordio. Entra impaurito. È giovane. Il ragazzo si farà"
+      },
+      {
+        "playerId": "p5",
+        "vote": 5.75,
+        "voteLabel": "6−",
+        "label": "Confusionario",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Lotta, combatte ma non riesce a lasciare il segno. Fa confusione anche durante il riconoscimento. Thomas?"
+      },
+      {
+        "playerId": "p6",
+        "vote": 5.75,
+        "voteLabel": "6−",
+        "label": "",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Partita di lotta e di governo. Ma soprattutto di lotta. Fa amicizia stretta con gli avversari. Molto stretta"
+      },
+      {
+        "playerId": "p8",
+        "vote": 5.75,
+        "voteLabel": "6−",
+        "label": "Aggressivo",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Partita da 6 nel complesso (sfortunato anche a colpire il palo). Piccola nota di demerito per l'ammonizione presa per il troppo nervosismo. Non sempre lucido"
+      },
+      {
+        "playerId": "p10",
+        "vote": 6,
+        "label": "Intraprendente",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Non sempre preciso, alcuni errori tecnici ma è da premiare per l'assist. Volenteroso"
+      },
+      {
+        "playerId": "p11",
+        "vote": 7.5,
+        "voteLabel": "7½",
+        "label": "Di sostanza",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Se ci dicessero che non ha mai giocato a futsal, non ci crederemmo. Pivot d'altri tempi. Tiene su la squadra, fa il punto di riferimento e fa anche doppietta. Implacabile dal dischetto. Totem"
+      },
+      {
+        "playerId": "p12",
+        "vote": 6,
+        "label": "Influenzato",
+        "saves": 0,
+        "conceded": 0,
+        "comment": "Può capitare"
+      },
+      {
+        "playerId": "p13",
+        "vote": 5.75,
+        "voteLabel": "6−",
+        "label": "Impacciato",
+        "goals": 0,
+        "tunnels": 1,
+        "comment": "Un po' spaesato sul terzo gol, anche a causa del cambio fatto nel momento sbagliato. Nel complesso, un po' impreciso"
+      },
+      {
+        "playerId": "p14",
+        "vote": 6.25,
+        "voteLabel": "6+",
+        "label": "Modric",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Mette subito la sua tecnica al servizio della squadra. Soffre un po' la fisicità (spesso eccessiva) degli avversari. Cala nel secondo tempo. Essenziale"
+      },
+      {
+        "playerId": "p15",
+        "vote": 6.25,
+        "voteLabel": "6+",
+        "label": "Solido",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Gioca poco, ma entra con l'atteggiamento giusto. 7 minuti per farsi valere. Solido"
+      },
+      {
+        "playerId": "s1",
+        "vote": 6,
+        "label": "Silenzioso. Forse troppo",
+        "comment": "Diffidati sempre presenti. Ci manca la sua voce da bordocampo"
+      },
+      {
+        "playerId": "s2",
+        "vote": 5.5,
+        "voteLabel": "5½",
+        "label": "",
+        "comment": "Commette un errore di tempismo sul cambio che causa il terzo gol. Disattento"
+      },
+      {
+        "playerId": "s3",
+        "vote": 6,
+        "label": "",
+        "comment": ""
+      }
+    ],
+    "title": "Tricarico, esordio a testa alta: a Tito passa l'Abriola 3-2",
+    "report": "Debutto assoluto nel futsal per il neonato Football Tricarico, che cade di misura (3-2) sul campo di Tito contro l'Abriola. A sbloccare e condizionare il match è stata una controversa decisione arbitrale a sfavore del Tricarico, ma il bilancio resta ampiamente positivo.\nNonostante l'inesperienza del gruppo, la squadra ha mostrato grande grinta. Su tutti spicca l'ottima prova di Vinciguerra, l'unico a rendersi veramente pericoloso per gli avversari: la sua preziosa doppietta ha trascinato i compagni, sfiorando fino all'ultimo l'impresa della rimonta. C'è sicuramente da lavorare sui meccanismi tattici, ma l'impegno visto sul parquet regala tanta fiducia per la prossima gara.",
+    "referee": {
+      "vote": 4.5,
+      "comment": "Condiziona la gara non chiamando il contro fallo sul fallo laterale, causando il primo gol dell'Abriola. Nel complesso non riesce a gestire i momenti della partita e sbaglia diversi fischi."
+    }
+  }
+}
