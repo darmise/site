@@ -19,7 +19,7 @@ concurrency:
 jobs:
   foglio:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     env:
       SHEET_GIORNATE_URL: ${{ vars.SHEET_GIORNATE_URL }}
       SHEET_PAGELLE_URL: ${{ vars.SHEET_PAGELLE_URL }}
@@ -29,6 +29,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Installa Pillow (per ridurre le foto)
+        run: pip install pillow
+
       - name: Leggi il foglio e aggiorna le pagelle
         shell: bash
         run: |
@@ -36,6 +39,7 @@ jobs:
           python scripts/import_sheet.py 2>&1 | tee import.log
           status=${PIPESTATUS[0]}
           grep '^ERRORE' import.log | while read -r line; do echo "::error::$line"; done
+          grep '^ATTENZIONE' import.log | while read -r line; do echo "::warning::$line"; done
           exit $status
 
       - name: Aggiorna i file per il foglio Google
@@ -45,7 +49,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/pagelle.json data/foglio-rosa.csv data/foglio-partite.csv
+          mkdir -p assets/partite
+          git add data/pagelle.json data/foglio-rosa.csv data/foglio-partite.csv assets/partite
           if git diff --cached --quiet; then
             echo "Nessuna novità."
           else

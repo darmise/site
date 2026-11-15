@@ -73,6 +73,85 @@ def parse_vote(text):
     return v, label
 
 
+ASSETS = Path(__file__).resolve().parent.parent / "assets" / "partite"
+MAX_BYTES = 12 * 1024 * 1024
+DRIVE_ID = re.compile(r"(?:drive|docs)\.google\.com/(?:file/d/|open\?id=|uc\?(?:[^#]*&)?id=|thumbnail\?(?:[^#]*&)?id=)([\w-]{20,})")
+
+
+def direct_url(url):
+    """Link di condivisione di Google Drive -> indirizzo di download diretto; gli altri indirizzi restano uguali."""
+    m = DRIVE_ID.search(url)
+    return f"https://drive.google.com/uc?export=download&id={m.group(1)}" if m else url
+
+
+def image_kind(data):
+    if data[:3] == b"\xff\xd8\xff":
+        return "jpg"
+    if data[:8] == b"\x89PNG\r\n\x1a\n":
+        return "png"
+    if data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+        return "webp"
+    if data[:6] in (b"GIF87a", b"GIF89a"):
+        return "gif"
+    return None
+
+
+def fetch_bytes(url):
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (pagelle-import)"})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        data = r.read(MAX_BYTES + 1)
+    if len(data) > MAX_BYTES:
+        raise ValueError("l'immagine pesa più di 12 MB")
+    return data
+
+
+def fit_image(data, kind):
+    """Con Pillow: ruota come nella foto, riduce a 1600 px e salva in JPEG leggero. Senza Pillow: tiene il file com'è."""
+    try:
+        from PIL import Image, ImageOps
+    except ImportError:
+        return data, kind
+    if kind == "gif":
+        return data, kind
+    im = ImageOps.exif_transpose(Image.open(io.BytesIO(data)))
+    im.thumbnail((1600, 1600))
+    if im.mode not in ("RGB", "L"):
+        bg = Image.new("RGB", im.size, "white")
+        bg.paste(im, mask=im.convert("RGBA").split()[-1])
+        im = bg
+    buf = io.BytesIO()
+    im.convert("RGB").save(buf, "JPEG", quality=82, optimize=True, progressive=True)
+    return buf.getvalue(), "jpg"
+
+
+def resolve_image(n, source, old):
+    """Foto della giornata n: path locale già nel repository, oppure link scaricato in assets/partite/g<n>.jpg.
+    Restituisce (campi da aggiungere alla giornata, avviso o None). Mai un errore: senza foto la giornata esce lo stesso."""
+    import hashlib
+    key = hashlib.sha1(source.encode("utf-8")).hexdigest()[:12]
+    if old.get("imageKey") == key and old.get("image") and (ASSETS.parent.parent / old["image"].split("?")[0]).exists():
+        return {"image": old["image"], "imageKey": key}, None          # già scaricata: non la riscarico ogni 30 minuti
+    if not re.match(r"^https?://", source):
+        local = source.lstrip("/")
+        if (ASSETS.parent.parent / local).is_file():
+            return {"image": local, "imageKey": key}, None
+        return {}, f"giornata {n}: immagine «{source}» non trovata (scrivi un link http o un percorso già presente nel sito)"
+    try:
+        data = fetch_bytes(direct_url(source))
+        kind = image_kind(data)
+        if not kind:
+            return {}, (f"giornata {n}: il link della foto non porta a un'immagine. Se è su Google Drive condividi il file con "
+                        f"«Chiunque abbia il link» e incolla il link di condivisione")
+        data, kind = fit_image(data, kind)
+        ASSETS.mkdir(parents=True, exist_ok=True)
+        for old_file in ASSETS.glob(f"g{n}.*"):
+            old_file.unlink()
+        (ASSETS / f"g{n}.{kind}").write_bytes(data)
+        return {"image": f"assets/partite/g{n}.{kind}?v={hashlib.sha1(data).hexdigest()[:8]}", "imageKey": key}, None
+    except Exception as e:
+        return {}, f"giornata {n}: foto non scaricata ({e}); la giornata viene pubblicata senza foto"
+
+
 def build(giornate, pagelle, players, matches, staff=()):
     errors, warnings, out = [], [], {}
     byid = {p["id"]: p for p in players}
@@ -162,6 +241,8 @@ def build(giornate, pagelle, players, matches, staff=()):
             ref["comment"] = g["commento arbitro"]
         if ref:
             entry["referee"] = ref
+        if g.get("immagine"):
+            entry["_immagine"] = g["immagine"].strip()   # risolta da main(): scaricata e salvata in assets/partite
         out[f"g{n}"] = entry
     return out, errors, warnings
 
@@ -216,6 +297,23 @@ def main():
         print(f"Foglio non importato: {len(errors)} errori da correggere.")
         return 1
     old = load("pagelle.json", {})
+    for key, entry in new.items():
+        src = entry.pop("_immagine", None)
+        prev = old.get(key, {})
+        if src:
+            fields, warn = resolve_image(int(key[1:]), src, prev)
+            entry.update(fields)
+            if warn:
+                print("ATTENZIONE:", warn)
+                if not fields and prev.get("image"):                    # download fallito: si tiene la foto di prima
+                    entry["image"], entry["imageKey"] = prev["image"], prev.get("imageKey", "")
+    for key, entry in new.items():   # cella Immagine svuotata nel foglio: la foto sparisce dal sito e il file scaricato viene tolto
+        prev_img = (old.get(key) or {}).get("image", "")
+        if prev_img and not entry.get("image") and prev_img.startswith("assets/partite/"):
+            try:
+                (ASSETS.parent.parent / prev_img.split("?")[0]).unlink()
+            except OSError:
+                pass
     merged = dict(old)
     merged.update(new)
     merged = dict(sorted(merged.items(), key=lambda kv: int(kv[0][1:]) if kv[0][1:].isdigit() else 999))

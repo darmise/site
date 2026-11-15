@@ -78,6 +78,7 @@ Le pagelle si scrivono a mano in `data/pagelle.json`, agganciate all'id della pa
   }
 }
 ```
+- `image` (facoltativo, a livello di giornata): foto della partita, mostrata tra il titolo e il commento; la scrive da sola l'importazione dal foglio (`assets/partite/g<N>.jpg`);
 - `vote`: voto finale (anche con decimali, es. 6.5; `voteLabel` facoltativo per mostrare `6+`, `6−`, `7½`); `label`: l'aggettivo della prestazione; `goals` e `tunnels`: gol fatti e tunnel subiti **in quella partita**; `comment`: la battuta.
 - Le pagelle compaiono ordinate dal voto più alto; il migliore ha la stella. Chi non è in lista non ha giocato.
 - I campi `goals`, `tunnels` e `vote` alimentano anche l'aggiornamento automatico dei cammelli (vedi sezione sopra).
@@ -137,6 +138,22 @@ Inserisci voti, commenti e titolo in un foglio Google condiviso: il sito si aggi
 4. Su GitHub: Settings > Secrets and variables > Actions > scheda **Variables** > New repository variable: `SHEET_GIORNATE_URL` e `SHEET_PAGELLE_URL` con i due indirizzi. In Settings > Actions > General > Workflow permissions attiva "Read and write permissions".
 5. Carica nel repository: `scripts/import_sheet.py`, `scripts/export_sheet_data.py`, `.github/workflows/sheet-pagelle.yml`, `.github/workflows/update-data.yml` e i due file `data/foglio-rosa.csv` e `data/foglio-partite.csv`.
 Se cambia la rosa (nuovo giocatore o staff) basta aggiornare i JSON: le righe mancanti compaiono nelle giornate già giocate alla sincronizzazione successiva.
+### Compilare le pagelle dallo smartphone (moduli Google)
+Il foglio è scomodo da telefono: per questo c'è `foglio/Moduli.gs`, che crea due **moduli Google** collegati al foglio.
+1. In Estensioni → Apps Script: File → + → Script, nome `Moduli`, incolla il contenuto di `foglio/Moduli.gs`; sostituisci anche `Sincronizza.gs` con la versione nuova. Salva.
+2. Ricarica il foglio e scegli **Pagelle → Crea i moduli per lo smartphone** (una volta sola; Google chiede l'autorizzazione). Compaiono i due link.
+3. **Modulo "voto di un giocatore o dello staff"**: giornata, persona, voto (lista: 6+, 6-, 6½ ...), aggettivo, gol e tunnel (o parate e gol subiti per i portieri), commento. Una pagella alla volta, poi «Invia un'altra risposta».
+4. **Modulo "commento della partita"**: giornata, titolo, commento, voto e commento dell'arbitro, e se pubblicare la giornata (mette SI in Pubblica).
+5. Ogni risposta finisce da sola nella riga giusta del foglio; inviarne un'altra per la stessa persona cambia solo i campi compilati. Le liste (giornate e persone) si aggiornano a ogni «Aggiorna dal sito». Se qualcosa non viene scritto, **Pagelle → Link dei moduli** mostra l'ultimo errore.
+6. Facoltativo: scrivi una parola in `CODICE_FORM` (in cima a `Moduli.gs`): nei moduli compare «Codice redazione» e le risposte senza il codice vengono ignorate.
+Sul telefono apri il link del modulo e aggiungilo alla schermata Home. La pubblicazione sul sito resta quella di sempre (lavoro «Pagelle dal foglio Google»).
+
+### Foto della partita
+Facoltativa, una per giornata: compare nelle Pagelle tra il titolo e il commento.
+- **Foglio:** colonna `Immagine` in Giornate (la crea «Aggiorna struttura»). Ci si scrive un **link**: carica la foto su Google Drive, Condividi → «Chiunque abbia il link» → copia il link. Vale anche un indirizzo diretto di un'immagine (i link di Google Foto no) o un percorso già nel sito (`assets/partite/...`).
+- **Modulo «commento della partita»:** campo «Foto della partita (link)» subito dopo il titolo. Per **caricare la foto direttamente dal telefono** apri il modulo in modifica (Pagelle → Link dei moduli) e aggiungi tu la domanda «Caricamento file» (Apps Script non può crearla; chi compila deve accedere con Google): la foto finisce nel tuo Drive e lo script scrive il link nel foglio. La prima volta Google chiede di nuovo l'autorizzazione (accesso a Drive): lancia una voce del menu Pagelle e accetta.
+- **Sito:** al «Run workflow» l'importazione scarica la foto, la riduce a 1600 px (JPEG leggero) e la salva in `assets/partite/g<N>.jpg` con un commit; il link non viene riscaricato a ogni giro. Se il link non porta a un'immagine (file non condiviso) la giornata esce **senza foto** e il log mostra `ATTENZIONE`.
+
 **Errori:** se nel foglio c'è un voto fuori da 1-10, un numero non valido o un id ripetuto, il lavoro in Actions diventa rosso e dice scheda e riga da correggere; finché c'è un errore non viene importato niente. Dopo la pubblicazione i cammelli di quella giornata non si ricalcolano.
 
 ## Bot Telegram per le pagelle (alternativa, non necessario con il foglio)

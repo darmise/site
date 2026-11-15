@@ -79,6 +79,10 @@
     const list = (m && m.pagelle ? m.pagelle.slice() : []).sort((a, b) => (Number(b.vote) || 0) - (Number(a.vote) || 0));
     let html = head(m, n);
     const ref = m && m.referee;
+    const img = m && m.image;
+    if (img) {   // sezione facoltativa tra il risultato e il commento della partita
+      html += `<figure class="pg-photo" aria-label="Foto della partita"><img src="${esc(img)}" alt="Foto della partita${m.title ? ': ' + esc(m.title) : ''}" loading="lazy" decoding="async"></figure>`;
+    }
     if (m && (m.title || m.report || ref)) {
       html += `<section class="pg-story" aria-label="Commento della partita">
         <span class="pg-kicker">Il commento della partita</span>
@@ -105,6 +109,9 @@
     }
     $('#pg-detail').innerHTML = html;
   }
+
+  // foto che non si carica (link rotto): sparisce senza lasciare un buco
+  document.addEventListener('error', e => { const t = e.target; if (t && t.matches && t.matches('.pg-photo img')) t.closest('.pg-photo').remove(); }, true);
 
   async function start() {
     try { STAFF = await FC.getJSON('data/staff.json'); } catch (e) { STAFF = []; }
