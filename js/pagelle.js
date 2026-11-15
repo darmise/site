@@ -8,6 +8,7 @@
   const RES = { V: 'Vittoria', N: 'Pareggio', P: 'Sconfitta' };
   const PLACEHOLDER = 'assets/team-placeholder.svg';
   const vote = v => (Math.round(v * 100) / 100).toString().replace('.', ',');
+  const showVote = r => (r.voteLabel ? String(r.voteLabel) : vote(Number(r.vote)));   // 6+ / 6− / 6½ come scritti nel foglio
   const n0 = v => (Number.isFinite(+v) ? +v : 0);
   const logo = src => `<span class="badge"><img class="tlogo" src="${esc(src || PLACEHOLDER)}" alt="" width="80" height="80"></span>`;
   const byRound = new Map();
@@ -53,7 +54,7 @@
     const g = n0(r.goals), t = n0(r.tunnels), sv = n0(r.saves), cn = n0(r.conceded);
     const gk = /^(por|portiere)$/i.test(String(p.role || ''));
     return `<article class="pg-card${best ? ' is-best' : ''}">
-      <div class="pg-vote ${Number.isFinite(v) ? FC.voteClass(v) : ''}" aria-label="Voto ${Number.isFinite(v) ? vote(v) : 'non assegnato'}">${Number.isFinite(v) ? vote(v) : 's.v.'}</div>
+      <div class="pg-vote ${Number.isFinite(v) ? FC.voteClass(v) : ''}" aria-label="Voto ${Number.isFinite(v) ? esc(showVote(r)) : 'non assegnato'}">${Number.isFinite(v) ? esc(showVote(r)) : 's.v.'}</div>
       <div class="pg-body">
         <div class="pg-top">
           <h3>${p.number != null ? `<span class="pg-n">${esc(p.number)}</span>` : ''}${esc(name)}</h3>
@@ -77,11 +78,18 @@
     const m = byRound.get(n);
     const list = (m && m.pagelle ? m.pagelle.slice() : []).sort((a, b) => (Number(b.vote) || 0) - (Number(a.vote) || 0));
     let html = head(m, n);
-    if (m && (m.title || m.report)) {
+    const ref = m && m.referee;
+    if (m && (m.title || m.report || ref)) {
       html += `<section class="pg-story" aria-label="Commento della partita">
         <span class="pg-kicker">Il commento della partita</span>
         ${m.title ? `<h2 class="pg-title">${esc(m.title)}</h2>` : ''}
         ${m.report ? `<p class="pg-report">${esc(m.report)}</p>` : ''}
+        ${ref && (ref.vote != null || ref.comment) ? `<div class="pg-ref">
+          <span class="pg-ref-ico" aria-hidden="true">🟨</span>
+          <span class="pg-ref-lab">Arbitro</span>
+          ${ref.vote != null ? `<b class="pg-ref-vote ${FC.voteClass(Number(ref.vote))}" aria-label="Voto all'arbitro ${esc(showVote(ref))}">${esc(showVote(ref))}</b>` : ''}
+          ${ref.comment ? `<span class="pg-ref-txt">${esc(ref.comment)}</span>` : ''}
+        </div>` : ''}
       </section>`;
     }
     if (list.length) {

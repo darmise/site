@@ -78,7 +78,7 @@ Le pagelle si scrivono a mano in `data/pagelle.json`, agganciate all'id della pa
   }
 }
 ```
-- `vote`: voto finale (anche con decimali, es. 6.5); `label`: l'aggettivo della prestazione; `goals` e `tunnels`: gol fatti e tunnel subiti **in quella partita**; `comment`: la battuta.
+- `vote`: voto finale (anche con decimali, es. 6.5; `voteLabel` facoltativo per mostrare `6+`, `6−`, `7½`); `label`: l'aggettivo della prestazione; `goals` e `tunnels`: gol fatti e tunnel subiti **in quella partita**; `comment`: la battuta.
 - Le pagelle compaiono ordinate dal voto più alto; il migliore ha la stella. Chi non è in lista non ha giocato.
 - I campi `goals`, `tunnels` e `vote` alimentano anche l'aggiornamento automatico dei cammelli (vedi sezione sopra).
 - Per vedere le pagelle d'esempio copia il contenuto di `pagelle.esempio.json` in `pagelle.json` (ma i valori dei giocatori cambierebbero davvero).
@@ -128,7 +128,7 @@ Inserisci voti, commenti e titolo in un foglio Google condiviso: il sito si aggi
 1. Aggiorni i risultati ("Aggiorna risultati"). Il sistema ricalcola anche `data/foglio-rosa.csv` (id di giocatori e staff) e `data/foglio-partite.csv` (partite).
 2. Il foglio, con il suo script (`foglio/Sincronizza.gs`), legge questi due file dal sito: ogni ora, o subito dal menu **Pagelle > Aggiorna dal sito**.
 3. Quando una partita risulta giocata compaiono nella scheda **Pagelle** le righe di quella giornata, una per ogni id (giocatori e staff) con nome e ruolo già scritti. Nella scheda **Giornate** compare la riga della partita, anche la prossima con data e ora. Le giornate da giocare non hanno righe di pagelle.
-4. Tu scegli chi ha giocato scrivendo il Voto; chi resta vuoto non ha giocato. Le pagelle si basano solo sull'id: il sito ricava da lì nome, ruolo e numero. Lo staff può avere voto, aggettivo e commento (niente statistiche).
+4. **Voti:** si scrive `6`, `6,5`, `6+` (vale 6,25), `6-` (5,75) o `6½`; sul sito compare come l'hai scritto, nei calcoli usa il valore numerico. **Arbitro:** nella scheda Giornate le colonne facoltative `Voto arbitro` e `Commento arbitro`; compaiono sotto il commento della partita. **Foglio già compilato:** incolla il nuovo `Sincronizza.gs` e usa Pagelle → Aggiorna struttura: aggiunge le colonne dell'arbitro e permette 6+ / 6- senza toccare i dati. Tu scegli chi ha giocato scrivendo il Voto; chi resta vuoto non ha giocato. Le pagelle si basano solo sull'id: il sito ricava da lì nome, ruolo e numero. Lo staff può avere voto, aggettivo e commento (niente statistiche).
 5. Scrivi Titolo e Commento partita nella scheda Giornate e metti **Pubblica = SI**. Entro 30 minuti (o subito con Actions > "Pagelle dal foglio Google" > Run workflow) il sito si aggiorna e si ricalcolano cammelli e bestemmie.
 **Preparazione (una volta sola)**
 1. Crea il file del foglio: `python scripts/build_sheet_template.py` (serve `pip install openpyxl`, genera `pagelle-foglio.xlsx`). Caricalo su Google Drive, aprilo con Fogli Google e fai **File > Salva come Fogli Google**.

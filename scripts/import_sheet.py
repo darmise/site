@@ -8,7 +8,7 @@ Si importano solo le giornate con Pubblica = SI. Se c'è anche un solo errore no
 indica scheda e riga da correggere. Le giornate non pubblicate nel foglio restano come sono in pagelle.json.
 Codici di uscita: 0 tutto bene (anche se non c'è niente di nuovo), 1 errori nel foglio.
 """
-import argparse, csv, io, json, os, sys, unicodedata, urllib.request
+import argparse, csv, io, json, os, re, sys, unicodedata, urllib.request
 from pathlib import Path
 
 DATA = Path(__file__).resolve().parent.parent / "data"
@@ -49,6 +49,30 @@ def num(text, lo=None, hi=None, integer=False):
     return int(v) if v == int(v) else v
 
 
+VOTO = re.compile(r"^(\d{1,2}(?:[.,]\d+)?)\s*([+\-\u2212\u2013\u00bd]?)$")
+STEP = {"+": 0.25, "-": -0.25, "\u2212": -0.25, "\u2013": -0.25, "\u00bd": 0.5}
+
+
+def parse_vote(text):
+    """Voto del foglio -> (valore numerico, etichetta da mostrare o None).
+    Accetta 6, 6.5, 6,5, 6+ (6,25), 6- (5,75), 6½ (6,5). Il valore deve restare tra 1 e 10."""
+    t = str(text).strip().replace(" ", "")
+    m = VOTO.match(t)
+    if not m:
+        raise ValueError("non è un voto valido: scrivi un numero (6, 6,5) o con + / - (6+, 6-)")
+    base = float(m.group(1).replace(",", "."))
+    mark = m.group(2)
+    v = base + STEP.get(mark, 0)
+    if not 1 <= v <= 10:
+        raise ValueError("deve essere tra 1 e 10")
+    v = int(v) if v == int(v) else round(v, 2)
+    label = None
+    if mark:
+        shown = m.group(1).replace(".", ",")
+        label = shown + ("+" if mark == "+" else "\u00bd" if mark == "\u00bd" else "\u2212")
+    return v, label
+
+
 def build(giornate, pagelle, players, matches, staff=()):
     errors, warnings, out = [], [], {}
     byid = {p["id"]: p for p in players}
@@ -61,6 +85,7 @@ def build(giornate, pagelle, players, matches, staff=()):
             errors.append(f"Giornate, riga {i}: numero di giornata non valido «{r.get('giornata', '')}»")
             continue
         if norm(r.get("pubblica")) in YES:
+            r["_riga"] = i
             published[n] = r
     rows_by_round = {}
     for i, r in enumerate(pagelle, start=2):
@@ -94,7 +119,9 @@ def build(giornate, pagelle, players, matches, staff=()):
             seen.add(p["id"])
             e = {"playerId": p["id"]}
             try:
-                e["vote"] = num(r["voto"], 1, 10)
+                e["vote"], label = parse_vote(r["voto"])
+                if label:
+                    e["voteLabel"] = label
             except ValueError as ex:
                 errors.append(f"{where}: voto «{r['voto']}» {ex}")
                 continue
@@ -123,6 +150,18 @@ def build(giornate, pagelle, players, matches, staff=()):
             entry["title"] = g["titolo"]
         if g.get("commento partita"):
             entry["report"] = g["commento partita"]
+        ref = {}
+        if g.get("voto arbitro"):
+            try:
+                ref["vote"], label = parse_vote(g["voto arbitro"])
+                if label:
+                    ref["voteLabel"] = label
+            except ValueError as ex:
+                errors.append(f"Giornate, riga {g.get('_riga')} (giornata {n}): voto arbitro «{g['voto arbitro']}» {ex}")
+        if g.get("commento arbitro"):
+            ref["comment"] = g["commento arbitro"]
+        if ref:
+            entry["referee"] = ref
         out[f"g{n}"] = entry
     return out, errors, warnings
 
