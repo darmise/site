@@ -80,6 +80,7 @@
      players.json e staff.json contengono i valori INIZIALI. Giornata dopo giornata (partite giocate, in ordine) il sito
      applica pagelle e risultati e ricava valori attuali e ultima variazione (le frecce). Nessun lavoro automatico deve
      riscrivere quei file: basta che data/pagelle.json e data/matches.json siano aggiornati.
+     Senza voto (s.v.): il valore non cambia (le statistiche sì). 6+ e 6- valgono come 6 (6½ = 6,5).
      Giocatori: arrotonda((voto-6)*4) + 2 per gol - 1 per tunnel.  Portieri: arrotonda((voto-6)*4) + parate/3 - gol subiti + 3 se inviolata.
      Staff: vittoria -1, pareggio 0, sconfitta +6, per Allenatore x2, Vice allenatore x1,5 (o campo "peso"). Mai sotto zero. */
   const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().split(/\s+/).filter(Boolean).join(' ');
@@ -110,14 +111,17 @@
       const byId = {}; votes.forEach(v => { if (v && v.playerId) byId[v.playerId] = v; });
       P.forEach(p => {
         const v = byId[p.id];
-        if (!v || v.vote == null || v.vote === '') { p.camelsChange = 0; return; }
-        const base = roundAway((+v.vote - 6) * 4);
+        if (!v) { p.camelsChange = 0; return; }
+        const senzaVoto = v.vote == null || v.vote === '' || !Number.isFinite(+v.vote);
+        // + e - accanto al voto (6+, 6-, 7+ ...) sono solo estetici: per il valore conta il voto intero. 6½ resta 6,5.
+        const vv = senzaVoto ? 0 : (/[+\u2212-]\s*$/.test(String(v.voteLabel || '')) ? Math.round(+v.vote) : +v.vote);
+        const base = senzaVoto ? 0 : roundAway((vv - 6) * 4);
         let d, g = 0, t = 0;
         if (roleOf(p) === 'POR') {
           const sv = num(v.saves), cn = num(v.conceded);
-          d = base + Math.floor(sv / 3) - cn + (cn === 0 ? 3 : 0);
+          d = senzaVoto ? 0 : base + Math.floor(sv / 3) - cn + (cn === 0 ? 3 : 0);
           p.saves += sv; p.conceded += cn;
-        } else { g = num(v.goals); t = num(v.tunnels); d = base + 2 * g - t; }
+        } else { g = num(v.goals); t = num(v.tunnels); d = senzaVoto ? 0 : base + 2 * g - t; }
         const nv = Math.max(0, p.camels + d);
         p.camelsChange = nv - p.camels; p.camels = nv; p.goals += g; p.tunnels += t;
       });

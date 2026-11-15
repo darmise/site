@@ -8,6 +8,7 @@
   const RES = { V: 'Vittoria', N: 'Pareggio', P: 'Sconfitta' };
   const PLACEHOLDER = 'assets/team-placeholder.svg';
   const vote = v => (Math.round(v * 100) / 100).toString().replace('.', ',');
+  const hasVote = r => r && r.vote != null && r.vote !== '' && Number.isFinite(Number(r.vote));   // s.v. = senza voto
   const showVote = r => (r.voteLabel ? String(r.voteLabel) : vote(Number(r.vote)));   // 6+ / 6− / 6½ come scritti nel foglio
   const n0 = v => (Number.isFinite(+v) ? +v : 0);
   const logo = src => `<span class="badge"><img class="tlogo" src="${esc(src || PLACEHOLDER)}" alt="" width="80" height="80"></span>`;
@@ -50,7 +51,7 @@
     const isStaff = !!st0;
     const p = pl0 || st0 || {};
     const name = p.name || r.name || 'Giocatore';
-    const v = Number(r.vote);
+    const v = hasVote(r) ? Number(r.vote) : NaN;
     const g = n0(r.goals), t = n0(r.tunnels), sv = n0(r.saves), cn = n0(r.conceded);
     const gk = /^(por|portiere)$/i.test(String(p.role || ''));
     return `<article class="pg-card${best ? ' is-best' : ''}">
@@ -76,7 +77,7 @@
 
   function detail(n) {
     const m = byRound.get(n);
-    const list = (m && m.pagelle ? m.pagelle.slice() : []).sort((a, b) => (Number(b.vote) || 0) - (Number(a.vote) || 0));
+    const list = (m && m.pagelle ? m.pagelle.slice() : []).sort((a, b) => (hasVote(b) ? Number(b.vote) : -1) - (hasVote(a) ? Number(a.vote) : -1));
     let html = head(m, n);
     const ref = m && m.referee;
     const img = m && m.image;
@@ -97,7 +98,7 @@
       </section>`;
     }
     if (list.length) {
-      const voted = list.filter(r => Number.isFinite(Number(r.vote)));
+      const voted = list.filter(hasVote);
       const avg = voted.length ? voted.reduce((s, r) => s + Number(r.vote), 0) / voted.length : null;
       const isPl = r => FC.S.players.some(x => x.id === r.playerId);
       const votedPl = voted.filter(isPl);

@@ -53,10 +53,15 @@ VOTO = re.compile(r"^(\d{1,2}(?:[.,]\d+)?)\s*([+\-\u2212\u2013\u00bd]?)$")
 STEP = {"+": 0.25, "-": -0.25, "\u2212": -0.25, "\u2013": -0.25, "\u00bd": 0.5}
 
 
+SV = {"sv", "s.v.", "s.v", "senza voto"}
+
+
 def parse_vote(text):
     """Voto del foglio -> (valore numerico, etichetta da mostrare o None).
     Accetta 6, 6.5, 6,5, 6+ (6,25), 6- (5,75), 6½ (6,5). Il valore deve restare tra 1 e 10."""
     t = str(text).strip().replace(" ", "")
+    if t.lower() in SV or str(text).strip().lower() in SV:
+        return None, "s.v."          # senza voto: in campo ma non valutato
     m = VOTO.match(t)
     if not m:
         raise ValueError("non è un voto valido: scrivi un numero (6, 6,5) o con + / - (6+, 6-)")
@@ -232,9 +237,11 @@ def build(giornate, pagelle, players, matches, staff=()):
         ref = {}
         if g.get("voto arbitro"):
             try:
-                ref["vote"], label = parse_vote(g["voto arbitro"])
-                if label:
-                    ref["voteLabel"] = label
+                rv, label = parse_vote(g["voto arbitro"])
+                if rv is not None:
+                    ref["vote"] = rv
+                    if label:
+                        ref["voteLabel"] = label
             except ValueError as ex:
                 errors.append(f"Giornate, riga {g.get('_riga')} (giornata {n}): voto arbitro «{g['voto arbitro']}» {ex}")
         if g.get("commento arbitro"):
