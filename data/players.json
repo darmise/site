@@ -13,5 +13,5 @@
   {"id":"p14","number":14,"name":"Daniele Tunzi","role":"LAT","status":"ok","camels":61,"tunnels":0,"goals":0},
   {"id":"p15","number":15,"name":"Daniele Casella","role":"CEN","status":"ok","camels":42,"tunnels":0,"goals":0},
   {"id":"p16","number":16,"name":"Alessandro D'Acunto","role":"LAT","status":"ok","camels":38,"tunnels":0,"goals":0},
-  {"id":"p17","number":17,"name":"Francesco Caputo","role":"PIV","status":"ok","camels":58,"tunnels":0,"goals":0}
+  {"id":"p17","number":17,"name":"Francesco Caputo","role":"LAT","status":"ok","camels":58,"tunnels":0,"goals":0}
 ]
