@@ -134,5 +134,145 @@
       "vote": 4.5,
       "comment": "Condiziona la gara non chiamando il controfallo sul calcio d'angolo, causando il primo gol dell'Abriola. Nel complesso non riesce a gestire i momenti della partita e sbaglia diversi fischi."
     }
+  },
+  "g2": {
+    "pagelle": [
+      {
+        "playerId": "p1",
+        "vote": 5.5,
+        "voteLabel": "5½",
+        "label": "Arrugginito",
+        "saves": 4,
+        "conceded": 2,
+        "comment": "Nel primo tempo fa diverse belle parate e da sicurezza alla squadra. Mentre sul primo gol subito, un po' incerto nell'uscita. Sul secondo gol incolpevole"
+      },
+      {
+        "playerId": "p3",
+        "vote": 6.25,
+        "voteLabel": "6+",
+        "label": "Allievo",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Nella veste del mister, non fa rimpiangere Mister Novellino. Bravo nel gestire la squadra e leggere la partita. Cambi giusti e squadra ben messa in campo. Manca solo il risultato. Ma arriverà"
+      },
+      {
+        "playerId": "p4",
+        "vote": 5.75,
+        "voteLabel": "6−",
+        "label": "Sfortunato",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Pochi minuti concessi dal mister, ma sfruttati bene. Ordinato e concentrato, peccato per il palo colpito. Da rivalutare nelle prossime gare, quando avrà accumulato un po' di minuti."
+      },
+      {
+        "playerId": "p5",
+        "vote": null,
+        "voteLabel": "s.v.",
+        "label": "",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Uomo squadra anche a distanza"
+      },
+      {
+        "playerId": "p6",
+        "vote": 6,
+        "label": "Roccioso",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Sicuro in fase difensiva. Ordinato nell'impostazione, prova qualche tiro dalla distanza, ma impreciso. Colpisce anche lui un palo. Probabilmente non ancora nella miglior condizione fisica. Può crescere"
+      },
+      {
+        "playerId": "p8",
+        "vote": 5.75,
+        "voteLabel": "6−",
+        "label": "Vivace",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Bella prestazione nel complesso. Da rivedere la gestione delle emozioni, prende un giallo (il secondo in due partite) per proteste molto evitabile. Energico"
+      },
+      {
+        "playerId": "p9",
+        "vote": null,
+        "voteLabel": "s.v.",
+        "label": "",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Manca"
+      },
+      {
+        "playerId": "p10",
+        "vote": 7,
+        "label": "Cinico",
+        "goals": 1,
+        "tunnels": 0,
+        "comment": "Partita da 6,5, premiato con mezzo punto in più per il bellissimo gol. Svaria per tutto il campo, non perdendo mai la lucidità. Pedina preziosa che potrà tornare molto utile. Figlio d'arte"
+      },
+      {
+        "playerId": "p11",
+        "vote": 6,
+        "label": "Stoico",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Non al meglio fisicamente, infatti ha una vistosa fasciatura alla caviglia, ma stringe i denti. Non riesce a trovare il gol nonostante qualche occasione. Sappiamo che può fare meglio."
+      },
+      {
+        "playerId": "p12",
+        "vote": null,
+        "voteLabel": "s.v.",
+        "label": "Pinsoglio",
+        "saves": 0,
+        "conceded": 0,
+        "comment": "Non entra ma è fondamentale per l'umore dello spogliatoio"
+      },
+      {
+        "playerId": "p13",
+        "vote": 6,
+        "label": "Estroso",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Gioca fuori ruolo come pivot ma si fa trovare pronto. Vince il premio per la miglior giocata della partita (stop al volo bellissimo). Vivo"
+      },
+      {
+        "playerId": "p14",
+        "vote": 6,
+        "label": "Trivela",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Tecnicamente superiore, un piacere per gli occhi. Peccato per la condizione fisica che cala nel secondo tempo. Fumatore"
+      },
+      {
+        "playerId": "p15",
+        "vote": 6.5,
+        "voteLabel": "6½",
+        "label": "Spacca-partita",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Entra e cambia il ritmo della partita. Gli avversari soffrono la sua esuberanza atletica. Tenta anche il tiro. Ci mette la faccia (anche letteralmente. Abbattuto dal pallone) Col tempo diventerà imprescindibile."
+      },
+      {
+        "playerId": "s1",
+        "vote": 6,
+        "label": "",
+        "comment": "Lo aspettiamo"
+      },
+      {
+        "playerId": "s2",
+        "vote": 6,
+        "label": "",
+        "comment": ""
+      },
+      {
+        "playerId": "s3",
+        "vote": 6,
+        "label": "",
+        "comment": ""
+      }
+    ],
+    "title": "Bel gioco ma niente punti: il Tricarico perde di misura anche in casa contro il San Fele",
+    "report": "Nonostante una prestazione nettamente superiore all'esordio, il Football Tricarico incassa la seconda sconfitta consecutiva. Dopo un primo tempo solido e dominato sul piano del palleggio (chiuso sullo 0-0 per troppa leggerezza sotto porta), i ragazzi sbloccano il match nella ripresa grazie a una prodezza di Nicolas.\nProprio nel momento di massimo controllo, però, arriva un clamoroso blackout che ribalta il risultato. Due disattenzioni fatali condannano il Tricarico: prima un lancio lungo su fallo laterale sorprende la difesa e il portiere fuori posizione, poi una beffarda palla a campanile si insacca lentamente nonostante il disperato tentativo di salvataggio sulla linea di Cristian. Due reti che portano a cinque il doloroso bilancio dei gol subiti (tutti evitabili) nelle prime due giornate, considerando il 3-2 incassato contro l'Abriola.\nL'unica, immensa nota lieta di un finale amaro è la prestazione di capitan Daniele Casella: una partita monumentale la sua, indiscutibilmente il migliore in campo per grinta e tenacia. Dal suo atteggiamento e dal netto miglioramento tattico si dovrà ripartire.",
+    "referee": {
+      "vote": 5.75,
+      "voteLabel": "6−"
+    }
   }
 }
