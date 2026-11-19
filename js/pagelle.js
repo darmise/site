@@ -112,7 +112,14 @@
   }
 
   // foto che non si carica (link rotto): sparisce senza lasciare un buco
-  document.addEventListener('error', e => { const t = e.target; if (t && t.matches && t.matches('.pg-photo img')) t.closest('.pg-photo').remove(); }, true);
+  document.addEventListener('error', e => {
+    const t = e.target;
+    if (!t || !t.matches || !t.matches('.pg-photo img')) return;
+    const fig = t.closest('.pg-photo');
+    const src = (t.getAttribute('src') || '').split('?')[0];
+    fig.classList.add('pg-photo-missing');
+    fig.innerHTML = `<p class="pg-photo-miss">Foto non trovata: <code>${esc(src)}</code>.<br>Carica il file su GitHub in questo percorso (maiuscole e minuscole contano).</p>`;
+  }, true);
 
   async function start() {
     try { STAFF = await FC.getJSON('data/staff.json'); } catch (e) { STAFF = []; }

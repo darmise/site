@@ -692,6 +692,7 @@ h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02e
 .pg-photo{margin:18px 0;border-radius:18px;overflow:hidden;background:var(--line);box-shadow:0 6px 18px rgba(12,38,112,.14)}
 .pg-photo img{display:block;width:100%;height:auto;max-height:min(62vh,520px);object-fit:cover}
 @media (max-width:640px){.pg-photo{margin:14px 0;border-radius:14px}.pg-photo img{max-height:300px}}
+.pg-photo-miss{margin:0;padding:16px 18px;font-size:14px;color:var(--bad);background:#fff3f3;text-align:center}.pg-photo-miss code{font-weight:700;word-break:break-all}
 .pg-ref{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:16px;padding-top:14px;border-top:1px dashed var(--line)}
 .pg-ref-ico{font-size:20px;line-height:1}
 .pg-ref-lab{font-weight:700;color:var(--muted)}
