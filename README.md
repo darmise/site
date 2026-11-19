@@ -78,7 +78,7 @@ Le pagelle si scrivono a mano in `data/pagelle.json`, agganciate all'id della pa
   }
 }
 ```
-- `image` (facoltativo, a livello di giornata): foto della partita, mostrata tra il titolo e il commento; la scrive da sola l'importazione dal foglio (`assets/partite/g<N>.jpg`);
+- `image` (facoltativo, a livello di giornata): foto della partita, mostrata tra il titolo e il commento; la scrive l'importazione dal foglio, leggendo il percorso della colonna `Immagine`;
 - `vote`: voto finale (anche con decimali, es. 6.5; `voteLabel` facoltativo per mostrare `6+`, `6−`, `7½`); `label`: l'aggettivo della prestazione; `goals` e `tunnels`: gol fatti e tunnel subiti **in quella partita**; `comment`: la battuta.
 - Le pagelle compaiono ordinate dal voto più alto; il migliore ha la stella. Chi non è in lista non ha giocato.
 - I campi `goals`, `tunnels` e `vote` alimentano anche l'aggiornamento automatico dei cammelli (vedi sezione sopra).
@@ -150,10 +150,13 @@ Il foglio è scomodo da telefono: per questo c'è `foglio/Moduli.gs`, che crea d
 Sul telefono apri il link del modulo e aggiungilo alla schermata Home. La pubblicazione sul sito resta quella di sempre (lavoro «Pagelle dal foglio Google»).
 
 ### Foto della partita
-Facoltativa, una per giornata: compare nelle Pagelle tra il titolo e il commento.
-- **Foglio:** colonna `Immagine` in Giornate (la crea «Aggiorna struttura»). Ci si scrive un **link**: carica la foto su Google Drive, Condividi → «Chiunque abbia il link» → copia il link. Vale anche un indirizzo diretto di un'immagine (i link di Google Foto no) o un percorso già nel sito (`assets/partite/...`).
-- **Modulo «commento della partita»:** campo «Foto della partita (link)» subito dopo il titolo. Per **caricare la foto direttamente dal telefono** apri il modulo in modifica (Pagelle → Link dei moduli) e aggiungi tu la domanda «Caricamento file» (Apps Script non può crearla; chi compila deve accedere con Google): la foto finisce nel tuo Drive e lo script scrive il link nel foglio. La prima volta Google chiede di nuovo l'autorizzazione (accesso a Drive): lancia una voce del menu Pagelle e accetta.
-- **Sito:** al «Run workflow» l'importazione scarica la foto, la riduce a 1600 px (JPEG leggero) e la salva in `assets/partite/g<N>.jpg` con un commit; il link non viene riscaricato a ogni giro. Se il link non porta a un'immagine (file non condiviso) la giornata esce **senza foto** e il log mostra `ATTENZIONE`.
+Facoltativa, una per giornata: compare nelle Pagelle **tra il risultato e il commento della partita**.
+1. Carica la foto su GitHub nella cartella `assets/partite/` (Add file → Upload files), per esempio `g1.jpg`.
+2. Nella colonna `Immagine` della scheda Giornate (o nel campo «Foto della partita (percorso)» del modulo) scrivi il nome del file: `g1.jpg`, oppure il percorso completo `assets/partite/g1.jpg`. Vale anche un indirizzo `https://...` diretto di un'immagine.
+3. Metti SI in Pubblica e lancia «Pagelle dal foglio Google»: nel `data/pagelle.json` la giornata riceve la chiave `"image"` e la foto compare nella pagina.
+- Cella vuota = nessuna sezione foto. Estensioni ammesse: jpg, png, webp, gif. Maiuscole e minuscole contano (`G1.jpg` non è `g1.jpg`).
+- Se il file non è ancora nel sito il log mostra `ATTENZIONE` e la foto compare da sola appena lo carichi. Se sostituisci un file con lo stesso nome la foto si aggiorna al giro successivo.
+- Consiglio: riduci la foto prima (circa 1600 px di larghezza) per non appesantire il sito.
 
 **Errori:** se nel foglio c'è un voto fuori da 1-10, un numero non valido o un id ripetuto, il lavoro in Actions diventa rosso e dice scheda e riga da correggere; finché c'è un errore non viene importato niente. Dopo la pubblicazione i cammelli di quella giornata non si ricalcolano.
 
