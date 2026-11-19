@@ -144,7 +144,7 @@
         "label": "Arrugginito",
         "saves": 4,
         "conceded": 2,
-        "comment": "Nel primo tempo fa diverse belle parate e da sicurezza alla squadra. Mentre sul primo gol subito, un po' incerto nell'uscita. sul secondo gol incolpevole"
+        "comment": "Nel primo tempo fa diverse belle parate e da sicurezza alla squadra. Mentre sul primo gol subito, un po' incerto nell'uscita. Sul secondo gol incolpevole"
       },
       {
         "playerId": "p3",
@@ -217,7 +217,8 @@
       },
       {
         "playerId": "p12",
-        "vote": 6,
+        "vote": null,
+        "voteLabel": "s.v.",
         "label": "Pinsoglio",
         "saves": 0,
         "conceded": 0,
