@@ -275,5 +275,147 @@
       "voteLabel": "6−"
     },
     "image": "assets/partite/g2.jpg?v=bfda2e0a"
+  },
+  "g3": {
+    "pagelle": [
+      {
+        "playerId": "p1",
+        "vote": 7,
+        "label": "Per i fotografi",
+        "saves": 8,
+        "conceded": 4,
+        "comment": "Riscatto netto rispetto alle uscite precedenti: sempre vivo, concentrato e reattivo su diversi tiri puliti degli avversari. Ha uno stile un po' particolare, non tanto bello da vedere, ma oggi si è rivelato molto efficace. Non ha colpe particolari sulle reti subite, quasi tutte ravvicinate e spesso con l'uomo libero in area sull'assedio col portiere di movimento. Funzionali i rilanci lunghi a palombella sui pivot, una scelta studiata per far salire la squadra sfruttandone la fisicità."
+      },
+      {
+        "playerId": "p3",
+        "vote": 6,
+        "label": "Zanna Bianca",
+        "goals": 0,
+        "tunnels": 1,
+        "comment": "Il voto non va sotto il 6 per premiare la prova complessiva della squadra, ma la serata ha diverse sbavature per un giocatore della sua esperienza: paga l'ingenuità del retropassaggio irregolare in area che porta al 2-1 su punizione a due, oltre a qualche imprecisione nell'uscita palla e qualche buco difensivo legato anche alla tenuta fisica. Resta però il \"vice-allenatore\" in campo che ordina i movimenti e tiene alta la concentrazione anche nell'assedio finale. Abbiamo visto prove molto migliori"
+      },
+      {
+        "playerId": "p4",
+        "vote": 6,
+        "label": "",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "\"Se hai paura di sbagliare, già hai sbagliato in partenza\". Citazione di un grande calciatore di Tricarico dagli spalti, che calza a pennello per Amato.\nGiovane e volenteroso, mostra gamba, freschezza e buona applicazione difensiva, anche se palla al piede gli manca ancora un po' di personalità e coraggio."
+      },
+      {
+        "playerId": "p5",
+        "vote": null,
+        "voteLabel": "s.v.",
+        "label": "",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Assente"
+      },
+      {
+        "playerId": "p6",
+        "vote": 7,
+        "label": "Gorilla",
+        "goals": 1,
+        "tunnels": 0,
+        "comment": "Tra i migliori in campo per continuità e solidità. Dietro è roccioso, attento e difficilmente saltato (un solo fallo ininfluente), mentre davanti colpisce in ripartenza sul 2-0. Sfiora anche il bis su corner (annullato) e va vicino al gol altre 3-4 volte con conclusioni precise. Bella l'esultanza alla Chiellini"
+      },
+      {
+        "playerId": "p8",
+        "vote": 8,
+        "label": "Spider-Man",
+        "goals": 2,
+        "tunnels": 0,
+        "comment": "Il migliore in campo senza dubbio. Combina qualità, velocità e peso specifico nei momenti chiave: ispira e rifinisce il 4-1 in triangolazione, firma il 5-1 in contropiede e chiude i conti sul 3-6 con un rasoterra da fuori sotto le gambe del portiere festeggiato alla Spider-Man, dando ossigeno alla squadra sotto pressione. Impeccabile anche in pressing e copertura difensiva. Oggi meno nervoso e i risultati si vedono"
+      },
+      {
+        "playerId": "p9",
+        "vote": 6.5,
+        "voteLabel": "6½",
+        "label": "Ci vediamo al bar",
+        "goals": 1,
+        "tunnels": 0,
+        "comment": "Freddissimo e lucido sul 3-1, con la sua classica finta ferma il tempo, manda al bar il portiere e segna a porta vuota.\nRiferimento preziosissimo come pivot: si fa dare palla, protegge con il corpo e fa respirare il Tricarico. Regala qualche giocata di qualità. Condizione fisica ancora da ritrovare, ma incidenza già altissima. Anche lui in fase difensiva fa valere l'esperienza e l'applicazione"
+      },
+      {
+        "playerId": "p10",
+        "vote": 7.25,
+        "voteLabel": "7+",
+        "label": "Costante",
+        "goals": 1,
+        "tunnels": 0,
+        "comment": "Prestazione di alto livello, subito dietro Trabace per incidenza. Mette in campo ritmo e intraprendenza. Con Trabace forma una coppia micidiale in ripartenza grazie a gamba, freschezza e velocità: recupera, dialoga, segna il 4-1 a porta vuota e serve l'assist per il 5-1. Paga solo un paio di errori sotto porta che avrebbero chiuso prima il match, ma il gran lavoro difensivo e il minutaggio elevato lo giustificano ampiamente."
+      },
+      {
+        "playerId": "p11",
+        "vote": 6.5,
+        "voteLabel": "6½",
+        "label": "Adriano l'imperatore",
+        "goals": 1,
+        "tunnels": 0,
+        "comment": "Apre le marcature con un gol di grande forza e tecnica (difesa del pallone, finte e conclusione dal limite, sembrava veramente Adriano). Si sbatte tanto anche a livello difensivo e ci mette cuore in ogni giocata che fa. Anche lui, come Dabraio, è perfetto come riferimento della squadra per farsi lanciare la palla addosso e ripulirla con qualità. Mezzo voto in meno per il cartellino giallo rimediato con un intervento duro dopo aver perso palla, che macchia in parte una prova commovente."
+      },
+      {
+        "playerId": "p12",
+        "vote": null,
+        "voteLabel": "s.v.",
+        "label": "",
+        "saves": 0,
+        "conceded": 0,
+        "comment": ""
+      },
+      {
+        "playerId": "p13",
+        "vote": 6,
+        "label": "",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Impiegato per pochissimi minuti, senza tempo sufficiente per incidere sul tabellino o sulle dinamiche della gara. Voto 6 perché entra e non sbaglia nulla, seguendo il flusso positivo della squadra"
+      },
+      {
+        "playerId": "p14",
+        "vote": 6,
+        "label": "Elle",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Gioca poco e, al di là del suo ingresso nell'azione del gol di Dabraio, poco da segnalare. Condizione fisica ancora da ritrovare, con un paio di errori nella gestione palla che per fortuna restano ininfluenti; nel complesso il 6 è meritato."
+      },
+      {
+        "playerId": "p15",
+        "vote": null,
+        "voteLabel": "s.v.",
+        "label": "",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": ""
+      },
+      {
+        "playerId": "p17",
+        "vote": null,
+        "voteLabel": "s.v.",
+        "label": "Ultras",
+        "goals": 0,
+        "tunnels": 0,
+        "comment": "Incita la squadra dalla tribuna"
+      },
+      {
+        "playerId": "s1",
+        "vote": 7,
+        "label": "Bentornato",
+        "comment": "Mister Novellino torna sulla panchina dopo la squalifica e la squadra torna ad essere bella, tosta e ben messa in campo. Coincidenze? Lo scopriremo. Partita preparata benissimo, il Potenza soffre il blocco basso e le ripartenze micidiali. Cambi fatti sempre nel migliore dei modi. Forse bisogna lavorare sulla difesa contro il portiere in movimento. Per il resto partita impeccabile"
+      },
+      {
+        "playerId": "s3",
+        "vote": 10,
+        "label": "Fame",
+        "comment": "Appena arrivato al Pala Pergola, i ragazzi sono già in campo per il riscaldamento. Chiedo ad uno dei pochi tifosi tricaricesi già presenti come gli sembrasse lo stato di salute della squadra. Mi risponde che li vede scarichi, che gli schemi non escono, che non fanno gol, sbagliano i tiri. Poi, poco prima dell'inizio arriva una parte della dirigenza e consegna un pacco. Il famoso pacco delle merendine che la squadra mangia nel post partita. Dal campo i ragazzi vedono questa scena e mi piace pensare che questa mossa della dirigenza abbia avuto un impatto. Perché da quel momento i ragazzi cambiano faccia. Entrano in campo con una fame assurda. Con fame di vincere. Con fame di mangiare quelle merendine. Stavolta però sapendo di averle meritate. \nLa partita è vinta in maniera meritata.\nNon dominando, ma controllandola.\nSempre in vantaggio, sempre vittoriosi sulle palle mezze mezze, più furbi, più scaltri degli avversari (anche con falli tattici e un po' di malizia).\n4-6. Potenza espugnata e merendine meritate. Dirigenza voto: 10"
+      }
+    ],
+    "title": "Il Football Tricarico si sblocca. Vittoria di carattere a Potenza",
+    "report": "Il Tricarico espugna il Pala Pergola di Potenza con una prova maiuscola, fatta di compattezza, concentrazione e un cinismo letale. Finisce 4-6 per gli ospiti, con una vittoria meritata e mai in discussione. Con giocate di grande qualità e una tenuta mentale d'acciaio, il Tricarico riscatta le prime due sconfitte, trovando gol bellissimi e difendendo con il cuore ogni singolo pallone, anche nei momenti di massima pressione avversaria. Una vittoria che nasce dalla fame e dal perfetto sincronismo di squadra",
+    "referee": {
+      "vote": 6.5,
+      "voteLabel": "6½",
+      "comment": "La partita è vivace, il Tricarico scende in campo con cattiveria agonistica che spesso sfocia in qualche fallo di troppo. Ma l'arbitro è bravo a tenere in mano il match, gestendo i cartellini nella maniera migliore."
+    }
   }
 }
