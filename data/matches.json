@@ -66,5 +66,22 @@
     "awayScore": null,
     "status": "scheduled",
     "url": "https://www.tuttocampo.it/Basilicata/CalcioA5Dilettanti/GironeBPotenza/Partita/4.3"
+  },
+  {
+    "id": "g5",
+    "round": 5,
+    "date": "2026-12-05T18:00",
+    "timeKnown": true,
+    "competition": "Serie D Calcio a 5",
+    "home": "Sporting Lavello",
+    "away": "Football Tricarico",
+    "homeId": "1334810",
+    "awayId": "1334806",
+    "homeLogo": "https://b2-content.tuttocampo.it/Teams/80/1334810.png?v=1",
+    "awayLogo": "https://b2-content.tuttocampo.it/Teams/80/1334806.png?v=1",
+    "homeScore": null,
+    "awayScore": null,
+    "status": "scheduled",
+    "url": "https://www.tuttocampo.it/Basilicata/CalcioA5Dilettanti/GironeBPotenza/Partita/5.6"
   }
 ]
